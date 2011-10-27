@@ -1,4 +1,4 @@
-﻿=== Plugin Name ===
+﻿=== Events Planner ===
 Contributors: abelony
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=abels122%40gmail%2ecom&lc=US&item_name=Events%20Planner%20for%20Wordpress&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: events, event, events planner, event planner, event registration, event calendar, events calendar, event management, paypal, registration, ticket, tickets, ticketing, tickets, widget, locations, maps, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
@@ -11,7 +11,9 @@ Events Planner: A powerful next generation event management plugin, built with c
 == Description ==
 
 [Events Planner](http://www.wpeventsplanner.com/) is a next generation wordpress events management plugin. A lot of research has been done on what features are needed for event management
-and what's lacking out there.  Here is a very small list of things about this plugin.
+and what's lacking out there.  Here is a quick overview video, followed by a list of features.
+
+[youtube http://www.youtube.com/watch?v=OLiF2tiadOU /]
 
 Programming:
 
