@@ -266,11 +266,10 @@ function epl_is_addon_active( $addon = '' ) {
 
 function epl_is_ok_to_show_regis_button() {
 
-    return false;
 
     global $event_details;
 
-    if ( $event_details['_epl_display_regis_button'] == 10 )
+    if ( isset($event_details['_epl_display_regis_button']) && $event_details['_epl_display_regis_button'] == 10 )
         return true;
 
     return false;

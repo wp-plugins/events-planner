@@ -1,11 +1,10 @@
 <?php
-
 /*
   Plugin Name: Events Planner
   Plugin URI: http://wpEventsPlanner.com
   Description: A comprehensive event management plugin that contains support for multiple event types, payments, custom forms, and etc.
 
-  Version: 1.0
+  Version: 1.1
 
   Author: Abel Sekepyan
   Author URI: http://wpEventsPlanner.com
@@ -106,14 +105,14 @@ function epl_activate() {
 
     require_once(dirname( __FILE__ ) . '/application/config/install_defaults.php');
 
-    /* check for option then update if necessary */
+    
     update_option( 'events_planner_version', EPL_PLUGIN_VERSION );
     update_option( 'events_planner_active', 1 );
 
     global $default_vals;
 
     foreach ( $default_vals as $key => $data ) {
-
+        /* check for option then update if necessary */
         if ( !get_option( $key ) ) {
             add_option( $key, $data );
         }
@@ -129,4 +128,5 @@ function epl_deactivate() {
 
 function epl_log( $log= '', $message = '' ) {
     return;
+    
 }

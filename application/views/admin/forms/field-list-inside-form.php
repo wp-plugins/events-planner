@@ -13,7 +13,7 @@ if ( $values == '' )
         <tr>
             <td class="epl_w20"> <div class="handle"></div></td>
             <td><input type="hidden" name ="epl_form_fields[]" value="<?php echo $q_id; ?>" />
-            <?php echo $epl_fields[$q_id]['epl_field']?$epl_fields[$q_id]['epl_field']:$epl_fields[$q_id]['label']; ?>
+            <?php echo (isset($epl_fields[$q_id]['epl_field']))?$epl_fields[$q_id]['epl_field']:$epl_fields[$q_id]['label']; ?>
         </td><td>
             <div class="epl_action epl_delete"></div>
         </td></tr>

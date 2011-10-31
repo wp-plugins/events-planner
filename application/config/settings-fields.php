@@ -5,13 +5,13 @@ global $epl_fields;
 $epl_fields['epl_general_options'] =
         array(
 
-            'epl_sort_event_list_by' => array(
+            /*'epl_sort_event_list_by' => array(
                 'input_type' => 'select',
                 'input_name' => 'epl_sort_event_list_by',
                 'label' => epl__('Sort Events By'),
                 'description' => 'If yes is selected, will be displayed',
                 'options' => array( 10 => epl__( 'Date Published' ), 20 => epl__( 'Title' ), 30 => epl__( 'Start Date' ), 40 => epl__( 'Registration Date' ) ),
-                'default_value' => 10 ),
+                'default_value' => 10 ),*/
                         'epl_currency_code' => array(
                 'input_type' => 'select',
                 'input_name' => 'epl_currency_code',

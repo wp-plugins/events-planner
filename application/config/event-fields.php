@@ -17,12 +17,14 @@ $epl_fields['epl_event_type_fields'] =
                 'input_name' => '_epl_event_type',
                 'options' => array(
                     5 => 'One or more days.  The user can only choose <span class="epl_font_red">one</span> of the days (if more than one day is available).',
-                    6 => 'One or more days.  The user can pick and choose <span class="epl_font_red">one or more</span> days (if more than one day is available).',
-                    
+
                 ),
-                'default_value' => 5
+                'default_value' => 5,
+                'default_checked' => 1
             ),
 );
+
+$epl_fields['epl_event_type_fields']['_epl_event_type'] = apply_filters('epl_event_type_fields',$epl_fields['epl_event_type_fields']['_epl_event_type']);
 
 $epl_fields['epl_price_fields'] =
         array(
@@ -290,9 +292,9 @@ $epl_fields['epl_other_settings_fields'] =
                 'input_name' => '_epl_payment_choices[]',
                 'options' => get_list_of_payment_profiles(),
                 'label' => epl__( 'Payment Choices' ), ),
-            '_epl_setting' => array(
+            '_epl_event_organization' => array(
                 'input_type' => 'select',
-                'input_name' => '_epl_setting[]',
+                'input_name' => '_epl_event_organization',
                 'options' => get_list_of_orgs(),
                 'label' => epl__( 'Organization hosting the event' ), ),
 );

@@ -2,6 +2,7 @@
 
 /*
  * Initializes menus, post types, loads assets, etc
+ * Right now loads everything.  Page specific loading soon.
  *
  */
 
@@ -17,7 +18,7 @@ class EPL_Init {
     function __constuct() {
 
         $this->epl = EPL_Base::get_instance();
-        
+
         add_action( 'init', array( &$this, 'create_post_types' ) );
         add_action( 'admin_menu', array( &$this, 'admin_specific' ) );
         add_action( 'wp_enqueue_scripts', array( &$this, 'front_specific' ) );
@@ -106,7 +107,7 @@ class EPL_Init {
 
 
     function load_front_stylesheets() {
-        wp_enqueue_style( 'registration-form-css', EPL_FULL_URL . 'css/regis-form/regis-form-style1.css' );
+        wp_enqueue_style( 'events-planner-stylesheet', EPL_FULL_URL . 'css/regis-form/events-planner-style1.css' );
         //wp_enqueue_style( 'widget-calendar-css', EPL_FULL_URL . 'css/calendar/widget-calendar-default.css' );
     }
 
@@ -126,8 +127,9 @@ class EPL_Init {
 
     function create_admin_menu() {
 
-        add_submenu_page( 'edit.php?post_type=epl_event', epl__( 'Form Manager' ), epl__( 'Form Manager' ), 'manage_options', 'epl_form_manager', 'events_planner_route' );
-        add_submenu_page( 'edit.php?post_type=epl_event', epl__( 'Settings' ), epl__( 'Settings' ), 'manage_options', 'epl_settings', 'events_planner_route' );
+        add_submenu_page( 'edit.php?post_type=epl_event', epl__( 'Form Manager' ), epl__( 'Form Manager' ), 'manage_options', 'epl_form_manager', array( $this, 'route' ));
+        add_submenu_page( 'edit.php?post_type=epl_event', epl__( 'Settings' ), epl__( 'Settings' ), 'manage_options', 'epl_settings', array( $this, 'route' ) );
+        add_submenu_page( 'edit.php?post_type=epl_event', epl__( 'Help' ), '<span class="epl_font_red">' . epl__( 'Help' ) . '</span>', 'manage_options', 'epl_help', array( $this, 'route' ) );
     }
 
     /*
@@ -157,7 +159,6 @@ class EPL_Init {
         return $this->epl->epl_router->shortcode_route();
     }
 
-
     /*
      * Custom Post types (http://codex.wordpress.org/Function_Reference/register_post_type)
      */
@@ -172,7 +173,7 @@ class EPL_Init {
                 'slug' => 'event',
                 'with_front' => false,
             ),
-            'supports' => array( 'title', 'post-formats', 'thumbnail', 'editor' ),
+            'supports' => array( 'title', 'thumbnail', 'editor' ),
             'labels' => array(
                 'name' => 'Events Planner',
                 'singular_name' => 'Event Planner',
@@ -197,7 +198,7 @@ class EPL_Init {
                 'slug' => 'location',
                 'with_front' => false,
             ),
-            'supports' => array( 'title', 'post-formats', 'editor', 'thumbnail' ),
+            'supports' => array( 'title', 'editor', 'thumbnail' ),
             'labels' => array(
                 'name' => 'Event Locations',
                 'singular_name' => 'Event Location',
@@ -216,52 +217,48 @@ class EPL_Init {
 
         register_post_type( 'epl_location', $post_type_args );
 
-       //this will be turned in 1.1 or 1.2
-        
-       /* $post_type_args = array(
-            //'public' => true,
-            'show_ui' => true,
-            'publicly_queryable' => true,
-            'exclude_from_search' => true,
-            'show_in_nav_menus' => false,
-            'show_in_menu' => true,
-            'query_var' => 'epl_registration',
-            'rewrite' => array(
-                'slug' => 'registration',
-                'with_front' => false,
-            ),
-            'supports' => array( 'title' ),
-            'labels' => array(
-                'name' => 'Registrations',
-                'singular_name' => 'Registration',
-                'add_new' => 'Add New Registration',
-                'add_new_item' => 'Add New Registration',
-                'edit_item' => 'Edit Registration',
-                'new_item' => 'New Registration',
-                'view_item' => 'View Registration',
-                'search_items' => 'Search Registrations',
-                'not_found' => 'No Registrations Found',
-                'not_found_in_trash' => 'No Registrations Found In Trash'
-            ),
-            'show_in_menu' => 'edit.php?post_type=epl_event'
-        );
+        //this will be turned in 1.1 or 1.2
+
+        /* $post_type_args = array(
+          //'public' => true,
+          'show_ui' => true,
+          'publicly_queryable' => true,
+          'exclude_from_search' => true,
+          'show_in_nav_menus' => false,
+          'show_in_menu' => true,
+          'query_var' => 'epl_registration',
+          'rewrite' => array(
+          'slug' => 'registration',
+          'with_front' => false,
+          ),
+          'supports' => array( 'title' ),
+          'labels' => array(
+          'name' => 'Registrations',
+          'singular_name' => 'Registration',
+          'add_new' => 'Add New Registration',
+          'add_new_item' => 'Add New Registration',
+          'edit_item' => 'Edit Registration',
+          'new_item' => 'New Registration',
+          'view_item' => 'View Registration',
+          'search_items' => 'Search Registrations',
+          'not_found' => 'No Registrations Found',
+          'not_found_in_trash' => 'No Registrations Found In Trash'
+          ),
+          'show_in_menu' => 'edit.php?post_type=epl_event'
+          );
 
 
-        register_post_type( 'epl_registration', $post_type_args );*/
+          register_post_type( 'epl_registration', $post_type_args ); */
 
 
         $post_type_args = array(
-            //'public' => true,
             'show_ui' => true,
             'publicly_queryable' => false,
             'exclude_from_search' => true,
             'show_in_nav_menus' => false,
             'show_in_menu' => true,
             'query_var' => 'epl_pay_profile',
-            'rewrite' => array(
-                'slug' => 'pay_profile',
-                'with_front' => false,
-            ),
+
             'supports' => array( 'title' ),
             'labels' => array(
                 'name' => 'Payment Profiles',
@@ -282,16 +279,11 @@ class EPL_Init {
         register_post_type( 'epl_pay_profile', $post_type_args );
 
         $post_type_args = array(
-            //'public' => true,
-            'show_ui' => true,
-            'publicly_queryable' => true,
-            'exclude_from_search' => false,
-            'show_in_nav_menus' => true,
-            'show_in_menu' => true,
+            'public' => true,
             'query_var' => 'epl_org',
             'rewrite' => array(
                 'slug' => 'org',
-                'with_front' => false,
+                'with_front' => true,
             ),
             'supports' => array( 'title', 'editor', 'thumbnail' ),
             'labels' => array(

@@ -75,12 +75,11 @@ if ( !class_exists( 'EPL_front' ) ) {
 
                         $epl_current_step = $epl_action;
 
-                        $r = $this->$epl_action();
+                        echo $this->$epl_action();
                     }
                 }
             }
             else {
-
 
                 /*
                  * get the event list
@@ -94,18 +93,30 @@ if ( !class_exists( 'EPL_front' ) ) {
 
 
         function set_event_list( $param ) {
+
             $this->epl_util->set_the_event_details();
         }
 
 
         function the_event_list() {
 
+
+            global $post;
+
             global $event_list;
             $this->ecm->events_list();
 
             $data['event_list'] = $event_list;
 
-            return $this->epl->load_view( 'front/event-list', $data, true );
+            $r = null;
+
+               $r = $this->epl->load_template_file( 'event-list.php' );
+
+               //template not found
+               if(is_null($r)){
+                   $r = $this->epl->load_view( 'front/event-list', $data, true );
+               }
+               return $r;
         }
 
         /*
@@ -118,7 +129,7 @@ if ( !class_exists( 'EPL_front' ) ) {
             $r = $this->rm->_process_session_cart();
 
             if ( !$GLOBALS['epl_ajax'] ) {
-                $this->show_cart();
+                return $this->show_cart();
                 return;
             }
             echo $this->epl_util->epl_response( array( 'html' => $r ) );
@@ -148,7 +159,7 @@ if ( !class_exists( 'EPL_front' ) ) {
             $data['next_step'] = 'regis_form';
             $data['next_step_label'] = 'Next: Attendee Information';
             $data['mode'] = 'edit';
-            $this->epl->load_view( 'front/cart-container', $data );
+            return $this->epl->load_view( 'front/cart-container', $data, true );
         }
 
 
@@ -167,7 +178,6 @@ if ( !class_exists( 'EPL_front' ) ) {
 
         function show_cart_overview( $next_step = null ) {
             //global $mode;
-
             //in case they come back from thank you page.
             if ( $this->rm->epl_is_empty_cart() ) {
 

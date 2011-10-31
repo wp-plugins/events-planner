@@ -1,0 +1,132 @@
+/* 
+
+    Stylesheet for event pages
+
+*/
+
+#event_list_wrapper{
+
+    border: 0px solid #e8e8e8;
+    display: block;
+    padding:5px;
+    width: auto;
+    
+}
+.event_wrapper{
+
+    -webkit-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    
+
+}
+.event_wrapper .event_thumbnail{
+    float: left;
+    width: 160px;
+    padding: 0;
+    margin: 5px;
+
+}
+.event_wrapper .event_thumbnail img{
+    -moz-box-shadow: 5px 5px 5px #ccc;
+    -webkit-box-shadow: 5px 5px 5px #ccc;
+    box-shadow: 5px 5px 5px #ccc;
+}
+.event_wrapper .col_left{
+    width: 65%;
+    float: left;
+
+}
+
+.event_wrapper .col_right{
+    width: 30%;
+    float: right;
+    background-color:  #ecebeb;
+}
+
+.event_wrapper .event_title a{
+    font-size: 22px;
+    text-decoration: none;
+    display: block;
+}
+
+.event_wrapper .event_description{
+    margin: 3px 10px;
+    font-size: 12px;
+
+
+}
+
+.event_wrapper .event_description p{
+    margin: 0
+}
+
+.event_wrapper .event_dates,
+.event_wrapper .event_times,
+.event_wrapper .event_prices{
+
+    float: left;
+    margin: 5px;
+}
+
+.event_wrapper .event_location, .event_wrapper .event_organization{
+
+    margin: 10px 20px;
+}
+
+.event_wrapper .event_location .heading, .event_wrapper .event_organization .heading{
+
+    display: block;
+    font-size: 15px;
+    font-weight: bold;
+    margin-left: -5px;
+}
+
+
+
+
+.event_wrapper .event_dates span,
+.event_wrapper .event_times span,
+.event_wrapper .event_prices span{
+
+    margin: 3px;
+    font-size: 11px;
+}
+
+.event_wrapper table{
+    border: 1px solid #ccc;
+}
+.event_wrapper table th,
+.event_wrapper table td {
+    padding: 5px;
+    text-transform: none;
+}
+
+
+
+.event_wrapper .register_button_wrapper {
+    clear: both;
+    bottom:10px;
+    right:10px;
+}
+.event_wrapper .register_button_wrapper a
+{
+    float: right;
+    margin: 10px;
+}
+#event_list_wrapper table {
+    width:auto;
+    margin: 0;
+    font-size: 11px;
+    margin: 3px;
+}
+
+
+.regis_form{
+    margin:0 auto;
+
+}

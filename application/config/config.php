@@ -56,6 +56,7 @@ $valid_controllers = array(
     $_short_name . '_pay_profile' => array('class' => 'epl-pay-profile-manager', 'location' => 'epl-pay-profile-manager' ),
     $_short_name . '_front' => array( 'object_name' => 'front', 'class' => 'epl-front', 'location' => 'epl-front' ),
     $_short_name . '_registration_front' => array( 'object_name' => 'front', 'class' => 'epl_registration_front', 'location' => 'epl-registration-front' ),
+    $_short_name . '_help' => array( 'object_name' => 'help', 'class' => 'epl-help-manager', 'location' => 'epl-help-manager' ),
 );
 
 $valid_controllers = apply_filters( $_short_name . '_valid_controllers', $valid_controllers );

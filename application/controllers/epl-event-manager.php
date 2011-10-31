@@ -139,6 +139,8 @@ class EPL_Event_Manager extends EPL_Controller {
 
         $help_link = get_help_icon( array( 'section' => 'event_donate', 'id' => null ) );
         add_meta_box( 'epl-donation-meta-box', epl__( 'Donations' ) . $help_link, array( &$this, 'donation_meta_box' ), "epl_event", 'side', 'low' );
+
+       
     }
 
 
@@ -176,13 +178,6 @@ class EPL_Event_Manager extends EPL_Controller {
         $data = array( );
         $data['help_link'] = get_help_icon( array( 'section' => 'epl_event_type', 'id' => null ) );
         $data['epl_event_type'] = array( );
-
-        $epl_fields_to_create = $this->fields['epl_event_type_fields']['epl_event_duplicate_x'];
-
-        $field = $epl_fields_to_create;
-
-
-        $data['epl_event_duplicate_x'] = $this->epl_util->create_element( $field );
 
 
         $epl_fields_to_create = $this->fields['epl_event_type_fields']['_epl_event_type'];
@@ -252,7 +247,7 @@ class EPL_Event_Manager extends EPL_Controller {
         $list_of_forms = $this->ecm->_get_fields( 'epl_forms' );
 
         $_o = array( );
-        foreach ( $list_of_forms as $form_key => $form_atts ) {
+        foreach ((array) $list_of_forms as $form_key => $form_atts ) {
             $_o[$form_key] = $form_atts['epl_form_label'];
         }
 

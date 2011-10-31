@@ -2,10 +2,12 @@
 
 class EPL_router {
 
+    private static $routed = false;
+
 
     function __construct() {
 
-        epl_log('init', get_class() . ' initialized' );
+        epl_log( 'init', get_class() . ' initialized' );
         $GLOBALS['epl_ajax'] = false;
 
         if ( isset( $_POST['epl_ajax'] ) && $_POST['epl_ajax'] == 1 )
@@ -17,10 +19,8 @@ class EPL_router {
 
         $this->uri_components = parse_url( $_SERVER['REQUEST_URI'] );
 
-        if(array_key_exists('query', $this->uri_components))
-        parse_str( $this->uri_components['query'], $this->uri_segments );
-        
-     
+        if ( array_key_exists( 'query', $this->uri_components ) )
+            parse_str( $this->uri_components['query'], $this->uri_segments );
     }
 
 
@@ -35,8 +35,11 @@ class EPL_router {
 
     function route() {
 
+        //if ( self::$routed )
+          //  return;
         //ajax also ends up in admin
-        define( 'EPL_IS_ADMIN', is_admin() );
+        if (!defined('EPL_IS_ADMIN'))
+            define( 'EPL_IS_ADMIN', is_admin() );
 
         if ( EPL_IS_ADMIN ) {
 
@@ -47,7 +50,7 @@ class EPL_router {
                 $post_type = get_post_type( ( int ) $_GET['post'] );
             }
             else
-                $post_type = isset($_REQUEST['post_type'])?$_REQUEST['post_type']:'';
+                $post_type = isset( $_REQUEST['post_type'] ) ? $_REQUEST['post_type'] : '';
 
             $resource = $post_type;
 
@@ -57,16 +60,17 @@ class EPL_router {
             if ( isset( $_REQUEST['epl_controller'] ) )
                 $resource = $_REQUEST['epl_controller'];
 
-            return $this->events_planner_route( $resource );
+            return $this->_route( $resource );
+        } elseif (isset($_REQUEST['epl_action'])){
+            //may use it for ipn
         }
     }
 
 
     function shortcode_route() {
-
         if ( !EPL_IS_ADMIN && ('the_content' == current_filter()) ) {
             $resource = 'epl_front';
-            return $this->events_planner_route( $resource );
+            return $this->_route( $resource );
         }
     }
 
@@ -78,11 +82,14 @@ class EPL_router {
      * @param none
      * @return Only when called from the front end, returns short code process result.
      */
-    function events_planner_route( $resource = null ) {
+    function _route( $resource = null ) {
 
 
- 
-        epl_log( "init", "<pre>" . print_r($resource, true ) . "</pre>" );
+ epl_log( "init", "<pre>" . print_r( $resource, true ) . "</pre>" );
+
+        if ( self::$routed )
+            return;
+        epl_log( "init", "<pre>" . print_r( $resource, true ) . "</pre>" );
 
 
         global $valid_controllers, $post; //When the shortcode is processed, the page id is ready
@@ -96,7 +103,7 @@ class EPL_router {
 
         $controller = $epl->load_controller( $controller_location );
 
-        $routed = true;
+        self::$routed = true;
 
         if ( !EPL_IS_ADMIN && !isset( $_REQUEST['epl_action'] ) ) {
             return $controller->run(); //doing this for the shortcode

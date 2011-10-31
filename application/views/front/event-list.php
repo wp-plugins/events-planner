@@ -1,9 +1,17 @@
+<?php
+
+//THESE TWO LINES ARE REQUIRED IN ALL EVENT LIST TEMPLATES
+
+the_event_list();
+global $event_list;
+?>
+
 <div id="event_list_wrapper">
 
 
     <?php
 
-    //echo "<pre class='prettyprint'>" . print_r( $event_list, true ) . "</pre>";
+    /* custom event list loop */
     if ( $event_list->have_posts() ):
 
         while ( $event_list->have_posts() ) :
@@ -12,48 +20,32 @@
 
             /*
              * after $event_list->the_post(), a global var called $event_details is created with all the event
-             * meta information (dates, times, ...).  The template tags below go off of that variable
+             * meta information (dates, times, ...).  The template tags below go off of that variable.  You can uncomment the next line to see what is in the variable
+             */
+            global $event_details;
+
+            /*
+             * As you can see, all the information is wrappeed in divs.  The styling comes from events-planner > css > events-planner-style1.css
+             * You can copy the style into your theme and modify
              */
     ?>
-
+            <!-- individual event wrapper -->
             <div class="event_wrapper clearfix">
 
 
-                <div class ="event_thumbnail">
-            <?php
+                <div class="col_left">
 
-            if ( has_post_thumbnail ( ) ) {
+                    <div class="event_title clearfix">
 
-                the_post_thumbnail( '150x150' );
-            }
-            else {
-
-                echo '<img src="' . EPL_FULL_URL . '/images/default_event_list_image.png" />';
-            } ?>
-
-        </div>
-        <?php //the_content(); ?>
-
-            <div class="event_info_wrapper">
-
-                <div class="event_title clearfix">
-
-                <?php
-
-                //If you don't want to use the_title, use
-                //http://...../events/?event_id=637&epl_action=event_details
-                //echo get_the_event_title();
-                ?>
-
-                <a href ="<?php echo get_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a>
+                        <a href ="<?php echo get_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a>
 
 
-            </div>
+                    </div>
 
 
-            <div class="event_description clearfix">
+                    <div class="event_description clearfix">
 
-                <?php the_content(); ?>
+                <?php the_content(); //the content from the event editor?>
 
             </div>
 
@@ -69,8 +61,49 @@
                 <?php echo get_the_event_times( ); ?>
             </div>
 
+            <div class ="event_prices" >
+                <span class="">Prices</span>
+                <?php echo get_the_event_prices( ); ?>
+            </div>
         </div>
-    </div>
+
+
+        <div class="col_right">
+
+            <?php
+                //location id is stored in $event_details['_epl_event_location']
+            ?>
+            <div class ="event_location">
+                <span class="heading">Location</span>
+                <a href="<?php echo get_permalink( $event_details['_epl_event_location'] ); ?>" title="<?php echo get_the_location_name(); ?>">
+                    <?php echo get_the_location_name(); ?>
+                </a><br />
+
+                <?php echo get_the_location_address(); ?><br />
+                <?php echo get_the_location_city(); ?>, <?php echo get_the_location_state(); ?> <?php echo get_the_location_zip(); ?>
+                <?php echo get_the_location_phone(); ?><br />
+            </div>
+
+
+            <?php
+                //organization id is stored in $event_details['_epl_event_organization']
+            ?>
+                <div class ="event_organization">
+                    <span class="heading">Hosted By</span>
+                    <a href="<?php echo get_permalink( $event_details['_epl_event_organization'] ); ?>" title="<?php echo get_the_organization_name(); ?>"><?php echo get_the_organization_name(); ?></a><br />
+                <?php echo get_the_organization_address(); ?><br />
+                <?php echo get_the_organization_city(); ?>,  <?php echo get_the_organization_state(); ?> <?php echo get_the_organization_zip(); ?><br />
+                <?php echo get_the_organization_phone(); ?><br />
+                <?php echo epl_anchor( get_the_organization_website(), 'Visit Website' ); ?><br />
+            </div>
+
+        </div>
+
+        <div class ="register_button_wrapper" style="clear:both;">
+
+            <?php echo get_the_register_button(); ?>
+            </div>
+        </div>
     <?php
 
                 endwhile;

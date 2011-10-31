@@ -14,7 +14,7 @@ class EPL_Base {
 
         epl_log( 'init', get_class() . " initialized" );
 
-       
+
 
         if ( !self::$instance ) {
             $this->epl = $this; //make this object available everywhere
@@ -47,7 +47,7 @@ class EPL_Base {
     function load_components() {
         global $libraries, $helpers;
 
-        epl_log('init', get_class() . " components loaded", 1 );
+        epl_log( 'init', get_class() . " components loaded", 1 );
 
         if ( count( $libraries ) > 0 ) {
 
@@ -184,7 +184,7 @@ class EPL_Base {
             $class = strtolower( str_replace( "-", "_", $file_name ) );
             // passing $this so that the objects get access to all
             // the properties and methods of this super object, if they want
-            return new $class(  );
+            return new $class( );
         }
     }
 
@@ -220,6 +220,28 @@ class EPL_Base {
         if ( file_exists( $file ) ) {
             require_once $file;
         }
+    }
+
+
+    function load_template_file( $file_name = null ) {
+
+        if ( is_null( $file_name ) )
+            return null;
+
+        $template_path = TEMPLATEPATH;
+        $file = $template_path . '/' . $file_name;
+
+        if ( !file_exists( $file ) ) {
+            return null;
+        }
+
+        ob_start();
+        include $file;
+        $r = ob_get_contents();
+        @ob_end_clean();
+
+        return $r;
+
     }
 
 

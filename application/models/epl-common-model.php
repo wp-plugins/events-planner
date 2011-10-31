@@ -1,6 +1,6 @@
 <?php
 
-class EPL_common_model extends EPL_Model {
+class EPL_Common_Model extends EPL_Model {
 
     private static $instance;
 
@@ -70,7 +70,7 @@ class EPL_common_model extends EPL_Model {
                 }
             }
 
-            epl_log( 'debug', "<pre>" . print_r( $this->d[$this->scope], true ) . "</pre>" );
+            //epl_log( 'debug', "<pre>" . print_r( $this->d[$this->scope], true ) . "</pre>" );
 
             update_option( $this->scope, $this->d[$this->scope] );
 
@@ -100,7 +100,7 @@ class EPL_common_model extends EPL_Model {
 
             //get the name of the unique id field.  The FIRST ARRAY ITEM is always the id field
             $id_field = key( $_fields );
-            epl_log( 'debug', "<pre>" . print_r( $id_field, true ) . "</pre>", 1 );
+            //epl_log( 'debug', "<pre>" . print_r( $id_field, true ) . "</pre>", 1 );
             if ( is_null( $id_field ) )
                 exit( $this->epl_util->epl_invoke_error( 1, 'no id' ) );
 
@@ -221,6 +221,57 @@ class EPL_common_model extends EPL_Model {
         return $event_details;
     }
 
+    function setup_location_details( $location_id = null ) {
+
+        static $current_location_id = null;
+
+
+        global $post, $location_details;
+
+        $id = (!is_null($location_id))?(int)$location_id:$post->ID;
+
+        //this makes sure that the location info is queried only once.
+        if ($current_location_id == $id)
+            return;
+
+
+        $post_data = get_post( $id, ARRAY_A );
+        
+        $post_meta = $this->get_post_meta_all( $id );
+        $location_details = ( array ) $post_data + ( array ) $post_meta;
+
+        $current_location_id = $id;
+
+        return $location_details;
+    }
+
+    
+    function setup_org_details( $org_id = null ) {
+
+        static $current_org_id = null;
+
+
+         global $post, $organization_details;
+
+        $id = (!is_null($org_id))?(int)$org_id:$post->ID;
+
+        //this makes sure that the org info is queried only once.
+        if ($current_org_id == $id)
+            return;
+
+
+        $post_data = get_post( $id, ARRAY_A );
+
+        $post_meta = $this->get_post_meta_all( $id );
+        $organization_details = ( array ) $post_data + ( array ) $post_meta;
+
+        $current_org_id = $id;
+        //epl_log( "debug", "<pre>" . print_r($organization_details, true ) . "</pre>" );
+
+        return $organization_details;
+    }
+
+
 
     function get_post_meta_all( $post_ID ) {
         if ( $post_ID == '' )
@@ -309,7 +360,7 @@ class EPL_common_model extends EPL_Model {
                   ) */
                 array(
                     'key' => '_q__epl_start_date',
-                    'value' => strtotime( date( "Y-m-d" ) ),
+                    'value' => strtotime( date( "Y-m-d 00:00:00" ) ),
                     //'type' => 'NUMERIC',
                     'compare' => '>='
                 ),
@@ -326,40 +377,29 @@ class EPL_common_model extends EPL_Model {
         global $event_list;
         $event_list = new WP_Query( $args );
 
-        epl_log( "debug", "<pre>" . print_r( $event_list, true ) . "</pre>" );
-
-        return; // $the_query;
-
-        if ( $the_query->have_posts() )
-            $epl_options = $this->epl_util->get_epl_options( 'events_planner_event_options' );
 
 
-        $post_info = array( );
-        //ob_start();
-        while ( $the_query->have_posts() ) :
-            $the_query->the_post();
+        return; 
+
+        
+    }
+
+    function event_location_details( $param =array( ) ) {
+
+        $args = array(
+            'post_type' => 'epl_location'
+
+
+        );
+
+        global $event_list;
+        $event_list = new WP_Query( $args );
 
 
 
-            $post_info[get_the_ID()] = $this->setup_event_details( get_the_ID() ); //= $this->get_post_meta_all( get_the_ID() );
-        //echo "<pre class='prettyprint'>" . print_r($pm, true). "</pre>";
-        //$this->epl_util
+        return;
 
-        /* echo "<h1>" . get_the_title() . "</h1>";
-          /*
-          echo $this->epl_util->get_time_display( &$post_mata );
-          echo $this->epl_util->get_prices_display( &$post_mata );
 
-          $epl_options['epl_show_event_description'] != 0 ? the_content() : '';
-
-          echo $this->epl_util->construct_date_display_table( array( 'post_ID' => get_the_ID(), 'meta' => $post_mata ) );
-         */
-        //echo $this->epl_util->construct_calendar($pm['epl_date_blueprint']);
-        endwhile;
-        //$r = ob_get_contents();
-        //ob_end_clean();
-        //wp_reset_postdata();
-        return $post_info;
     }
 
 
@@ -393,7 +433,7 @@ class EPL_common_model extends EPL_Model {
 
 
         extract( $args );
-        epl_log( "debug", "<pre>THE ARGS" . print_r($args, true ) . "</pre>" );
+        //epl_log( "debug", "<pre>THE ARGS" . print_r($args, true ) . "</pre>" );
 
         if (!isset($fields) || empty($fields))
             return;
@@ -425,7 +465,7 @@ class EPL_common_model extends EPL_Model {
         $event_meta = array_intersect_key( $_POST, $fields );
 
 
-        epl_log( "debug", "<pre>THE META" . print_r($event_meta, true ) . "</pre>" );
+        //epl_log( "debug", "<pre>THE META" . print_r($event_meta, true ) . "</pre>" );
         //post save callback function, if adding
         $_save_cb = 'epl_add_post_meta';
 
@@ -433,7 +473,7 @@ class EPL_common_model extends EPL_Model {
         if ( $edit_mode )
             $_save_cb = 'epl_update_post_meta';
 
-        epl_log( "debug", "<pre>" . print_r( $event_meta, true ) . "</pre>" );
+        //epl_log( "debug", "<pre>" . print_r( $event_meta, true ) . "</pre>" );
 
         foreach ( $event_meta as $k => $data['values'] ) {
 

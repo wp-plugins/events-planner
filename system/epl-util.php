@@ -27,6 +27,8 @@ class EPL_util {
 
     function load_components() {
         $this->epl = EPL_base::get_instance();
+
+
         $this->ecm = $this->epl->load_model( 'epl-common-model' );
         $this->rm = $this->epl->load_model( 'epl-recurrence-model' );
         $this->opt = $this->ecm->get_epl_options();
@@ -93,11 +95,11 @@ class EPL_util {
                             $master_keys = $meta['value'][$field_name];
 
 
-                        $field_attr['value'] = (isset($meta['value'][$field_name]))?$meta['value'][$field_name]:'';
+                        $field_attr['value'] = (isset( $meta['value'][$field_name] )) ? $meta['value'][$field_name] : '';
                         $k = '';
 
                         //if the value is an array (from dynamically created fields)
-                        if ( isset($meta['value'][$field_name]) && is_array( $meta['value'][$field_name] ) ) {
+                        if ( isset( $meta['value'][$field_name] ) && is_array( $meta['value'][$field_name] ) ) {
 
                             $k = array_keys( $meta['value'][$field_name] ); //will be used for checking dinamically added row data
 
@@ -121,10 +123,10 @@ class EPL_util {
                     $_r .= $this->create_element( $field_attr, $meta['_view'] );
                 }
 
-                if ( isset($field_attr['key']) && $field_attr['key'] == '' )
+                if ( isset( $field_attr['key'] ) && $field_attr['key'] == '' )
                     $_k = $field_attr['tmp_key'];
                 else
-                    $_k = isset($field_attr['key'])?$field_attr['key']:'';
+                    $_k = isset( $field_attr['key'] ) ? $field_attr['key'] : '';
 
                 $r[$_k] = $_r;
             }
@@ -133,7 +135,7 @@ class EPL_util {
             foreach ( $fields_to_display as $key => $field ) {
 
                 if ( isset( $meta['value'] ) ) {
-                    $field['value'] = (isset($meta['value'][$key]))?$meta['value'][$key]:'';
+                    $field['value'] = (isset( $meta['value'][$key] )) ? $meta['value'][$key] : '';
                 }
                 $field['content'] = $meta['_content'];
                 $_r[$key] = $this->create_element( $field, $meta['_view'] );
@@ -229,7 +231,6 @@ class EPL_util {
         if ( $key !== '' && ($input_type == 'text' || $input_type == 'hidden') ) {
             $name = str_replace( "[", "[" . $key, $name );
             $value = $value[$key];
-            epl_log( "debug", "<pre> $name > $key " . print_r( $value, true ) . "</pre>" );
         }
 
 
@@ -522,12 +523,17 @@ class EPL_util {
         $tmpl = array( 'table_open' => '<table cellpadding="0" cellspacing="0" class="event_dates_table">' );
 
         $this->epl->epl_table->set_template( $tmpl );
-        $this->epl->epl_table->set_heading( epl__( 'Start Date' ), epl__( 'End Date' ), '' );
+        //$this->epl->epl_table->set_heading( epl__( 'Start Date' ), epl__( 'End Date' ), '' );
         foreach ( $meta['_epl_start_date'] as $key => $date ) {
 
             if ( strtotime( $date ) >= strtotime( date( "Y-m-d" ) ) ) {
 
                 $t_row = array( $date, $meta['_epl_end_date'][$key] );
+
+                if ($date == $meta['_epl_end_date'][$key])
+                    $t_row = array( $date);
+
+
                 $this->epl->epl_table->add_row( $t_row );
             }
         }
@@ -596,13 +602,13 @@ class EPL_util {
         $tmpl = array( 'table_open' => '<table cellpadding="0" cellspacing="0" class="event_times_table">' );
 
         $this->epl->epl_table->set_template( $tmpl );
-        $this->epl->epl_table->set_heading( epl__( 'Start Time' ), epl__( 'End Time' ), '' );
+        //$this->epl->epl_table->set_heading( epl__( 'Start Time' ), epl__( 'End Time' ), '' );
         foreach ( $event_details['_epl_start_time'] as $time_key => $times ) {
 
             $start_time = date( $time_format, strtotime( $times ) );
             $end_time = date( $time_format, strtotime( $event_details['_epl_end_time'][$time_key] ) );
 
-            $this->epl->epl_table->add_row( $start_time, $end_time );
+            $this->epl->epl_table->add_row( $start_time . ' - ' . $end_time );
         }
 
         $r = $this->epl->epl_table->generate();
@@ -611,25 +617,25 @@ class EPL_util {
     }
 
 
-    function get_prices_display( $args ) {
-        extract( $args );
-        if ( $this->is_empty_array( $meta['_epl_price_name'] ) )
+    function get_prices_display() {
+        global $event_details, $epl_fields;
+        if ( $this->is_empty_array( $event_details['_epl_price_name'] ) )
             return;
 
-        global $fields;
+        echo "<pre class='prettyprint'>" . print_r( $event_details['_epl_price_name'], true ) . "</pre>";
 
         $this->epl->load_config( 'event-fields' );
 
 
-        $price_fileds = $fields['_epl_price_fields'];
+        $price_fileds = $epl_fields['epl_price_fields'];
 
-        foreach ( $meta['_epl_price_name'] as $price_key => $price_data ) {
+        foreach ( $event_details['_epl_price_name'] as $price_key => $price_data ) {
             $r = array( );
             foreach ( $price_fileds as $field_name => $field_values ) {
 
-                if ( array_key_exists( $field_name, $meta ) ) {
+                if ( array_key_exists( $field_name, $event_details ) ) {
 
-                    $r[] = $meta[$field_name][$price_key];
+                    $r[] = $event_details[$field_name][$price_key];
                 }
             }
 
@@ -758,6 +764,10 @@ class EPL_util {
         return $found;
     }
 
+    /*
+     * Event Template Tag handlers
+     */
+
 
     function get_the_event_title( $post_ID = null ) {
 
@@ -812,16 +822,29 @@ class EPL_util {
     }
 
 
-    function get_the_event_prices( $post_ID = null ) {
-        if ( is_null( $post_ID ) )
-            return null;
-        global $event_details;
+    function get_the_event_prices() {
 
-        return $this->get_prices_display( array( 'post_ID' => $post_ID, 'meta' => $event_details ) );
+        global $event_details;
+        $tmpl = array( 'table_open' => '<table cellpadding="0" cellspacing="0" class="event_prices_table">' );
+
+        $this->epl->epl_table->set_template( $tmpl );
+        foreach ( $event_details['_epl_price_name'] as $price_key => $price_data ) {
+
+            $price_name = $event_details['_epl_price_name'][$price_key];
+            $price = (epl_is_free_event())?'':epl_get_formatted_curr($event_details['_epl_price'][$price_key]);
+                   $this->epl->epl_table->add_row( $price_name, $price
+                           );
+
+            //$this->epl->epl_table->add_row( $r );
+        }
+
+        $r = $this->epl->epl_table->generate();
+        $this->epl->epl_table->clear();
+        return $r;
     }
 
 
-    function get_the_add_button( $post_ID = null ) {
+    function get_the_register_button( $post_ID = null ) {
         global $post, $event_details;
 
         if ( !epl_is_ok_to_show_regis_button() )
@@ -844,6 +867,10 @@ class EPL_util {
 
         echo $this->construct_date_display_table( array( 'post_ID' => $post_ID, 'meta' => $post_mata ) );
     }
+
+    /*
+     * END Event Template Tag handlers
+     */
 
 
     function get_widget_cal() {
