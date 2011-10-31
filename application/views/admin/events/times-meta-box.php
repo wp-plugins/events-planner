@@ -36,20 +36,7 @@
     </div>
 
 
-    <?php if ( !empty( $epl_pricing_type ) ): ?>
-
-                <div class="epl_box epl_highlight">
-                    <div class="epl_box_content">
-                        <span class="epl_highlight">
-                <?php epl_e( 'Please note that once you make this selection and save the event, you will NOT be able to change this.' ); ?>
-            </span>
-
-            <?php echo current( $epl_pricing_type ); ?>
-            </div>
-
-        </div>
-    <?php endif; ?>
-
+    
 
     <div id="epl_time_price_section" class="">
 
