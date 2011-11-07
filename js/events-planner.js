@@ -1,6 +1,8 @@
 jQuery(document).ready(function($) {
 
-$('.help_tip').tipsy({opacity: 1});
+    $('.help_tip').tipsy({
+        opacity: 1
+    });
 
     $.ajaxSetup({
         cache: false,
@@ -536,23 +538,26 @@ function epl_validate_field(field){
     //http://www.regular-expressions.info/email.html should get 99.99%
     var email_regexp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
+
+
     if (field.hasClass('required') && jQuery.trim(field.val()) == ''){
 
-        field.animate({
+        field.css('background-color','pink');
+        /*par.animate({
             backgroundColor: 'pink'
-        }, 300);
+        }, 300);*/
         return false;
         
     }
 
     if (field.hasClass('email') && !validate_regex(field.val(), email_regexp)){
-        field.animate({
-            backgroundColor: 'pink'
-        }, 300);
+
+        
+        field.css('background-color','pink');
         return false;
     } else {
  
-        field.css('background-color', '#fff');
+        field.css('background-color','#fff');
         return true;
     }
 }

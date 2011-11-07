@@ -214,12 +214,15 @@ class EPL_Common_Model extends EPL_Model {
             return null;
 
         global $event_details;
+
         $post_data = get_post( $event_id, ARRAY_A );
 
         $post_meta = $this->get_post_meta_all( $event_id );
         $event_details = ( array ) $post_data + ( array ) $post_meta;
+
         return $event_details;
     }
+
 
     function setup_location_details( $location_id = null ) {
 
@@ -228,15 +231,15 @@ class EPL_Common_Model extends EPL_Model {
 
         global $post, $location_details;
 
-        $id = (!is_null($location_id))?(int)$location_id:$post->ID;
+        $id = (!is_null( $location_id )) ? ( int ) $location_id : $post->ID;
 
         //this makes sure that the location info is queried only once.
-        if ($current_location_id == $id)
+        if ( $current_location_id == $id )
             return;
 
 
         $post_data = get_post( $id, ARRAY_A );
-        
+
         $post_meta = $this->get_post_meta_all( $id );
         $location_details = ( array ) $post_data + ( array ) $post_meta;
 
@@ -245,18 +248,18 @@ class EPL_Common_Model extends EPL_Model {
         return $location_details;
     }
 
-    
+
     function setup_org_details( $org_id = null ) {
 
         static $current_org_id = null;
 
 
-         global $post, $organization_details;
+        global $post, $organization_details;
 
-        $id = (!is_null($org_id))?(int)$org_id:$post->ID;
+        $id = (!is_null( $org_id )) ? ( int ) $org_id : $post->ID;
 
         //this makes sure that the org info is queried only once.
-        if ($current_org_id == $id)
+        if ( $current_org_id == $id )
             return;
 
 
@@ -269,6 +272,31 @@ class EPL_Common_Model extends EPL_Model {
         //epl_log( "debug", "<pre>" . print_r($organization_details, true ) . "</pre>" );
 
         return $organization_details;
+    }
+
+    function setup_regis_details( $regis_id = null ) {
+
+        static $current_regis_details = null;
+
+
+        global $post, $regis_details;
+
+        $id = (!is_null( $regis_id )) ? ( int ) $regis_id : $post->ID;
+
+        //this makes sure that the org info is queried only once.
+        if ( $current_regis_id == $id )
+            return;
+
+
+        $post_data = get_post( $id, ARRAY_A );
+
+        $post_meta = $this->get_post_meta_all( $id );
+        $regis_details = ( array ) $post_data + ( array ) $post_meta;
+
+        $current_regis_id = $id;
+        //echo "<pre class='prettyprint'>" . print_r($regis_details, true). "</pre>";
+
+        //return $regis_details;
     }
 
 
@@ -329,6 +357,19 @@ class EPL_Common_Model extends EPL_Model {
 
         $current_att_count = array( );
 
+        $decrement = epl_nz(epl_get_regis_setting( 'epl_regis_decrement_when' ), 20);
+
+       /* if ($decrement == 20)
+        {
+            $q = $wpdb->get_results( "SELECT post_id
+                FROM $wpdb->postmeta as pm
+                INNER JOIN $wpdb->posts p ON p.ID = pm.post_id
+                WHERE p.post_status = 'publish'
+                AND meta_key = '_date_paid'
+                GROUP BY meta_key", ARRAY_A );
+        }
+*/
+
         $q = $wpdb->get_results( "SELECT meta_key, SUM(meta_value) as num_attendees
                 FROM $wpdb->postmeta as pm
                 INNER JOIN $wpdb->posts p ON p.ID = pm.post_id
@@ -379,17 +420,14 @@ class EPL_Common_Model extends EPL_Model {
 
 
 
-        return; 
-
-        
+        return;
     }
+
 
     function event_location_details( $param =array( ) ) {
 
         $args = array(
             'post_type' => 'epl_location'
-
-
         );
 
         global $event_list;
@@ -398,8 +436,6 @@ class EPL_Common_Model extends EPL_Model {
 
 
         return;
-
-
     }
 
 
@@ -435,17 +471,17 @@ class EPL_Common_Model extends EPL_Model {
         extract( $args );
         //epl_log( "debug", "<pre>THE ARGS" . print_r($args, true ) . "</pre>" );
 
-        if (!isset($fields) || empty($fields))
+        if ( !isset( $fields ) || empty( $fields ) )
             return;
         //$epl_fields = $this->rekey_fields_array($epl_fields);
         // verify this came from the our screen and with proper authorization,
         // because save_post can be triggered at other times
         //if ( !wp_verify_nonce( $_POST['myplugin_noncename'], plugin_basename( __FILE__ ) ) )
-          // return;
+        // return;
 
-        /*if ( !empty( $_POST ) || !check_admin_referer( 'epl_form_nonce', '_epl_nonce' ) ) {
-            return;
-        }*/
+        /* if ( !empty( $_POST ) || !check_admin_referer( 'epl_form_nonce', '_epl_nonce' ) ) {
+          return;
+          } */
         // Check permissions
         /* if ( 'page' == $_POST['post_type'] )
           {
@@ -457,9 +493,7 @@ class EPL_Common_Model extends EPL_Model {
           if ( !current_user_can( 'edit_post', $post_id ) )
           return;
           } */
-       // epl_log( "debug", "<pre>EPL FIEDS " . print_r( $fields, true ) . "</pre>" );
-
-
+        // epl_log( "debug", "<pre>EPL FIEDS " . print_r( $fields, true ) . "</pre>" );
         //From the config file, only get the fields that pertain to this section
         //We are only interested in the posted fields that pertain to events planner
         $event_meta = array_intersect_key( $_POST, $fields );

@@ -17,9 +17,10 @@ class EPL_Gateway_Model extends EPL_Model {
 
     function _express_checkout_redirect() {
         global $event_details;
-        $event_id = key( ( array ) $_SESSION['__epl'][$regis_id]['events'] );
-        
-                if (is_null($event_id)){
+
+        $event_id = $event_details['ID']; //key( ( array ) $_SESSION['__epl'][$regis_id]['events'] );
+
+        if ( is_null( $event_id ) ) {
             return false;
         }
         $this->epl->load_file( 'libraries/gateways/paypal/paypal.php' );
@@ -28,6 +29,8 @@ class EPL_Gateway_Model extends EPL_Model {
 
         //echo "<pre class='prettyprint'>" . print_r( $_SESSION, true ) . "</pre>";
         $regis_id = $this->erm->get_regis_id();
+        $gateway_info = $this->erm->get_gateway_info();
+
 
 
 
@@ -38,6 +41,7 @@ class EPL_Gateway_Model extends EPL_Model {
         $this->ecm->setup_event_details( $event_id );
 
         $_totals = $this->erm->calculate_totals();
+
 
         $requestParams = array(
             'RETURNURL' => add_query_arg( array( 'cart_action' => '', 'p_ID' => $post_ID, 'regis_id' => $regis_id, 'epl_action' => '_exp_checkout_payment_success' ), $url ),
@@ -53,27 +57,28 @@ class EPL_Gateway_Model extends EPL_Model {
 
         $item = array(
             'L_PAYMENTREQUEST_0_NAME0' => 'Event Registration',
-            'L_PAYMENTREQUEST_0_DESC0' =>  $event_details['post_title'] . ', ' . $_totals['att_quantity']['total'][$event_id] . ' tickets' ,
+            'L_PAYMENTREQUEST_0_DESC0' => $event_details['post_title'] . ', ' . $_totals['_att_quantity']['total'][$event_details['ID']] . ' tickets',
             'L_PAYMENTREQUEST_0_AMT0' => $_totals['money_totals']['grand_total'],
-            'L_PAYMENTREQUEST_0_QTY0' => '1'
+            'L_PAYMENTREQUEST_0_QTY0' => 1 //$_totals['_att_quantity']['total'][$event_details['ID']]
         );
 
         //echo "<pre class='prettyprint'>" . print_r($requestParams + $orderParams +  $item , true). "</pre>";
 
         $paypal = new Paypal();
-        $response = $paypal->request( 'SetExpressCheckout', $requestParams + $orderParams + $item );
 
+        $response = $paypal->request( 'SetExpressCheckout', $requestParams + $orderParams + $item );
 
         if ( is_array( $response ) && $response['ACK'] == 'Success' ) { //Request successful
             $token = $response['TOKEN'];
 
-
-            header( 'Location: https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=' . urlencode( $token ) );
-            //header( 'Location: https://www.paypal.com/webscr?cmd=_express-checkout&token=' . urlencode( $token ) );
+            if ( $gateway_info['_epl_sandbox'] == 10 )
+                header( 'Location: https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=' . urlencode( $token ) );
+            else
+                header( 'Location: https://www.paypal.com/webscr?cmd=_express-checkout&token=' . urlencode( $token ) );
         }
         else {
 
-            echo "sorry, error";
+            echo "Sorry an error occured.";
         }
     }
 
@@ -92,8 +97,7 @@ class EPL_Gateway_Model extends EPL_Model {
             // We can save it for future reference or cross-check with the data we have
             $paypal = new Paypal();
             $checkoutDetails = $paypal->request( 'GetExpressCheckoutDetails', array( 'TOKEN' => $_GET['token'] ) );
-            echo "<pre class='prettyprint'>" . print_r( $checkoutDetails, true ) . "</pre>";
-
+            //echo "<pre class='prettyprint'>" . print_r( $checkoutDetails, true ) . "</pre>";
             // Complete the checkout transaction
 
             return true;
@@ -110,15 +114,15 @@ class EPL_Gateway_Model extends EPL_Model {
     function _exp_checkout_do_payment() {
 
         global $event_details;
-        $event_id = key( ( array ) $_SESSION['__epl'][$regis_id]['events'] );
+        $event_id = $event_details['ID'];
 
-        if (is_null($event_id)){
+        if ( is_null( $event_id ) ) {
             return false;
         }
 
         $regis_id = $this->erm->get_regis_id();
 
-        
+
         $post_ID = $_SESSION['__epl']['post_ID'];
 
 
@@ -145,21 +149,21 @@ class EPL_Gateway_Model extends EPL_Model {
 
 
             $total_paid = $_totals['money_totals']['grand_total'];
-            $date_paid = current_time('mysql');
+            $date_paid = current_time( 'mysql' );
 
             $transactionId = $response['PAYMENTINFO_0_TRANSACTIONID'];
 
-            update_post_meta($post_ID,'_payment_status', 'Completed' );
-            update_post_meta($post_ID,'_total_paid', $total_paid );
-            update_post_meta($post_ID,'_date_paid', $date_paid );
-            update_post_meta($post_ID,'_transaction_id', $transactionId );
-            update_post_meta($post_ID,'_payment_type', $response['PAYMENTINFO_0_TRANSACTIONTYPE'] );
+            update_post_meta( $post_ID, '_epl_regis_status', '5' );
+            update_post_meta( $post_ID, '_epl_payment_amount', $total_paid );
+            update_post_meta( $post_ID, '_epl_payment_date', $date_paid );
+            update_post_meta( $post_ID, '_epl_transaction_id', $transactionId );
+            update_post_meta( $post_ID, '_epl_payment_method', '_pp_exp' );
 
             return true; //echo "DONE";
         }
         else {
             //display error message
-            echo "Sorry, but it looks like something went wrong.  Please notify the administrator or try again.";
+            echo "Sorry, but it looks like something went wrong.  Please notify the administrator.";
         }
     }
 

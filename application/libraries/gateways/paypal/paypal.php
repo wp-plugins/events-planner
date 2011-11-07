@@ -14,11 +14,7 @@ class Paypal {
      * Use the correct credentials for the environment in use (Live / Sandbox)
      * @var array
      */
-    protected $_credentials = array(
-        'USER' => 'purene_1276030345_biz_api1.gmail.com',
-        'PWD' => '1276030351',
-        'SIGNATURE' => 'A47jVqM7npzqE4So255vXWhQZ5psA.rSCrS2B9ou.8iIRRqgpmK03OvG',
-    );
+    protected $_credentials;
     /**
      * API endpoint
      * Live - https://api-3t.paypal.com/nvp
@@ -46,6 +42,19 @@ class Paypal {
             $this->_errors = array( 'API method is missing' );
             return false;
         }
+
+        $this->erm = EPL_Base::get_instance()->load_model( 'epl-registration-model' );
+        $gateway_info = $this->erm->get_gateway_info();
+
+        $this->_credentials = array(
+            'USER' => $gateway_info['_epl_pp_exp_user'],
+            'PWD' => $gateway_info['_epl_pp_exp_pwd'],
+            'SIGNATURE' => $gateway_info['_epl_pp_exp_sig'],
+        );
+
+        if ($gateway_info['_epl_sandbox'] == 0)
+            $this->_endPoint = 'https://api-3t.paypal.com/nvp';
+
 
         //Our request parameters
         $requestParams = array(

@@ -134,6 +134,9 @@ class EPL_Event_Manager extends EPL_Controller {
         $help_link = get_help_icon( array( 'section' => 'event_options', 'id' => null ) );
         add_meta_box( 'epl-options-meta-box', epl__( 'Options' ) . $help_link, array( &$this, 'options_meta_box' ), "epl_event", 'side', 'core' );
 
+        $help_link = get_help_icon( array( 'section' => 'event_display_options', 'id' => null ) );
+        add_meta_box( 'epl-display-options-meta-box', epl__( 'Display Options' ) . $help_link, array( &$this, 'display_options_meta_box' ), "epl_event", 'side', 'core' );
+
         $help_link = get_help_icon( array( 'section' => 'event_capacity', 'id' => null ) );
         add_meta_box( 'epl-capacity-meta-box', epl__( 'Capacity Information' ) . $help_link, array( &$this, 'capacity_meta_box' ), "epl_event", 'side', 'core' );
 

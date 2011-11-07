@@ -14,7 +14,8 @@ function the_event_list() {
 function get_the_event_title( $post_ID = null ) {
 
 
-    return EPL_util::get_instance()->get_the_event_title( $post_ID );
+    //return EPL_util::get_instance()->get_the_event_title( $post_ID );
+    return EPL_util::get_instance()->get_the_regis_event_name();
 }
 
 
@@ -45,7 +46,7 @@ function get_the_event_prices( ) {
 
 
 function get_the_register_button() {
-    return null;
+    //return null;
     return EPL_util::get_instance()->get_the_register_button();
 }
 
@@ -210,10 +211,6 @@ function _get_the_organization_field( $field = null ) {
         return null;
     global $organization_details;
 
-
-     global $organization_details;
-
-
         $id = null;
         global $event_details;
         if (isset($event_details))
@@ -251,6 +248,73 @@ function epl_get_the_label( $field, $fields ) {
 function epl_get_the_desc( $field, $fields ) {
 
     return $fields[$field]['description'];
+}
+
+
+/*
+ * Registration Template Tags
+ */
+
+
+function the_registration_details() {
+
+    return EPL_Common_Model::get_instance()->setup_regis_details();
+}
+
+
+function get_the_regis_dates() {
+
+    return EPL_util::get_instance()->get_the_regis_dates( );
+}
+
+function get_the_regis_times() {
+
+    return EPL_util::get_instance()->get_the_regis_times( );
+}
+
+function get_the_regis_prices() {
+
+    return EPL_util::get_instance()->get_the_regis_prices( );
+}
+
+function get_the_regis_payment_amount() {
+
+    return EPL_util::get_instance()->get_the_regis_payment_amount( );
+}
+function get_the_regis_payment_date() {
+
+    return EPL_util::get_instance()->get_the_regis_payment_date( );
+}
+function get_the_regis_transaction_id() {
+
+    return EPL_util::get_instance()->get_the_regis_transaction_id( );
+}
+
+function get_the_regis_id() {
+
+    return EPL_util::get_instance()->get_the_regis_id( );
+}
+
+
+
+
+function _get_the_regis_field( $field = null ) {
+    if ( is_null( $field ) )
+        return null;
+    global $regis_details;
+
+
+    /*
+        $id = null;
+        global $event_details;
+        if (isset($event_details))
+            $id = $event_details['_epl_event_organization'];
+
+        EPL_Common_Model::get_instance()->setup_regis_details($id);
+*/
+
+    return $organization_details[$field];
+
 }
 
 ?>

@@ -1,9 +1,9 @@
-
-<div  class="row_wrapper clearfix">
-    <label><?php echo $el['label']; ?></label>
-    <div class="field_wrapper">
+<tr>
+    <td>
+        <?php echo $el['label']; ?>
+    </td>
+    <td>
         <?php echo $el['field']; ?>
 
-        <small><?php echo $el['description']; ?></small>
-    </div>
-</div>
+    </td>
+</tr>

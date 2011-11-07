@@ -110,13 +110,13 @@ if ( !class_exists( 'EPL_front' ) ) {
 
             $r = null;
 
-               $r = $this->epl->load_template_file( 'event-list.php' );
+            $r = $this->epl->load_template_file( 'event-list.php' );
 
-               //template not found
-               if(is_null($r)){
-                   $r = $this->epl->load_view( 'front/event-list', $data, true );
-               }
-               return $r;
+            //template not found
+            if ( is_null( $r ) ) {
+                $r = $this->epl->load_view( 'front/event-list', $data, true );
+            }
+            return $r;
         }
 
         /*
@@ -130,7 +130,6 @@ if ( !class_exists( 'EPL_front' ) ) {
 
             if ( !$GLOBALS['epl_ajax'] ) {
                 return $this->show_cart();
-                return;
             }
             echo $this->epl_util->epl_response( array( 'html' => $r ) );
             die();
@@ -154,11 +153,13 @@ if ( !class_exists( 'EPL_front' ) ) {
 
             $this->rm->set_mode( 'edit' );
             $data['cart_data'] = $this->rm->show_cart();
-
+            $data['mode'] = 'edit';
             $data['content'] = $this->epl->load_view( 'front/cart/cart', $data, true );
             $data['next_step'] = 'regis_form';
+
+            $data['form_action'] = add_query_arg( 'epl_action', 'regis_form', $_SERVER['REQUEST_URI'] );
             $data['next_step_label'] = 'Next: Attendee Information';
-            $data['mode'] = 'edit';
+
             return $this->epl->load_view( 'front/cart-container', $data, true );
         }
 
@@ -169,8 +170,11 @@ if ( !class_exists( 'EPL_front' ) ) {
             $data['mode'] = 'edit';
             $data['content'] = $this->rm->regis_form();
 
+            $data['prev_step_url'] = add_query_arg( 'epl_action', 'show_cart', $_SERVER['REQUEST_URI'] );
 
+            $data['form_action'] = add_query_arg( 'epl_action', 'show_cart_overview', $_SERVER['REQUEST_URI'] );
             $data['next_step'] = 'show_cart_overview';
+            $data['next_step_label'] = 'Overview';
 
             $this->epl->load_view( 'front/cart-container', $data );
         }
@@ -187,24 +191,32 @@ if ( !class_exists( 'EPL_front' ) ) {
                 $this->rm->set_mode( 'overview' );
 
                 $data['cart_data'] = $this->rm->show_cart();
-
+                $data['mode'] = 'overview';
                 $data['content'] = $this->epl->load_view( 'front/cart/cart', $data, false );
 
 
                 $data['content'] .= $this->rm->regis_form();
                 $data['next_step'] = $next_step;
-
+                $data['prev_step_url'] = add_query_arg( 'epl_action', 'regis_form', $_SERVER['REQUEST_URI'] );
                 if ( is_null( $data['next_step'] ) )
                     $data['next_step'] = 'payment_page';
 
                 if ( epl_is_free_event ( ) ) {
 
+                    $data['form_action'] = add_query_arg( 'epl_action', 'thank_you_page', $_SERVER['REQUEST_URI'] );
+
                     $data['next_step'] = 'thank_you_page';
                     $data['next_step_label'] = 'Confirm and Complete';
                 }
+                else {
+                    $data['form_action'] = add_query_arg( 'epl_action', 'payment_page', $_SERVER['REQUEST_URI'] );
+
+                    $data['next_step'] = 'payment_page';
+                    $data['next_step_label'] = 'Confirm and Continue to PayPal';
+                }
 
 
-                $data['mode'] = 'overview';
+
                 $this->epl->load_view( 'front/cart-container', $data );
             }
         }
@@ -212,61 +224,105 @@ if ( !class_exists( 'EPL_front' ) ) {
 
         function payment_page() {
 
-            /* $this->rm->set_mode( 'overview' );
+             $this->rm->set_mode( 'overview' );
               $data['cart_data'] = $this->rm->show_cart();
 
-              $data['content'] = $this->epl->load_view( 'front/cart/cart', $data, true );
-
-              $data['mode'] = 'overview';
-              $this->epl->load_view( 'front/cart-container', $data );
-             */
-
-            /*
-             * find out what kind of payment from _epl_selected_payment
-             * then redirect to correct page
-             * --if free, complete, send email, show overview
-             * --if ppexp, redirect
-             * --if cc, show the billing form
-             * --if check or invoice, complete and show overview
-             *
-             */
-
-
-            if ( epl_is_free_event ( ) ) {
-
-                echo "HERE FOR FREE EVENT";
-            }
-
-            //$egp = $this->epl->load_model( 'epl-gateway-model' );
-            //$egp->_express_checkout_redirect();
+            $egp = $this->epl->load_model( 'epl-gateway-model' );
+            $egp->_express_checkout_redirect();
         }
 
 
         function thank_you_page() {
-            $this->rm->set_mode( 'thank_you_page' );
+            //$this->rm->set_mode( 'thank_you_page' );
             /*
              * display payment info
              * display overview
              * send email
              * destry session
              */
-            $_SESSION['__epl'] = array( );
-            session_regenerate_id();
-            echo "Thank you very much";
+
+            //echo "<pre class='prettyprint'>" . print_r($_SESSION, true). "</pre>";
+            if ( $this->rm->epl_is_empty_cart() ) {
+
+                echo $this->epl_util->epl_invoke_error( 20, null, false );
+            }
+            else {
+                $this->ecm->setup_regis_details( $_SESSION['__epl']['post_ID'] );
+                $this->rm->set_mode( 'overview' );
+
+                $data['cart_data'] = $this->rm->show_cart();
+
+                //$data['thank_you_message'] = $this->epl->load_view( 'front/registration/regis-thank-you-section', '', true );
+                //$data['content'] = $this->epl->load_view( 'front/cart/cart', $data );
+
+
+                $data['regis_form'] = $this->rm->regis_form( null, true );
+                $data['payment_details'] = $this->epl->load_view( 'front/registration/regis-payment-details', '', true );
+
+
+                //$data['prev_step_url'] = add_query_arg( 'epl_action', 'regis_form', $_SERVER['REQUEST_URI'] );
+                if ( is_null( $data['next_step'] ) )
+                    $data['next_step'] = 'payment_page';
+
+                if ( epl_is_free_event ( ) ) {
+
+                    //$data['form_action'] = add_query_arg( 'epl_action', 'thank_you_page', $_SERVER['REQUEST_URI'] );
+                    //$data['next_step'] = 'thank_you_page';
+                    //$data['next_step_label'] = 'Confirm and Complete';
+                }
+
+
+                $data['mode'] = 'overview';
+                $data['overview'] = $this->epl->load_view( 'front/registration/regis-thank-you-page', $data );
+            }
+
+
+
+             $_SESSION['__epl'] = array( );
+              session_regenerate_id();
+              
         }
 
 
+        function _exp_checkout_payment_cancel() {
+
+            $this->show_cart_overview();
+
+        }
         function _exp_checkout_payment_success() {
 
             $egp = $this->epl->load_model( 'epl-gateway-model' );
 
-            if ( $egp->_exp_checkout_payment_success() )
-                $this->show_cart_overview( '_exp_checkout_do_payment' );
+            if ( $egp->_exp_checkout_payment_success() ){
+
+                $this->rm->set_mode( 'overview' );
+                $data['message'] = "Please review and Finalize your payment.";
+                $data['cart_data'] = $this->rm->show_cart();
+                $data['mode'] = 'overview';
+                $data['content'] = $this->epl->load_view( 'front/cart/cart', $data, false );
+
+
+                $data['content'] .= $this->rm->regis_form();
+
+
+                    $data['form_action'] = add_query_arg( 'epl_action', '_exp_checkout_do_payment', $_SERVER['REQUEST_URI'] );
+
+                    $data['next_step'] = '_exp_checkout_do_payment';
+                    $data['next_step_label'] = 'Confirm Payment and Finish';
+
+                $this->epl->load_view( 'front/cart-container', $data );
+
+            } else {
+                echo "Sorry, something must have gone wrong.  Please notify the site administrtor";
+            }
+                //$this->show_cart_overview( '_exp_checkout_do_payment' );
         }
 
 
         function _exp_checkout_do_payment() {
-
+                //this sets the event details, for now
+                $this->rm->set_mode( 'overview' );
+                $data['cart_data'] = $this->rm->show_cart();
 
             $egp = $this->epl->load_model( 'epl-gateway-model' );
 
@@ -274,11 +330,8 @@ if ( !class_exists( 'EPL_front' ) ) {
             $egp->_exp_checkout_do_payment();
 
             if ( $egp->_exp_checkout_do_payment() ) {
-                $_SESSION['__epl'] = array( );
-                unset( $_SESSION['__epl'] );
-                session_regenerate_id();
-
-                echo "Payment Successfull.  Thank you very much.";
+               
+                $this->thank_you_page();
             }
         }
 

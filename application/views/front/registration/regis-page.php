@@ -1,10 +1,11 @@
+<div class="epl_cart_wrapper">
+   
+        <?php
+
+        echo $forms;
+        ?>
 
 
-<?php
-
-echo $forms;
-?>
-
-
+</div>
 
 

@@ -1,7 +1,9 @@
 <?php
+
 /*
  * pardon the dust.  Cleanup planned in v1.2+
  */
+
 
 function epl_e( $t ) {
 
@@ -17,6 +19,8 @@ function epl__( $t ) {
 /*
  * checks for a null value and returns 0 or anything passed as $d
  */
+
+
 function epl_nz( $v, $d = 0 ) {
 
     if ( is_null( $v ) || $v == '' )
@@ -216,9 +220,9 @@ function epl_is_ok_to_register( $event_data, $current_key ) {
      *
      */
 
-    global $event_details, $capacity, $current_att_count;
-
-    $today = date( "m/d/Y" );
+    global $event_details, $capacity, $current_att_count, $available_space_arr;
+    //echo "<pre class='prettyprint'>$current_key" . print_r( $current_att_count, true ) . "</pre>";
+    $today = date( 'm/d/Y H:i:s', EPL_TIME );
 
     $ok = epl_compare_dates( $today, $event_data['_epl_regis_start_date'][$current_key], ">=" );
 
@@ -235,7 +239,30 @@ function epl_is_ok_to_register( $event_data, $current_key ) {
     if ( !$ok )
         return epl__( ' Registration Closed' );
 
+    $avail_spaces = 0;
+    if ( is_array( $available_space_arr ) && !empty( $available_space_arr ) )
+        if ( array_key_exists( $current_key, $available_space_arr ) && $available_space_arr[$current_key][2] ) {
+            $avail_spaces = $available_space_arr[$current_key][2];
 
+            $ok = is_numeric( $avail_spaces );
+        }
+
+    if ( !$ok )
+        return epl__( 'Sold Out' );
+    /*
+      $erm = EPL_Base::get_instance()->load_model( 'EPL_registration_model' );
+      $totals = $erm->calculate_totals();
+
+      echo "<pre class='prettyprint'>" . print_r( $totals, true ) . "</pre>";
+
+      if ( is_array( $totals ) && !empty( $totals ) ) {
+      $total_att = $_totals['_att_quantity']['total'][$event_details['ID']];
+
+      if ( $total_att > $avail_spaces ) {
+      return epl__('Sorry, the number of attendees selected exceeds number of avaialable spaces.  Available spaces:' . $avail_spaces);
+      }
+      }
+     */
 
     return true;
 }
@@ -253,7 +280,7 @@ function epl_is_addon_active( $addon = '' ) {
 
     $opt = get_option( 'epl_addon_options' );
 
-    if (!$opt)
+    if ( !$opt )
         return false;
 
     if ( array_key_exists( $addon, $opt ) && $opt[$addon] == 10 ) {
@@ -269,17 +296,18 @@ function epl_is_ok_to_show_regis_button() {
 
     global $event_details;
 
-    if ( isset($event_details['_epl_display_regis_button']) && $event_details['_epl_display_regis_button'] == 10 )
+    if ( isset( $event_details['_epl_display_regis_button'] ) && $event_details['_epl_display_regis_button'] == 10 )
         return true;
 
     return false;
 }
 
+
 function epl_is_free_event() {
 
     global $event_details;
 
-    if ( epl_nz($event_details['_epl_free_event'],0) == 10 )
+    if ( epl_nz( $event_details['_epl_free_event'], 0 ) == 10 )
         return true;
 
     return false;
@@ -364,13 +392,14 @@ function get_remote_help() {
     }
 }
 
-function epl_donate_button(){
+
+function epl_donate_button() {
     // Please guys, this took a lot of work on my end //
     return '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=abels122%40gmail%2ecom&lc=US&item_name=Events%20Planner%20for%20Wordpress&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest" target="_blank">
     <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" alt ="Please Donate" /><a>
 ';
-
 }
+
 
 function epl_get_formatted_curr( $amount ) {
 
@@ -392,13 +421,13 @@ function epl_get_formatted_curr( $amount ) {
             break;
     }
 
-    return epl_get_currency_symbol() . $amount;
+    return $amount;
 }
 
 
 function epl_get_currency_symbol() {
     $v = epl_get_option( 'epl_general_options' );
-    return $v['epl_currency_symbol'];
+    return (isset($v['epl_currency_symbol']))?$v['epl_currency_symbol']:'';
 }
 
 
@@ -416,4 +445,13 @@ function epl_get_event_property( $prop = '', $key = '' ) {
         return $event_details[$prop];
 }
 
+
+function epl_get_gateway_info( ) {
+
+
+
+
+    
+
+}
 ?>

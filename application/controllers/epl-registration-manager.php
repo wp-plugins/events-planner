@@ -12,6 +12,8 @@ class EPL_Registration_Manager extends EPL_Controller {
 
         epl_log( 'init', get_class() . " initialized" );
 
+
+
         if ( isset( $_REQUEST['epl_ajax'] ) && $_REQUEST['epl_ajax'] == 1 ) {
 
             $this->run();
@@ -20,8 +22,7 @@ class EPL_Registration_Manager extends EPL_Controller {
             $this->ecm = $this->epl->load_model( 'epl-common-model' );
             add_action( 'default_title', array( &$this, 'pre' ) );
             add_action( 'add_meta_boxes', array( &$this, 'epl_add_meta_boxes' ) );
-            //add_action( 'save_post', array( &$this, 'save_postdata' ) );
-
+            add_action( 'save_post', array( &$this, 'save_postdata' ) );
             //post list manage screen columns - extra columns
             add_filter( 'manage_edit-' . self::post_type . '_columns', array( &$this, 'add_new_columns' ) );
             //post list manage screen - column data
@@ -66,7 +67,6 @@ class EPL_Registration_Manager extends EPL_Controller {
             $this->rm->__update_from_post( 'initial-save' );
         }
         $this->rm->__out();
-
     }
 
 
@@ -139,7 +139,7 @@ class EPL_Registration_Manager extends EPL_Controller {
          *
          */
 
-       // echo "<pre class='prettyprint'>" . print_r($this->event_meta + $this->regis_meta, true). "</pre>";
+         //echo "<pre class='prettyprint'>" . print_r($this->event_meta + $this->regis_meta, true). "</pre>";
         $data['event_id'] = $this->event_id;
 
         //events, dates, times, prices, quantities
@@ -157,25 +157,12 @@ class EPL_Registration_Manager extends EPL_Controller {
         //registration form
         $data['attendee_info'] = $this->rm->__in( $this->event_meta + $this->regis_meta )->regis_form();
 
-        //the list of events
-        /*$params = array(
-            'input_type' => 'select',
-            'input_name' => 'event_list_id',
-            'id' => 'event_list_id',
-            'label' => epl__( 'Event' ),
-            'options' => $this->ecm->get_all_events(),
-                //'value' => $this->data['values']
-        );
-        //echo "<pre class='prettyprint'>" . print_r($params, true). "</pre>";
-        $data['fields'][] = $this->epl_util->create_element( $params );*/
 
         if ( !$this->edit_mode ) {
             $data['message'] = epl__( "This feature will be coming soon." );
         }
 
         $this->epl->load_view( 'admin/registrations/registration-attendee-meta-box', $data );
-
-
     }
 
 
@@ -334,6 +321,16 @@ class EPL_Registration_Manager extends EPL_Controller {
 
 
     function get_values() {
+        global $epl_fields;
+        $this->epl->load_config( 'regis-fields' );
+        $this->ecm = $this->epl->load_model( 'epl-common-model' );
+        $this->epl_fields = $epl_fields; //this is a multi-dimensional array of all the fields
+        $this->ind_fields = $this->epl_util->combine_array_keys( $this->epl_fields ); //this is each individualt field array
+
+
+        $this->data['values'] = $this->ecm->get_post_meta_all( ( int ) $post_ID );
+
+
 
         $this->rm = $this->epl->load_model( 'epl-regis-admin-model' );
         $this->ecm = $this->epl->load_model( 'epl-common-model' );
@@ -346,7 +343,8 @@ class EPL_Registration_Manager extends EPL_Controller {
             $post_ID = $_POST['post_ID'];
         $this->edit_mode = $post_ID != '';
 
-        $this->regis_meta = (array) $this->ecm->get_post_meta_all( $post_ID );
+        $this->regis_meta = ( array ) $this->ecm->get_post_meta_all( $post_ID );
+        $this->data['values'] = $this->regis_meta;
         //$this->regis_meta['__epl'] = get_post_meta( $post_ID, '__epl', true );
 
         $this->post_ID = ( int ) $post_ID;
@@ -361,7 +359,7 @@ class EPL_Registration_Manager extends EPL_Controller {
             $this->event_id = key( ( array ) $this->regis_meta['__epl'][$this->regis_id]['events'] );
         }
 
-        $this->event_meta = (array)$this->ecm->setup_event_details( $this->event_id );
+        $this->event_meta = ( array ) $this->ecm->setup_event_details( $this->event_id );
 
         //if a brand new regis, set up minimum structure.
         if ( empty( $this->regis_meta['__epl'] ) ) {
@@ -370,7 +368,7 @@ class EPL_Registration_Manager extends EPL_Controller {
             $this->regis_meta['__epl']['post_id'] = $this->post_ID;
             $this->regis_meta['__epl'][$this->regis_id] = array( );
 
-            update_post_meta( $post_ID, '__epl', $this->regis_meta['__epl'] );
+            //update_post_meta( $post_ID, '__epl', $this->regis_meta['__epl'] );
         }
     }
 
@@ -379,23 +377,24 @@ class EPL_Registration_Manager extends EPL_Controller {
         $this->get_values();
         add_meta_box( 'epl-regis-meta-box', epl__( 'Registration Information' ), array( &$this, 'regis_meta_box' ), self::post_type, 'normal', 'core' );
         add_meta_box( 'epl-payment-meta-box', epl__( 'Payment Information' ), array( &$this, 'payment_meta_box' ), self::post_type, 'side', 'low' );
-       // add_meta_box( 'epl-regis-action-meta-box', epl__( 'Available Actions' ), array( &$this, 'action_meta_box' ), self::post_type, 'side', 'low' );
+        // add_meta_box( 'epl-regis-action-meta-box', epl__( 'Available Actions' ), array( &$this, 'action_meta_box' ), self::post_type, 'side', 'low' );
     }
 
 
     function payment_meta_box() {
-        //echo "pending pay, paid, cancelled-pending refund, cancel refunded, waiting list";
-        $tmpl = array( 'table_open' => '<table cellpadding="0" cellspacing="0" class="epl_form_data_table">' );
 
-        $this->epl_table->set_template( $tmpl );
+        $epl_fields_to_display = array_keys( $this->epl_fields['epl_regis_payment_fields'] );
 
-        $this->epl_table->add_row('Total Due', epl_get_formatted_curr($this->regis_meta['_grand_total']));
-        $this->epl_table->add_row('Total Paid', epl_get_formatted_curr($this->regis_meta['_total_paid']));
-        $this->epl_table->add_row('Payment Type', $this->regis_meta['_payment_type']);
-        $this->epl_table->add_row('Date', (isset($this->regis_meta['_date_paid']))?date(get_option('date_format') . ' ' . get_option('time_format'), strtotime($this->regis_meta['_date_paid'])):'');
-        $this->epl_table->add_row('Trans. ID', $this->regis_meta['_transaction_id']);
-        echo $this->epl_table->generate();
+        $_field_args = array(
+            'section' => $this->epl_fields['epl_regis_payment_fields'],
+            'fields_to_display' => $epl_fields_to_display,
+            'meta' => array( '_view' => 3, '_type' => 'row', 'value' => $this->data['values'] )
+        );
 
+        $data['epl_regis_payment_fields'] = $this->epl_util->render_fields( $_field_args );
+
+
+        $this->epl->load_view( 'admin/registrations/regis-payment-meta-box', $data );
     }
 
 
@@ -412,6 +411,7 @@ class EPL_Registration_Manager extends EPL_Controller {
         $new_columns['title'] = _x( 'Registration ID', 'column name' );
         $new_columns['event'] = epl__( 'Event' );
         $new_columns['attendees'] = epl__( 'Attendees' );
+        $new_columns['payment_amount'] = epl__( 'Payment Amount' );
         //$new_columns['payment'] = epl__( 'Payment Status' );
         //$new_columns['images'] = __( 'Images' );
         //$new_columns['author'] = __( 'Author' );
@@ -433,18 +433,18 @@ class EPL_Registration_Manager extends EPL_Controller {
 
 
         $meta = $this->ecm->get_post_meta_all( $id );
-        //echo "<pre class='prettyprint'>" . print_r($meta, true). "</pre>";
+        //echo "<pre class='prettyprint'>meta" . print_r($meta, true). "</pre>";
         $event_id = '';
         $event_name = '';
         $num_attendees = '';
 
-        if ( isset( $meta['events'] ) && !empty( $meta['events'] ) ) {
-            $event_id = key( $meta['events'] );
+        if ( isset( $meta['_epl_events'] ) && !empty( $meta['_epl_events'] ) ) {
+            $event_id = key( $meta['_epl_events'] );
             $event_name = get_post( $event_id )->post_title;
-            $num_attendees = $meta['_total_att_' .$event_id];
+            $num_attendees = $meta['_total_att_' . $event_id];
 
-            if ( $num_attendees > 0 )
-                $num_attendees = '<span class="num_attendees">' . $num_attendees . '</span> <img id = "' . $id . '" class="epl_regis_snapshot" src="' . EPL_FULL_URL . 'images/application_view_list.png" />';
+            //if ( $num_attendees > 0 )
+            //    $num_attendees = '<span class="num_attendees">' . $num_attendees . '</span> <img id = "' . $id . '" class="epl_regis_snapshot" src="' . EPL_FULL_URL . 'images/application_view_list.png" />';
         }
         switch ( $column_name )
         {
@@ -462,6 +462,11 @@ class EPL_Registration_Manager extends EPL_Controller {
 
 
                 echo $num_attendees;
+                break;
+            case 'payment_amount':
+
+
+                echo epl_get_currency_symbol() . epl_get_formatted_curr( epl_nz($meta['_epl_payment_amount'], 0));
                 break;
             case 'payment':
 

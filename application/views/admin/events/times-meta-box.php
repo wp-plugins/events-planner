@@ -24,19 +24,8 @@
 
     </div>
 
-    <div class="epl_box epl_highlight">
-        <div class="epl_box_content">
-            <?php
-
-            echo epl_get_the_label( '_epl_price_per', $price_option_fields );
-            echo epl_get_the_field( '_epl_price_per', $price_option_fields );
-            ?>
-        </div>
-
-    </div>
 
 
-    
 
     <div id="epl_time_price_section" class="">
 

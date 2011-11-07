@@ -20,7 +20,8 @@ jQuery(document).ready(function($){
         events_planner_do_ajax( data, function(r){
             var d = r.html; //$('.data', par).val();
             //
-            $('.epl_totals_table').replaceWith(d);
+           // $('.epl_totals_table').replaceWith(d);
+            $('#epl_totals_wrapper table').replaceWith(d);
         //console.log(r.html);
         //alert(d);
 
@@ -32,6 +33,10 @@ jQuery(document).ready(function($){
 
     });
 
+    $('.epl_att_qty_dd').change(function(){
+        $('a#calculate_total_due').trigger('click');
+    });
+    
     $('a.add_to_cart').click(function(){
         var me = $(this);
         var par = me.parent();
@@ -155,13 +160,20 @@ jQuery(document).ready(function($){
     });
 
 
+    $("#events_planner_shopping_cart").validate({
+        submitHandler: function(form) {
+            form.submit();
+        }
+    });
 
-    $('form#events_planner_shopping_cart').live('submit', function(){
+    $('form#events_planner_shopping_cart1').live('submit', function(){
 
         var me = $(this);
 
-        if (!epl_validate(me))
-            return false;
+        me.validate();
+
+        /*        if (!epl_validate(me))
+            return false;*/
 
         return true;
         var main_cont = $('#epl_main_container');

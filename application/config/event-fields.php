@@ -53,13 +53,6 @@ $epl_fields['epl_price_option_fields'] =
                 'options' => epl_yes_no(),
                 'default_value' => 0
             ),
-            '_epl_price_per' => array(
-                'input_type' => 'select',
-                'input_name' => '_epl_price_per',
-                'label' => epl__( 'If the user can register for more than one day, do the following prices apply to: ' ),
-                'description' => epl__( 'If you are offering multiple days, this will determine if the user pays per day or for the whole event.' ),
-                'options' => array( 0 => epl__( 'The Whole Event' ), 10 => epl__( 'Each Event Date' ) )
-            ),
             '_epl_multi_price_select' => array(
                 'input_type' => 'select',
                 'input_name' => '_epl_multi_price_select',
@@ -332,7 +325,7 @@ $epl_fields['epl_display_option_fields'] =
               'options' => epl_yes_no(),
               'description' => epl__( '' ),
               'default_value' => 0,
-              'class' => '' ), */
+              'class' => '' ), 
             '_epl_date_display_type' => array(
                 'input_type' => 'select',
                 'input_name' => '_epl_date_display_type',
@@ -340,7 +333,7 @@ $epl_fields['epl_display_option_fields'] =
                 'options' => array( 5 => epl__( 'Table' ), 10 => epl__( 'Calendar' ) ),
                 'description' => '',
                 'default_value' => 5,
-                'class' => '' )
+                'class' => '' )*/
 );
 $epl_fields['epl_capacity_fields'] =
         array(

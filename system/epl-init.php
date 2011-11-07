@@ -21,7 +21,8 @@ class EPL_Init {
 
         add_action( 'init', array( &$this, 'create_post_types' ) );
         add_action( 'admin_menu', array( &$this, 'admin_specific' ) );
-        add_action( 'wp_enqueue_scripts', array( &$this, 'front_specific' ) );
+        add_action( 'wp_print_styles', array( &$this, 'front_specific_styles' ), 1, 1 );
+        add_action( 'wp_enqueue_scripts', array( &$this, 'front_specific_js' ) );
     }
 
 
@@ -33,17 +34,22 @@ class EPL_Init {
                 ->load_admin_stylesheets()
                 ->create_admin_menu();
 
-        add_action( 'admin_footer', array( &$this, 'load_slide_down_box' ) );
+        add_action( 'admin_footer', array( $this, 'load_slide_down_box' ) );
     }
 
 
-    function front_specific() {
+    function front_specific_js() {
 
         $this->common_js_files()
-                ->front_js_files()
-                ->load_common_stylesheets()
+                ->front_js_files();
+        add_action( 'wp_footer', array( $this, 'load_slide_down_box' ) );
+    }
+
+
+    function front_specific_styles() {
+
+        $this->load_common_stylesheets()
                 ->load_front_stylesheets();
-        add_action( 'wp_footer', array( &$this, 'load_slide_down_box' ) );
     }
 
     /*
@@ -76,6 +82,7 @@ class EPL_Init {
 
     function front_js_files() {
         wp_enqueue_script( 'events_planner_front_js', EPL_FULL_URL . 'js/epl-front.js', array( 'jquery' ) );
+        wp_enqueue_script( 'jquery_form_js', EPL_FULL_URL . 'js/jquery.validate.min.js', array( 'jquery' ) );
 
         return $this;
     }
@@ -107,7 +114,7 @@ class EPL_Init {
 
 
     function load_front_stylesheets() {
-        wp_enqueue_style( 'events-planner-stylesheet', EPL_FULL_URL . 'css/regis-form/events-planner-style1.css' );
+        wp_enqueue_style( 'events-planner-stylesheet', EPL_FULL_URL . 'css/events-planner-style1.css' );
         //wp_enqueue_style( 'widget-calendar-css', EPL_FULL_URL . 'css/calendar/widget-calendar-default.css' );
     }
 
@@ -127,7 +134,7 @@ class EPL_Init {
 
     function create_admin_menu() {
 
-        add_submenu_page( 'edit.php?post_type=epl_event', epl__( 'Form Manager' ), epl__( 'Form Manager' ), 'manage_options', 'epl_form_manager', array( $this, 'route' ));
+        add_submenu_page( 'edit.php?post_type=epl_event', epl__( 'Form Manager' ), epl__( 'Form Manager' ), 'manage_options', 'epl_form_manager', array( $this, 'route' ) );
         add_submenu_page( 'edit.php?post_type=epl_event', epl__( 'Settings' ), epl__( 'Settings' ), 'manage_options', 'epl_settings', array( $this, 'route' ) );
         add_submenu_page( 'edit.php?post_type=epl_event', epl__( 'Help' ), '<span class="epl_font_red">' . epl__( 'Help' ) . '</span>', 'manage_options', 'epl_help', array( $this, 'route' ) );
     }
@@ -217,38 +224,36 @@ class EPL_Init {
 
         register_post_type( 'epl_location', $post_type_args );
 
-        //this will be turned in 1.1 or 1.2
-
-        /* $post_type_args = array(
-          //'public' => true,
-          'show_ui' => true,
-          'publicly_queryable' => true,
-          'exclude_from_search' => true,
-          'show_in_nav_menus' => false,
-          'show_in_menu' => true,
-          'query_var' => 'epl_registration',
-          'rewrite' => array(
-          'slug' => 'registration',
-          'with_front' => false,
-          ),
-          'supports' => array( 'title' ),
-          'labels' => array(
-          'name' => 'Registrations',
-          'singular_name' => 'Registration',
-          'add_new' => 'Add New Registration',
-          'add_new_item' => 'Add New Registration',
-          'edit_item' => 'Edit Registration',
-          'new_item' => 'New Registration',
-          'view_item' => 'View Registration',
-          'search_items' => 'Search Registrations',
-          'not_found' => 'No Registrations Found',
-          'not_found_in_trash' => 'No Registrations Found In Trash'
-          ),
-          'show_in_menu' => 'edit.php?post_type=epl_event'
-          );
+        $post_type_args = array(
+            //'public' => true,
+            'show_ui' => true,
+            'publicly_queryable' => true,
+            'exclude_from_search' => true,
+            'show_in_nav_menus' => false,
+            'show_in_menu' => true,
+            'query_var' => 'epl_registration',
+            'rewrite' => array(
+                'slug' => 'registration',
+                'with_front' => false,
+            ),
+            'supports' => array( 'title' ),
+            'labels' => array(
+                'name' => 'Registrations',
+                'singular_name' => 'Registration',
+                'add_new' => 'Add New Registration',
+                'add_new_item' => 'Add New Registration',
+                'edit_item' => 'Edit Registration',
+                'new_item' => 'New Registration',
+                'view_item' => 'View Registration',
+                'search_items' => 'Search Registrations',
+                'not_found' => 'No Registrations Found',
+                'not_found_in_trash' => 'No Registrations Found In Trash'
+            ),
+            'show_in_menu' => 'edit.php?post_type=epl_event'
+        );
 
 
-          register_post_type( 'epl_registration', $post_type_args ); */
+        register_post_type( 'epl_registration', $post_type_args );
 
 
         $post_type_args = array(
@@ -258,7 +263,6 @@ class EPL_Init {
             'show_in_nav_menus' => false,
             'show_in_menu' => true,
             'query_var' => 'epl_pay_profile',
-
             'supports' => array( 'title' ),
             'labels' => array(
                 'name' => 'Payment Profiles',

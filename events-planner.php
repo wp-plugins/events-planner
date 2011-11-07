@@ -4,7 +4,7 @@
   Plugin URI: http://wpEventsPlanner.com
   Description: A comprehensive event management plugin that contains support for multiple event types, payments, custom forms, and etc.
 
-  Version: 1.1
+  Version: 1.2
 
   Author: Abel Sekepyan
   Author URI: http://wpEventsPlanner.com
@@ -128,5 +128,34 @@ function epl_deactivate() {
 
 function epl_log( $log= '', $message = '' ) {
     return;
-    
+    $process = array(
+        'init',
+        'debug',
+        'clear'
+        );
+
+    if (!in_array($log, $process))
+        return;
+
+    $log_file = WP_PLUGIN_DIR . "/log.txt";
+
+    if ( $log == 'clear' )
+        file_put_contents( $log_file, '' );
+
+    static $flags = FILE_APPEND; //first call clears the file
+    $new_call = "\r\n";
+
+
+    $_bt = '';
+    $trace = debug_backtrace();
+    if ( isset( $trace[1] ) ) {
+
+        $_bt = " \t\t called by {$trace[1]['class']} :: {$trace[1]['function']}, line {$trace[1]['line']}, file {$trace[1]['file']}";
+
+    }
+
+    //$message = $new_call . date( "m/d/Y H:i:s" ) . ' > ' . $message . $_bt . "\r\n";
+    $message = $new_call . $message . $_bt . "\r\n";
+
+    file_put_contents( $log_file, $new_call . $message, $flags );
 }

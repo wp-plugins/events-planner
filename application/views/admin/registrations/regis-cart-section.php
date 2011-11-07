@@ -1,7 +1,10 @@
 <div class="epl_cart_wrapper">
+
     <input name="event_id" type ="hidden" value ="<?php echo $event_id; ?>" />
+
     <?php
 
+    echo epl_show_ad( 'Editable registrations and printable attendee list coming soon.' );
     /*
      * This loop grabs each one of the forms and displays.
      */
@@ -10,21 +13,22 @@
     ?>
             <div class="epl_cart_section">
 
-                <div class="event_name"><?php echo $event['title']; ?></div>
+                <div class="event_name"><h1><?php echo $event['title']; ?></h1></div>
                 <div class="epl_event_section">
 
 
                     <p class="message"></p>
                     <div class="content">
-                <?php //echo $ev['event_dates']['field']; ?>
+
+
 <?php echo $event['event_dates']; ?>
-            </div>
+                    </div>
 
-        </div>
-        <div class="epl_event_section">
+                </div>
+                <div class="epl_event_section">
 
 
-            <div class="content">
+                    <div class="content">
 <?php echo $event['event_time_and_prices']; ?>
             </div>
 
@@ -36,7 +40,10 @@
 
 
 
-    <?php endforeach;
-            endif; ?>
+<?php
+
+            endforeach;
+        endif;
+?>
 
 </div>

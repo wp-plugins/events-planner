@@ -163,7 +163,7 @@ class EPL_util {
             return null;
 
         $response_veiws = array( '', 'common/form-table-row', 'common/form-table-cell' ); //views used for returning the fields
-//echo "<pre class='prettyprint'>" . print_r($params, true). "</pre>";
+//echo "<pre class='prettyprint'>" . print_r($args, true). "</pre>";
         $defaults = array(
             'input_type' => '',
             'input_name' => '',
@@ -239,6 +239,11 @@ class EPL_util {
 
             if ( $input_type == 'checkbox' ) {
                 //$readonly .= ' disabled="disabled"';
+                $style .= "visibility:hidden;";
+            }
+            if ( $input_type == 'radio' ) {
+
+                $readonly = ' disabled="disabled"';
                 $style .= "visibility:hidden;";
             }
         }
@@ -518,6 +523,7 @@ class EPL_util {
     function construct_date_display_table( $args ) {
 
         extract( $args );
+        global $event_details;
 
 
         $tmpl = array( 'table_open' => '<table cellpadding="0" cellspacing="0" class="event_dates_table">' );
@@ -530,8 +536,8 @@ class EPL_util {
 
                 $t_row = array( $date, $meta['_epl_end_date'][$key] );
 
-                if ($date == $meta['_epl_end_date'][$key])
-                    $t_row = array( $date);
+                if ( $date == $meta['_epl_end_date'][$key] )
+                    $t_row = array( $date );
 
 
                 $this->epl->epl_table->add_row( $t_row );
@@ -541,6 +547,134 @@ class EPL_util {
         $this->epl->epl_table->clear();
         return $r;
     }
+
+    /*
+     * registration template tag processors
+     */
+
+
+    function get_the_regis_event_name() {
+
+        global $regis_details, $event_details;
+
+        return stripslashes_deep( $event_details['post_title'] );
+    }
+
+
+    function get_the_regis_id() {
+
+        global $regis_details, $event_details;
+
+        return stripslashes_deep( $regis_details['post_title'] );
+    }
+
+
+    function get_the_regis_dates() {
+
+        global $regis_details, $event_details;
+
+        $dates = ( array ) $event_details['_epl_start_date'];
+        $regis_dates = $regis_details['_epl_dates']['_epl_start_date'][$event_details['ID']];
+
+        $tmpl = array( 'table_open' => '<table cellpadding="0" cellspacing="0" class="event_dates_table">' );
+
+        $this->epl->epl_table->set_template( $tmpl );
+        //$this->epl->epl_table->set_heading( epl__( 'Start Date' ), epl__( 'End Date' ), '' );
+        foreach ( $dates as $key => $date ) {
+
+            if ( in_array( $key, $regis_dates ) ) {
+
+                $t_row = array( $date, $meta['_epl_end_date'][$key] );
+
+                if ( $date == $meta['_epl_end_date'][$key] )
+                    $t_row = array( $date );
+
+
+                $this->epl->epl_table->add_row( $t_row );
+            }
+        }
+        $r = $this->epl->epl_table->generate();
+        $this->epl->epl_table->clear();
+        return $r;
+    }
+
+
+    function get_the_regis_times() {
+        //extract( $args );
+        global $regis_details, $event_details;
+
+        $time_format = get_option( 'time_format' );
+
+        $regis_times = $regis_details['_epl_dates']['_epl_start_time'][$event_details['ID']];
+
+        $tmpl = array( 'table_open' => '<table cellpadding="0" cellspacing="0" class="event_times_table">' );
+
+        $this->epl->epl_table->set_template( $tmpl );
+
+        foreach ( $event_details['_epl_start_time'] as $time_key => $times ) {
+
+            if ( in_array( $time_key, $regis_times ) ) {
+
+                $start_time = date( $time_format, strtotime( $times ) );
+                $end_time = date( $time_format, strtotime( $event_details['_epl_end_time'][$time_key] ) );
+
+                $this->epl->epl_table->add_row( $start_time . ' - ' . $end_time );
+            }
+        }
+
+        $r = $this->epl->epl_table->generate();
+        $this->epl->epl_table->clear();
+        return $r;
+    }
+
+
+    function get_the_regis_prices() {
+        global $event_details, $regis_details;
+
+        if ( $this->is_empty_array( $event_details['_epl_price_name'] ) )
+            return;
+
+
+        $price_fileds = $epl_fields['epl_price_fields'];
+        $regis_tickets = $regis_details['_epl_dates']['_att_quantity'][$event_details['ID']];
+
+        foreach ( $event_details['_epl_price_name'] as $price_key => $price_data ) {
+            $r = array( );
+            if ( array_key_exists( $price_key, $regis_tickets ) ) {
+
+
+                $this->epl->epl_table->add_row( $event_details['_epl_price_name'][$price_key] . ' - ' . current( $regis_tickets[$price_key] ) );
+            }
+        }
+
+        $r = $this->epl->epl_table->generate();
+        $this->epl->epl_table->clear();
+        return $r;
+    }
+
+
+    function get_the_regis_payment_amount() {
+
+        global $regis_details, $event_details;
+
+        return epl_get_currency_symbol().( epl_get_formatted_curr(epl_nz($regis_details['_epl_payment_amount'])) );
+    }
+    function get_the_regis_payment_date() {
+
+        global $regis_details, $event_details;
+
+        return date("m/d/Y", strtotime($regis_details['_epl_payment_date']));
+    }
+    function get_the_regis_transaction_id() {
+
+        global $regis_details, $event_details;
+
+        return $regis_details['_epl_transaction_id'];
+    }
+
+    /*
+     * end registration template tag processors
+     */
 
 
     function construct_calendar( $dates = array( ) ) {
@@ -622,7 +756,7 @@ class EPL_util {
         if ( $this->is_empty_array( $event_details['_epl_price_name'] ) )
             return;
 
-        echo "<pre class='prettyprint'>" . print_r( $event_details['_epl_price_name'], true ) . "</pre>";
+        //echo "<pre class='prettyprint'>" . print_r( $event_details['_epl_price_name'], true ) . "</pre>";
 
         $this->epl->load_config( 'event-fields' );
 
@@ -831,9 +965,9 @@ class EPL_util {
         foreach ( $event_details['_epl_price_name'] as $price_key => $price_data ) {
 
             $price_name = $event_details['_epl_price_name'][$price_key];
-            $price = (epl_is_free_event())?'':epl_get_formatted_curr($event_details['_epl_price'][$price_key]);
-                   $this->epl->epl_table->add_row( $price_name, $price
-                           );
+            $price = (epl_is_free_event()) ? '' : epl_get_formatted_curr( $event_details['_epl_price'][$price_key] );
+            $this->epl->epl_table->add_row( $price_name, $price
+            );
 
             //$this->epl->epl_table->add_row( $r );
         }

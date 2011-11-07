@@ -1,6 +1,6 @@
 
 <div  class="row_wrapper clearfix">
-    <label><?php echo $el['label']; ?></label>
+    <?php echo $el['label']; ?>
     <div class="field_wrapper">
         <?php echo $el['field']; ?>
 

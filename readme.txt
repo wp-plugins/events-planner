@@ -1,10 +1,10 @@
-﻿=== Events Planner ===
+=== Events Planner ===
 Contributors: abelony
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=abels122%40gmail%2ecom&lc=US&item_name=Events%20Planner%20for%20Wordpress&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: events, event, events planner, event planner, event registration, event calendar, events calendar, event management, paypal, registration, ticket, tickets, ticketing, tickets, widget, locations, maps, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
 Requires at least: 3.1
 Tested up to: 3.2
-Stable tag: 1.1
+Stable tag: 1.2
 
 Events Planner: A powerful next generation event management plugin, built with Custom Post Types
 
@@ -12,12 +12,16 @@ Events Planner: A powerful next generation event management plugin, built with C
 
 Events Planner is a next generation [Event Registration](http://www.wpeventsplanner.com/) Plugin, built with standard Wordpress tools (Custom Post Types, Custom Fields, Options), making it extremely powerful and flexible.
 
+= New in version 1.2 =
+* Registration activated.  Use Events Planner to accept registrations for Free and Paid events (using PayPal ExpressCheckout).
+* [Read More](http://www.wpeventsplanner.com/2011/11/event-registration-using-events-planner/)
+
 = New in version 1.1 =
 * Use theme templates (samples provided) to change the look and content of the event list, individual event, location, organization pages.
 * Use custom event template tags to include event specific information on your event pages.
 * [Read More](http://www.wpeventsplanner.com/2011/10/whats-new-in-v1-1/)
 
-**Coming in 1.2 or 1.3, full registration using PayPal**
+**Coming in 1.3, registration management on the admin side, email notification...**
 
 = List of features =
 
@@ -44,7 +48,7 @@ will be able to do it yourself, easily and safely.
 
 = If the user chooses to register for more than one day =
 
-1.  Allow the user to select **the same time for all the days** 
+1.  Allow the user to select **the same time for all the days**
 1.  Allow the user to select **different time for each day that they choose** -Pro
 1.  Allow the user to select **the same price for all the days**
 1.  Choose if the prices apply to **the whole event or each day**
@@ -112,6 +116,10 @@ will be able to do it yourself, easily and safely.
 
 == Changelog ==
 
+= 1.2 =
+
+* Activated registration process.
+
 = 1.1 =
 
 * Added Help section
@@ -130,4 +138,3 @@ will be able to do it yourself, easily and safely.
 == Frequently Asked Questions ==
 
 Please visit our [Contact Page](http://www.wpeventsplanner.com/contact-us/) and ask us anything about the plugin.
-

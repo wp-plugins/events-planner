@@ -16,7 +16,33 @@ class EPL_registration_model extends EPL_model {
         parent::__construct();
         $this->ecm = $this->epl->load_model( 'epl-common-model' );
         $this->mode == 'edit';
+        //$this->_is_cart_expired();
         $this->_start_cart_session();
+    }
+
+    /*
+     * refactor
+     */
+
+
+    function _is_cart_expired() {
+
+        if ( isset( $_SESSION['__epl']['_cart_time'] ) ) {
+            $cart_time = $_SESSION['__epl']['_cart_time'];
+            $now = time();
+
+            $cart_active_time = ($now - $cart_time) / 60;
+            echo $cart_active_time;
+
+            if ( $cart_active_time >= 1 ) {
+                $this->regis_id = $_SESSION['__epl']['_regis_id'];
+                $_SESSION['__epl']['_cart_time'] = time();
+                $_SESSION['__epl'][$this->regis_id] = array( );
+
+                $redir = add_query_arg( 'epl_action', 'process_cart_action', $_SERVER['REQUEST_URI'] );
+                wp_redirect( $redir );
+            }
+        }
     }
 
 
@@ -74,6 +100,11 @@ class EPL_registration_model extends EPL_model {
             $this->set_event_capacity_info();
 
             //are all the selecte dates, times, prices available
+            /* $ok = epl_is_ok_to_register($event_details, $event_id);
+
+              if ($ok === true)
+
+             */
             $ok = $this->ok_to_proceed();
 
             if ( $ok !== true )
@@ -133,7 +164,7 @@ class EPL_registration_model extends EPL_model {
      */
     function show_cart( $values = null ) {
 
-
+        //echo "<pre class='prettyprint'>" . print_r( $_SESSION, true ) . "</pre>";
         $this->_refresh_data();
 
         if ( is_null( $values ) )
@@ -159,7 +190,7 @@ class EPL_registration_model extends EPL_model {
 
 
                 //if ( $event_details['_epl_event_available_space_display'] )
-                //    $r['available_spaces'][$event_id] = $this->capacity_table();
+                $r['available_spaces'][$event_id] = $this->capacity_table();
 
                 $multi_time = (isset( $event_details['_epl_multi_time_select'] ) && $event_details['_epl_multi_time_select'] == 10);
                 $multi_price = (isset( $event_details['_epl_multi_price_select'] ) && $event_details['_epl_multi_price_select'] == 10);
@@ -216,7 +247,10 @@ class EPL_registration_model extends EPL_model {
         if ( empty( $events ) )
             return $this->epl_util->epl_invoke_error( 20 );
 
-        $data = array( );
+        static $data = array( );
+        if ( !empty( $data ) )
+            return $data;
+
         $price_multiplier = 1;
         //prices for this event
         $prices = $this->get_event_property( '_epl_price' );
@@ -395,6 +429,18 @@ class EPL_registration_model extends EPL_model {
             return null;
     }
 
+
+    function get_gateway_info() {
+        $gateway_info = array( );
+        if ( isset( $_SESSION['__epl'][$this->regis_id]['_dates']['_epl_selected_payment'] ) ) {
+            $selected_payment = $_SESSION['__epl'][$this->regis_id]['_dates']['_epl_selected_payment'][0];
+
+            $gateway_info = $this->ecm->get_post_meta_all( $selected_payment );
+           
+        }
+        return $gateway_info;
+    }
+
     /*
      * get the dates for the cart, both edit and overview
      */
@@ -410,7 +456,8 @@ class EPL_registration_model extends EPL_model {
 
         $dates_data = $event_details['_epl_start_date'];
 
-        $input_type = $event_details['_epl_event_type'] == 5 ? 'radio' : 'checkbox';
+        //$input_type = (epl_nz($event_details['_epl_event_type'],5) == 5) ? 'radio' : 'checkbox';
+        $input_type = 'radio';
 
         foreach ( $dates_data as $event_date_id => $event_date ) {
 
@@ -435,7 +482,7 @@ class EPL_registration_model extends EPL_model {
 
                 $epl_fields['readonly'] = 1;
                 $epl_fields['default_checked'] = 0;
-                $epl_fields['options'][$event_date_id] .= $ok_to_register;
+                $epl_fields['options'][$event_date_id] .= ' ' . $ok_to_register;
             }
             $epl_fields += ( array ) $this->overview_trigger;
             //has to register for all dates.
@@ -549,7 +596,7 @@ class EPL_registration_model extends EPL_model {
 
 
     function preg_grep_keys( $pattern, $input, $flags = 0 ) {
-        echo "<pre class='prettyprint'>" . print_r( $pattern, true ) . "</pre>";
+        // echo "<pre class='prettyprint'>" . print_r( $pattern, true ) . "</pre>";
         $keys = preg_grep( $pattern, array_keys( $input ), $flags );
         $vals = array( );
         foreach ( $keys as $key ) {
@@ -629,7 +676,8 @@ class EPL_registration_model extends EPL_model {
                 'input_type' => 'select',
                 'input_name' => "_att_quantity[{$event_details['ID']}][{$_price_key}][{$date_id}]",
                 'options' => $this->get_allowed_quantity( $event_details ),
-                'value' => $value
+                'value' => $value,
+                'class' => 'epl_att_qty_dd'
             );
             $epl_fields += ( array ) $this->overview_trigger;
 
@@ -744,19 +792,21 @@ class EPL_registration_model extends EPL_model {
     function _set_relevant_data( $index, $value ) {
         global $_on_admin;
 
-        //echo "<pre class='prettyprint'>FROM POST" . print_r( $value, true ) . "</pre>";
-        $this->data[$this->regis_id][$index] = $value;
+
+        if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+            //echo "<pre class='prettyprint'>FROM POST" . print_r( $value, true ) . "</pre>";
+            $this->data[$this->regis_id][$index] = $value;
 
 
-        $_SESSION['__epl'][$this->regis_id][$index] = $value;
-
+            $_SESSION['__epl'][$this->regis_id][$index] = $value;
+        }
         //$this->_refresh_data();
     }
 
 
     function epl_is_empty_cart() {
 
-        if ( !isset( $_SESSION['__epl'][$this->regis_id]['_events'] )  || empty($_SESSION['__epl'][$this->regis_id]['_events']))
+        if ( !isset( $_SESSION['__epl'][$this->regis_id]['_events'] ) || empty( $_SESSION['__epl'][$this->regis_id]['_events'] ) )
             return true;
 
         return false;
@@ -803,7 +853,7 @@ class EPL_registration_model extends EPL_model {
      */
 
 
-    function regis_form( $values = null ) {
+    function regis_form( $values = null, $primary_only = false ) {
 
         global $event_details;
         if ( !isset( $event_details ) )
@@ -816,14 +866,14 @@ class EPL_registration_model extends EPL_model {
             $this->_set_relevant_data( '_dates', $_POST ); //from the shopping cart
 
             $this->set_event_capacity_info(); //
-            //$ok = $this->ok_to_proceed(); //Are there available spaces for the dates, times, prices in the cart
+            $ok = $this->ok_to_proceed(); //Are there available spaces for the dates, times, prices in the cart
 
             if ( $ok !== true ) {
 
                 return $ok;
             }
         }
-        elseif ( $this->mode == 'overview' ) { //overview mode comes after user enters their info in the fields and submits
+        elseif ( $this->mode == 'overview' && $_GET['epl_action'] == 'show_cart_overview' ) { //overview mode comes after user enters their info in the fields and submits
             $this->_set_relevant_data( '_attendee_info', $_POST ); //from the regis form, add to session
             //echo "<pre class='prettyprint'>" . print_r( $this->data, true ) . "</pre>";
             $this->add_registration_to_db( $this->data ); //create the record
@@ -850,9 +900,11 @@ class EPL_registration_model extends EPL_model {
             $data['forms'] .= $this->get_registration_forms( array( 'scope' => 'ticket_buyer', 'event_id' => $event_id,
                         'forms' => '_epl_primary_regis_forms' ) );
 
-            foreach ( $values['_att_quantity'][$event_id] as $price_id => $qty ) {
-                $attendee_qty = array_sum( $qty );
-                $data['forms'] .= $this->get_registration_forms( array( 'scope' => 'regis_forms', 'event_id' => $event_id, 'forms' => '_epl_addit_regis_forms', 'attendee_qty' => $attendee_qty, 'price_name' => $event_details['_epl_price_name'][$price_id] ) );
+            if ( !$primary_only ) {
+                foreach ( $values['_att_quantity'][$event_id] as $price_id => $qty ) {
+                    $attendee_qty = array_sum( $qty );
+                    $data['forms'] .= $this->get_registration_forms( array( 'scope' => 'regis_forms', 'event_id' => $event_id, 'forms' => '_epl_addit_regis_forms', 'attendee_qty' => $attendee_qty, 'price_name' => $event_details['_epl_price_name'][$price_id] ) );
+                }
             }
             //$data['forms'] .= $this->get_registration_forms( array( 'scope' => 'regis_forms', 'event_id' => $event_id, 'forms' => '_epl_addit_regis_forms', 'attendee_qty' => $attendee_qty ) );
             //$r .= $thiis->epl->load_view( 'front/registration/regis-page', $data, true );
@@ -882,7 +934,7 @@ class EPL_registration_model extends EPL_model {
         $r = '';
 
         $this->fields = $epl_fields;
-        $event_details = ( array ) $this->ecm->get_post_meta_all( $event_id );
+        //$event_details = ( array ) $this->ecm->get_post_meta_all( $event_id );
 
         if ( !is_array( $event_details[$forms] ) || empty( $event_details[$forms] ) )
             return null;
@@ -1036,8 +1088,89 @@ class EPL_registration_model extends EPL_model {
     }
 
 
+    function add_registration_to_db( $meta ) {
+        /*
+         * if id exists, update meta         *
+         */
+        //epl_log( "debug", "<pre> META FOR DB " . print_r( $meta, true ) . "</pre>" );
+        //echo "<pre class='prettyprint'>CAPACITY PER" . print_r( $this->capacity_per(), true ) . "</pre>";
+        global $event_details, $multi_time, $multi_price;
 
-function ok_to_proceed() {
+        $_post = array(
+            'post_type' => 'epl_registration',
+            'post_title' => $this->regis_id,
+            'post_content' => '',
+            'post_status' => 'publish'
+        );
+
+        if ( isset( $_SESSION['__epl']['post_ID'] ) ) {
+            //If this post is already in the db, the meta will be deleted before
+            $_post['ID'] = ( int ) $_SESSION['__epl']['post_ID'];
+
+            global $wpdb;
+
+            // TODO - research why the % in the like gives problem with prepared statement.
+            $wpdb->query( "DELETE FROM  $wpdb->postmeta
+                    WHERE meta_key like '__epl_original%' AND post_id = '{$_post['ID']}'" );
+
+            $wpdb->query( $wpdb->prepare( "UPDATE  $wpdb->postmeta
+                   SET meta_key = '__epl_original-%d'    WHERE meta_key = '__epl' AND post_id = '%d'", time(), $_post['ID'] ) );
+        }
+        else {
+            //update the post
+            $post_ID = wp_insert_post( $_post );
+            $_SESSION['__epl']['post_ID'] = $post_ID;
+        }
+
+        //get the attendee and money totals
+        $_totals = $this->calculate_totals();
+
+        $grand_total = $_totals['money_totals']['grand_total'];
+        $grand_total_key = "_epl_grand_total";
+
+        update_post_meta( $_SESSION['__epl']['post_ID'], $grand_total_key, epl_get_formatted_curr( $grand_total ) );
+
+        switch ( $this->capacity_per() )
+        {
+            case 'event': //per event
+
+                $qty_meta_key = "_total_att_" . $event_details['ID'];
+                $total_att = $_totals['_att_quantity']['total'][$event_details['ID']];
+                update_post_meta( $_SESSION['__epl']['post_ID'], $qty_meta_key, $total_att );
+                break;
+            case 'date': //per date
+                //need the total attendees
+                //need to apply the total attendees to every day.
+
+
+                $qty_meta_key = "_total_att_" . $event_details['ID'];
+                //$total_att = array_sum( ( array ) $meta[$this->regis_id]['_dates']['_att_quantity'][$event_details['ID']] );
+                $total_att = $_totals['_att_quantity']['total'][$event_details['ID']];
+                update_post_meta( $_SESSION['__epl']['post_ID'], $qty_meta_key, $total_att );
+
+                $dates = ( array ) $meta[$this->regis_id]['_dates']['_epl_start_date'][$event_details['ID']];
+
+                foreach ( $dates as $_key => $_date_id ) {
+                    $qty_meta_key = "_total_att_" . $event_details['ID'] . '_date_' . $_date_id;
+                    update_post_meta( $_SESSION['__epl']['post_ID'], $qty_meta_key, $total_att );
+                }
+
+
+                break;
+        }
+
+        //store the whole session, useful for admin side or future edit
+        update_post_meta( $_SESSION['__epl']['post_ID'], '__epl', $meta );
+
+        //also store individual ones for easier data access and queries.
+        //update_post_meta( $_SESSION['__epl']['post_ID'], '_grand_total', $meta[$this->regis_id]['grand_total'] );
+        update_post_meta( $_SESSION['__epl']['post_ID'], '_epl_events', $meta[$this->regis_id]['_events'] );
+        update_post_meta( $_SESSION['__epl']['post_ID'], '_epl_dates', $meta[$this->regis_id]['_dates'] );
+        update_post_meta( $_SESSION['__epl']['post_ID'], '_epl_attendee_info', $meta[$this->regis_id]['_attendee_info'] );
+    }
+
+
+    function ok_to_proceed() {
 
         global $event_details, $capacity, $current_att_count, $multi_time, $multi_price;
 
@@ -1074,116 +1207,28 @@ function ok_to_proceed() {
                 $total_att = $_totals['_att_quantity']['total'][$event_details['ID']];
 
 
-                $dates = $_SESSION['__epl'][$this->regis_id]['_dates']['_epl_start_date'][$event_details['ID']];
+                $dates = ( array ) $_SESSION['__epl'][$this->regis_id]['_dates']['_epl_start_date'][$event_details['ID']];
 
                 foreach ( $dates as $_dkey => $_date_id ) {
                     $qty_meta_key = "_total_att_" . $event_details['ID'] . '_date_' . $_date_id;
 
-
+                    //capacity
                     $cap = $capacity['date'][$_date_id];
                     if ( array_key_exists( $qty_meta_key, ( array ) $current_att_count ) ) {
+                        //number of registered attendees
                         $num_att = $current_att_count[$qty_meta_key];
                         $avail = $this->avail_spaces( $cap, $num_att );
-                        if ( $avail == 0 )
+                        $total_att = $_totals['_att_quantity']['total'][$event_details['ID']];
+
+                        //echo "<pre class='prettyprint'>$cap - $num_att " . print_r($current_att_count, true). "</pre>";
+                        if ( $avail == 0 ) {
                             $_response_arr[] = array( $event_details['_epl_start_date'][$_date_id], epl__( 'SOLD OUT.  Please choose another date.' ) );
-                    }
-                }
-
-                break;
-            case 'time'://per time
-                //for each date in cart
-                //for each time in cart
-                // compare value selected and time selected and
-                $qty_meta_key = "_total_att_" . $event_details['ID'];
-                //$total_att = array_sum( ( array ) $meta[$this->regis_id]['_dates']['_att_quantity'][$event_details['ID']] );
-                //update_post_meta( $_SESSION['__epl']['post_ID'], $qty_meta_key, $total_att );
-                $total_att = $_totals['_att_quantity']['total'][$event_details['ID']];
-                $dates = $_SESSION['__epl'][$this->regis_id]['_dates']['_epl_start_date'][$event_details['ID']];
-                $times = $_SESSION['__epl'][$this->regis_id]['_dates']['_epl_start_time'][$event_details['ID']];
-                epl_log( "debug", "<pre>" . print_r( $capacity, true ) . "</pre>" );
-
-
-                foreach ( $dates as $_dkey => $_date_id ) {
-                    $qty_meta_key = "_total_att_" . $event_details['ID'] . '_date_' . $_date_id;
-
-                    foreach ( $times as $_tkey => $_time_id ) {
-                        if ( $event_details['_epl_multi_time_select'] == 0 ) {
-                            $qty_meta_key = "_total_att_" . $event_details['ID'] . '_time_' . $_date_id . '_' . $_time_id;
-
-                            $cap = $capacity['time'][$_time_id];
-                            if ( array_key_exists( $qty_meta_key, ( array ) $current_att_count ) ) {
-                                $num_att = $current_att_count[$qty_meta_key];
-                                $avail = $this->avail_spaces( $cap, $num_att );
-                                if ( $avail == 0 )
-                                    $_response_arr[] = array( $event_details['_epl_start_date'][$_date_id], $event_details['_epl_start_time'][$_time_id], epl__( 'SOLD OUT.  Please choose another time.' ) );
-                            }
                         }
-                        else {
-                            if ( $_date_id == $_tkey ) {
-                                $qty_meta_key = "_total_att_" . $event_details['ID'] . '_time_' . $_date_id . '_' . $_time_id;
-                            }
+                        elseif ( $total_att > $avail ) {
+                            $_response_arr[] = array( $event_details['_epl_start_date'][$_date_id], epl__( 'Sorry, the number of attendees selected exceeds number of avaialable spaces.  Available spaces: ' . $avail ) );
                         }
                     }
                 }
-
-                /*   $dates = $event_details['epl_start_date'];
-                  $times = $event_details['epl_start_time'];
-
-                  $tmpl = array( 'table_open' => '<table border="1" cellpadding="2" cellspacing="1" class="available_spaces">' );
-
-                  $this->epl_table->set_template( $tmpl );
-
-                  foreach ( $dates as $_date_key => $_date_id ) {
-                  $qty_meta_key = "_total_att_" . $event_details['ID'] . '_date_' . $_date_id;
-                  $this->epl_table->add_row( $_date_id );
-                  foreach ( $times as $_time_key => $_time_id ) {
-                  if ( $event_details['epl_multi_time_select'] == 0 ) {
-                  $qty_meta_key = "_total_att_" . $event_details['ID'] . '_time_' . $_date_key . '_' . $_time_key;
-
-                  $cap = $capacity['time'][$_time_key];
-                  $num_att = $current_att_count[$qty_meta_key];
-                  $avail = $this->avail_spaces( $cap, $num_att );
-                  if ($avail == 0)
-                  $this->epl_table->add_row( $_date_id, $event_details['epl_start_time'][$_time_key], 'SOLD OUT' );
-                  }
-                  else {
-                  if ( $_date_id == $_time_key ) {
-                  $qty_meta_key = "_total_att_" . $event_details['ID'] . '_time_' . $_date_key . '_' . $_time_key;
-                  }
-                  }
-                  }
-                  } */
-
-
-
-                break;
-            case 'price': //per price
-
-                $qty_meta_key = "_total_att_" . $event_details['ID'];
-                $total_att = array_sum( ( array ) $meta[$this->regis_id]['_dates']['_att_quantity'][$event_details['ID']] );
-                //update_post_meta( $_SESSION['__epl']['post_ID'], $qty_meta_key, $total_att );
-
-                $dates = $meta[$this->regis_id]['_dates']['_epl_start_date'][$event_details['ID']];
-                $prices = $meta[$this->regis_id]['_dates']['_att_quantity'][$event_details['ID']];
-                $tota_att = 0;
-                foreach ( $dates as $_dkey => $_date_id ) {
-
-                    foreach ( $prices as $_pkey => $_price_id ) {
-                        $price_att = array_sum( ( array ) $meta[$this->regis_id]['_dates']['_att_quantity'][$event_details['ID']][$_pkey] );
-                        $total_att += $price_att;
-                        if ( !$multi_price ) {
-                            $qty_meta_key = "_total_att_" . $event_details['ID'] . '_price_' . $_date_id . '_' . $_price_id;
-                        }
-                        else {
-                            if ( $_date_id == $_pkey ) {
-                                $qty_meta_key = "_total_att_" . $event_details['ID'] . '_price_' . $_date_id . '_' . $_price_id;
-                            }
-                        }
-                    }
-                }
-
-                $qty_meta_key = "_total_att_" . $event_details['ID'];
-
 
                 break;
         }
@@ -1197,5 +1242,90 @@ function ok_to_proceed() {
         }
         return $_response;
     }
+
+
+    function capacity_table( $table = true ) {
+        /*
+         * if id exists, update meta         *
+         */
+        //epl_log( "debug", "<pre> META FOR DB " . print_r( $meta, true ) . "</pre>" );
+        //echo "<pre class='prettyprint'>CAPACITY PER" . print_r( $this->capacity_per(), true ) . "</pre>";
+        global $event_details, $capacity, $current_att_count, $multi_time, $multi_price, $available_space_arr;
+
+        if ( $this->mode == 'overview' )
+            return null;
+
+        $tmpl = array( 'table_open' => '<table border="0" cellpadding="2" cellspacing="1" class="epl_avail_spaces_table">' );
+
+
+        $this->epl_table->set_template( $tmpl );
+        $this->epl_table->set_heading( 'Date', '#' );
+
+        $_table = '';
+        //get the attendee and money totals
+        $_totals = $this->calculate_totals();
+
+        $grand_total = $_totals['money_totals']['grand_total'];
+        $grand_total_key = "_grand_total";
+
+        $available_space_arr = array( );
+        //$this->epl_table->set_heading( 'Available Spaces', '', '' );
+        switch ( $this->capacity_per() )
+        {
+            case 'event': //per event
+
+                $qty_meta_key = "_total_att_" . $event_details['ID'];
+                $total_att = $this->calculate_totals();
+
+                $cap = $capacity['cap'];
+                $num_att = $current_att_count[$qty_meta_key];
+                $avail = $this->avail_spaces( $cap, $num_att );
+
+                $available_space_arr[] = $avail;
+                //$this->epl_table->add_row( $avail );
+
+                break;
+            case 'date': //per date
+                //need the total attendees
+                //need to apply the total attendees to every day.
+
+
+                $qty_meta_key = "_total_att_" . $event_details['ID'];
+                //$total_att = array_sum( ( array ) $meta[$this->regis_id]['_dates']['_att_quantity'][$event_details['ID']] );
+                $total_att = $_totals['_att_quantity']['total'][$event_details['ID']];
+
+
+                $dates = $event_details['_epl_start_date'];
+
+                foreach ( $dates as $_date_key => $_date_id ) {
+                    $qty_meta_key = "_total_att_" . $event_details['ID'] . '_date_' . $_date_key;
+
+                    $cap = $capacity['date'][$_date_key];
+                    $num_att = $current_att_count[$qty_meta_key];
+                    $avail = $this->avail_spaces( $cap, $num_att );
+
+                    if ( $avail == 0 )
+                        $avail = epl__( 'Sold Out' );
+
+                    $available_space_arr[$_date_key] = array( $event_details['_epl_start_date'][$_date_key], $avail );
+
+                    //$this->epl_table->add_row( '', $event_details['_epl_start_date'][$_date_key], $avail );
+                }
+
+
+
+                break;
+        }
+
+        if ( $table ) {
+            $data['available_spaces_table'] = $this->epl_table->generate( $available_space_arr );
+            $this->epl_table->clear();
+
+            return $this->epl->load_view( 'front/cart/cart-available-spaces', $data, true );
+        }
+        return $available_space_arr;
+    }
+
 }
+
 ?>
