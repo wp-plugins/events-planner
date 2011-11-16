@@ -1,4 +1,4 @@
-<div id="" class="">
+<div id="" class="epl_event_section" style="padding: 10px;">
 
     <?php if ( isset( $ticket_number ) ): ?>
 

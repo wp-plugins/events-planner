@@ -312,6 +312,14 @@ end cart section
 
 }
 /* when the values are displayed for overview*/
+.epl_regis_message_warn {
+    padding: 10px;
+    background-color:  #f9febd;
+    font-weight: bold;
+    margin: 10px auto;
+    width: 96%;
+}
+
 .epl_regis_field_wrapper div.value{
     border-bottom: none;
     color:  #333;

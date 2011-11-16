@@ -19,7 +19,7 @@
 
             <?php
 
-            wp_nonce_field( 'epl_settings_save', 'epl_settings_nonce' );
+            wp_nonce_field( 'epl_form_nonce', '_epl_nonce' );
             ?>
             <div id="tabs">
                 <ul>

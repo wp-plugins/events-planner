@@ -15,7 +15,8 @@ class EPL_registration_model extends EPL_model {
     function __construct() {
         parent::__construct();
         $this->ecm = $this->epl->load_model( 'epl-common-model' );
-        $this->mode == 'edit';
+        $this->mode = 'edit';
+        $this->overview_trigger = null;
         //$this->_is_cart_expired();
         $this->_start_cart_session();
     }
@@ -349,8 +350,6 @@ class EPL_registration_model extends EPL_model {
 
         $capacity['cap'] = $event_details['_epl_event_capacity'];
         $capacity['date'] = $event_details['_epl_date_capacity'];
-        $capacity['time'] = $event_details['_epl_time_capacity'];
-        $capacity['price'] = $event_details['_epl_price_capacity'];
     }
 
     /*
@@ -436,7 +435,6 @@ class EPL_registration_model extends EPL_model {
             $selected_payment = $_SESSION['__epl'][$this->regis_id]['_dates']['_epl_selected_payment'][0];
 
             $gateway_info = $this->ecm->get_post_meta_all( $selected_payment );
-           
         }
         return $gateway_info;
     }
@@ -524,6 +522,8 @@ class EPL_registration_model extends EPL_model {
 
     function get_time_and_prices_for_cart() {
         global $event_details, $multi_time, $multi_price;
+        
+        $r = '';
         //if each time slot has its own pricing
         if ( $event_details['_epl_pricing_type'] == 10 ) {
             $r = '';
@@ -661,7 +661,7 @@ class EPL_registration_model extends EPL_model {
 
     function _get_prices( $date_id = null ) {
         global $event_details;
-
+        $r = '';
         foreach ( $event_details['_epl_price_name'] as $_price_key => $_price_name ) {
 
             $data['price_name'] = $_price_name;
@@ -749,7 +749,7 @@ class EPL_registration_model extends EPL_model {
 
 
     function get_relevant_regis_values() {
-        return $_SESSION['__epl'][$this->regis_id]['_attendee_info'];
+        return (isset($_SESSION['__epl'][$this->regis_id]['_attendee_info']))?$_SESSION['__epl'][$this->regis_id]['_attendee_info']:'';
         return $this->data[$this->regis_id]['_attendee_info'];
     }
 
@@ -820,12 +820,13 @@ class EPL_registration_model extends EPL_model {
 
         $_o = array( );
         $data = array( );
-
+        $date['date'] = '';
+        $date['field'] = '';
         foreach ( ( array ) $payment_choices as $payment_choice ) {
             $q = $this->ecm->get_post_meta_all( $payment_choice );
             $label = $q['_epl_pay_display'];
             // echo "<pre class='prettyprint'>" . print_r($type, true). "</pre>";
-            $_o[$payment_choice] = $type;
+            //$_o[$payment_choice] = $type;
             $_payment = array(
                 'input_type' => 'radio',
                 'input_name' => '_epl_selected_payment[]',
@@ -859,7 +860,8 @@ class EPL_registration_model extends EPL_model {
         if ( !isset( $event_details ) )
             $this->ecm->setup_event_details( ( int ) $_GET['event_id'] );
 
-
+        $data = array();
+        $data['forms'] = '';
 
 
         if ( $this->mode == 'edit' ) { //not overview
@@ -898,7 +900,7 @@ class EPL_registration_model extends EPL_model {
             //$attendee_qty = 3; //$this->get_attendee_count( $values, $event_id );
             //display the ticket purchaser form.
             $data['forms'] .= $this->get_registration_forms( array( 'scope' => 'ticket_buyer', 'event_id' => $event_id,
-                        'forms' => '_epl_primary_regis_forms' ) );
+                        'forms' => '_epl_primary_regis_forms', 'price_name' => '' ) );
 
             if ( !$primary_only ) {
                 foreach ( $values['_att_quantity'][$event_id] as $price_id => $qty ) {
@@ -982,7 +984,7 @@ class EPL_registration_model extends EPL_model {
      */
 
 
-    function construct_form( $scope, $event_id, $forms, $attendee_number, $price_name ) {
+    function construct_form( $scope, $event_id, $forms, $attendee_number, $price_name = '' ) {
 
         static $ticket_number = 0; //keeps track of the attendee count for dispalay
         global $event_details;
@@ -1032,7 +1034,7 @@ class EPL_registration_model extends EPL_model {
                     'label' => $field_atts['label'],
                     'description' => $field_atts['description'],
                     'required' => $field_atts['required'],
-                    'validation' => $field_atts['validation'],
+                    'validation' => (isset($field_atts['validation']))?$field_atts['validation']:'',
                     'options' => $options,
                     'value' => $vals != '' ? $vals[$field_atts['input_name']][$event_id][$ticket_number] : null
                 );
@@ -1045,8 +1047,8 @@ class EPL_registration_model extends EPL_model {
                 $data['el'] = $this->epl_util->create_element( $args, 0 );
                 $data['fields'] .= $this->epl->load_view( 'front/registration/regis-field-row', $data, true );
             }
-            $data['form_label'] = (in_array( 0, ( array ) $form_atts['epl_form_options'] ) ? $form_atts['epl_form_label'] : '');
-            $data['form_descr'] = (in_array( 10, ( array ) $form_atts['epl_form_options'] ) ? $form_atts['epl_form_descritption'] : '');
+            $data['form_label'] = (isset($form_atts['epl_form_options']) && in_array( 0, ( array ) $form_atts['epl_form_options'] ) ? $form_atts['epl_form_label'] : '');
+            $data['form_descr'] = (isset($form_atts['epl_form_options']) && in_array( 10, ( array ) $form_atts['epl_form_options'] ) ? $form_atts['epl_form_descritption'] : '');
 
             $data['form'] = $this->epl->load_view( 'front/registration/regis-form-wrap', $data, true );
         }
@@ -1128,7 +1130,7 @@ class EPL_registration_model extends EPL_model {
         $grand_total = $_totals['money_totals']['grand_total'];
         $grand_total_key = "_epl_grand_total";
 
-        update_post_meta( $_SESSION['__epl']['post_ID'], $grand_total_key, epl_get_formatted_curr( $grand_total ) );
+        update_post_meta( $_SESSION['__epl']['post_ID'], $grand_total_key, $grand_total );
 
         switch ( $this->capacity_per() )
         {
@@ -1167,6 +1169,10 @@ class EPL_registration_model extends EPL_model {
         update_post_meta( $_SESSION['__epl']['post_ID'], '_epl_events', $meta[$this->regis_id]['_events'] );
         update_post_meta( $_SESSION['__epl']['post_ID'], '_epl_dates', $meta[$this->regis_id]['_dates'] );
         update_post_meta( $_SESSION['__epl']['post_ID'], '_epl_attendee_info', $meta[$this->regis_id]['_attendee_info'] );
+
+        $this->update_payment_data( array(
+            'post_ID' => $_SESSION['__epl']['post_ID'],
+            '_epl_grand_total' => $grand_total ) );
     }
 
 
@@ -1225,7 +1231,7 @@ class EPL_registration_model extends EPL_model {
                             $_response_arr[] = array( $event_details['_epl_start_date'][$_date_id], epl__( 'SOLD OUT.  Please choose another date.' ) );
                         }
                         elseif ( $total_att > $avail ) {
-                            $_response_arr[] = array( $event_details['_epl_start_date'][$_date_id], epl__( 'Sorry, the number of attendees selected exceeds number of avaialable spaces.  Available spaces: ' . $avail ) );
+                            $_response_arr[] = array( $event_details['_epl_start_date'][$_date_id], epl__( 'Sorry, the number of attendees selected exceeds number of available spaces.  Available spaces: ' . $avail ) );
                         }
                     }
                 }
@@ -1272,19 +1278,7 @@ class EPL_registration_model extends EPL_model {
         //$this->epl_table->set_heading( 'Available Spaces', '', '' );
         switch ( $this->capacity_per() )
         {
-            case 'event': //per event
 
-                $qty_meta_key = "_total_att_" . $event_details['ID'];
-                $total_att = $this->calculate_totals();
-
-                $cap = $capacity['cap'];
-                $num_att = $current_att_count[$qty_meta_key];
-                $avail = $this->avail_spaces( $cap, $num_att );
-
-                $available_space_arr[] = $avail;
-                //$this->epl_table->add_row( $avail );
-
-                break;
             case 'date': //per date
                 //need the total attendees
                 //need to apply the total attendees to every day.
@@ -1324,6 +1318,36 @@ class EPL_registration_model extends EPL_model {
             return $this->epl->load_view( 'front/cart/cart-available-spaces', $data, true );
         }
         return $available_space_arr;
+    }
+
+
+    function update_payment_data( $args = array( ) ) {
+        global $epl_fields;
+
+        $this->epl->load_config( 'regis-fields' );
+
+
+
+        $defaults = $this->epl_util->remove_array_vals( array_flip( array_keys( $epl_fields['epl_regis_payment_fields'] ) ) );
+
+        $args = wp_parse_args( $args, $defaults );
+
+        if ( !isset( $args['post_ID'] ) )
+            return false;
+
+        $post_ID = ( int ) $args['post_ID'];
+
+        foreach ( $defaults as $meta_key => $meta_value ) {
+            if ( $args[$meta_key] == '' ) {
+
+                $default = (isset( $epl_fields['epl_regis_payment_fields'][$meta_key]['default_value']))?$epl_fields['epl_regis_payment_fields'][$meta_key]['default_value']:'';
+                $args[$meta_key] = $default;
+            }
+
+            update_post_meta( $post_ID, $meta_key, $args[$meta_key] );
+        }
+
+        return true;
     }
 
 }

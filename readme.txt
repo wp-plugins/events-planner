@@ -4,13 +4,18 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=abels
 Tags: events, event, events planner, event planner, event registration, event calendar, events calendar, event management, paypal, registration, ticket, tickets, ticketing, tickets, widget, locations, maps, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
 Requires at least: 3.1
 Tested up to: 3.2
-Stable tag: 1.2
+Stable tag: 1.3
 
 Events Planner: A powerful next generation event management plugin, built with Custom Post Types
 
 == Description ==
 
 Events Planner is a next generation [Event Registration](http://www.wpeventsplanner.com/) Plugin, built with standard Wordpress tools (Custom Post Types, Custom Fields, Options), making it extremely powerful and flexible.
+
+= New in version 1.3 =
+* Downloadable list of registrations (status, payment info, attendees, regis field responses...) in CSV format, AJAX powered quick info access to Registration and Payment Info, better available space calculations....
+* [Read More](http://www.wpeventsplanner.com/2011/11/whats-new-in-events-planner-lite-version-1-3/)
+
 
 = New in version 1.2 =
 * Registration activated.  Use Events Planner to accept registrations for Free and Paid events (using PayPal ExpressCheckout).
@@ -21,7 +26,7 @@ Events Planner is a next generation [Event Registration](http://www.wpeventsplan
 * Use custom event template tags to include event specific information on your event pages.
 * [Read More](http://www.wpeventsplanner.com/2011/10/whats-new-in-v1-1/)
 
-**Coming in 1.3, registration management on the admin side, email notification...**
+**Coming next, the PRO version with a lot more features (i.e. more event types, more pricing options, widgets, calendars....)**
 
 = List of features =
 
@@ -76,12 +81,12 @@ will be able to do it yourself, easily and safely.
 1.  Inside each form, you can sort the order of the fields.
 1.  Inside each event, you can choose which forms to use to collect the registration information from the ticket buyer (and optionally, the other attendees).
 
-= Accept and Manage Registrations (**coming very soon**) =
+= Accept (**coming very soon**) =
 
 1.  All the registration information is stored in a custom post type.
 1.  The user will go through a process similar to a shopping cart (i.e. select event > select event options > enter registration info > see overview > pay > done).
 1.  Along with the registration data, you will see the payment information inside the post.
-1.  You can create new registrations and modify them from inside the Wordpress admin.
+1.  You can create new registrations and modify them from inside the Wordpress admin -Pro.
 
 = Some features being worked on right now =
 
@@ -115,6 +120,14 @@ will be able to do it yourself, easily and safely.
 2. Registration Page Overview
 
 == Changelog ==
+
+= 1.2 =
+
+* Downloadable CSV of event registration info.
+* AJAX snapshots of registration and payment info.
+* Hardened available space calculation.
+* Ability to exclude org. info form the event list.
+* Fixed a few php notices.
 
 = 1.2 =
 

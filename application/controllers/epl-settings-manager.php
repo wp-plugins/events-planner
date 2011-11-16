@@ -53,7 +53,7 @@ class EPL_Settings_Manager extends EPL_Controller {
 
     function set_options() {
 
-        if ( !empty( $_POST ) && check_admin_referer( 'epl_settings_save', 'epl_settings_nonce' ) ) {
+        if ( !empty( $_POST ) && check_admin_referer( 'epl_form_nonce', '_epl_nonce' ) ) {
 
             foreach ( $this->fields as $section => $epl_fields ) {
 

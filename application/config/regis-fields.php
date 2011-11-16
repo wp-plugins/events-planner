@@ -9,9 +9,9 @@ $epl_fields['epl_regis_payment_fields'] =
                 'input_name' => '_epl_payment_method',
                 'label' => epl__( 'Payment Method' ),
                 'options' => array(
-                    '_cash' => 'Cash',
+                    '_cash' => epl__('Cash'),
                     '_check' => 'Check',
-                    '_pp_exp' => 'PayPal Express Checkout',
+                    '_pp_exp' => 'PayPal Expr. Checkout',
                     '_other' => 'Other',
                 ),
                 'empty_row' => true
@@ -22,7 +22,7 @@ $epl_fields['epl_regis_payment_fields'] =
                 'label' => epl__( 'Regis. Status' ),
                 'options' => array(
                     2 => 'Pending',
-                    5 => 'Completed',
+                    5 => 'Complete',
                     10 => 'Cancelled - pending refund',
                     15 => 'Cancelled - refunded',
                 ),
@@ -49,6 +49,31 @@ $epl_fields['epl_regis_payment_fields'] =
                 'label' => epl__( 'Date Paid' ),
                 'class' => ' datepicker '
             ),
+            /*'_epl_refund_method' => array(
+                'input_type' => 'select',
+                'input_name' => '_epl_refund_method',
+                'label' => epl__( 'Refund Method' ),
+                'options' => array(
+                    '_cash' => epl__('Cash'),
+                    '_check' => 'Check',
+                    '_pp_exp' => 'PayPal Expr. Checkout',
+                    '_other' => 'Other',
+                ),
+                'empty_row' => true
+            ),
+            '_epl_refund_amount' => array(
+                'input_type' => 'text',
+                'input_name' => '_epl_refund_amount',
+                'label' => epl__( 'Refund Amount' ),
+                'description' => '',
+                'style' => '',
+                'class' => '' ),
+            '_epl_refund_date' => array(
+                'input_type' => 'text',
+                'input_name' => '_epl_refund_date',
+                'label' => epl__( 'Refund Date' ),
+                'class' => ' datepicker '
+            ),*/
             '_epl_transaction_id' => array(
                 'input_type' => 'text',
                 'input_name' => '_epl_transaction_id',
@@ -60,5 +85,6 @@ $epl_fields['epl_regis_payment_fields'] =
                 'input_type' => 'textarea',
                 'input_name' => '_epl_payment_note',
                 'label' => epl__( 'Notes' ),
-                'style' => 'width:100%;' ),
+                'style' => 'width:100%;',
+                'default_value' => ''),
 );

@@ -7,7 +7,7 @@ define( "EPL_FULL_PATH", WP_PLUGIN_DIR . EPL_PATH );
 define( "EPL_APPLICATION_FOLDER", EPL_FULL_PATH . 'application/' );
 define( "EPL_FULL_URL", WP_PLUGIN_URL . EPL_PATH );
 define( "EPL_MODULE_ACTIVE", TRUE );
-define( "EPL_PLUGIN_VERSION", '1.0' );
+define( "EPL_PLUGIN_VERSION", '1.3' );
 define( "EPL_CONTROLLER_FOLDER", EPL_FULL_PATH . 'application/controllers/' );
 define( "EPL_SYSTEM_FOLDER", EPL_FULL_PATH . 'system/' );
 define( "EPL_ASSETS_FOLDER", EPL_FULL_URL . 'assets/' );
@@ -24,8 +24,6 @@ $_short_name = "epl";
 $epl_help_links = array(
 
     10 => array('s'=> 'epl_event_type'),
-    20 => array('s'=> 'epl_event_type'),
-    30 => array('s'=> 'epl_event_type'),
 
 );
 

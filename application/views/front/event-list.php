@@ -73,6 +73,7 @@ global $event_list;
             <?php
                 //location id is stored in $event_details['_epl_event_location']
             ?>
+
             <div class ="event_location">
                 <span class="heading">Location</span>
                 <a href="<?php echo get_permalink( $event_details['_epl_event_location'] ); ?>" title="<?php echo get_the_location_name(); ?>">
@@ -87,7 +88,13 @@ global $event_list;
 
             <?php
                 //organization id is stored in $event_details['_epl_event_organization']
+
+            if (epl_nz(epl_get_event_property('_epl_display_org_info'), 10) != 0):
+
+
             ?>
+            
+            
                 <div class ="event_organization">
                     <span class="heading">Hosted By</span>
                     <a href="<?php echo get_permalink( $event_details['_epl_event_organization'] ); ?>" title="<?php echo get_the_organization_name(); ?>"><?php echo get_the_organization_name(); ?></a><br />
@@ -96,6 +103,8 @@ global $event_list;
                 <?php echo get_the_organization_phone(); ?><br />
                 <?php echo epl_anchor( get_the_organization_website(), 'Visit Website' ); ?><br />
             </div>
+
+            <?php endif; ?>
 
         </div>
 

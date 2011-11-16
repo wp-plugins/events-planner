@@ -10,6 +10,7 @@
 class EPL_regis_admin_model extends EPL_model {
 
     public $regis_id;
+    public $mode;
     public $data = null;
 
 
@@ -57,7 +58,7 @@ class EPL_regis_admin_model extends EPL_model {
         $this->regis_meta['__epl'] = $data['__epl'];
         $this->regis_id = $data['__epl']['_regis_id'];
         $this->post_ID = $data['__epl']['post_id'];
-
+        //echo "<pre class='prettyprint'>" . print_r($data, true). "</pre>";
         return $this;
     }
 
@@ -89,6 +90,10 @@ class EPL_regis_admin_model extends EPL_model {
                 $this->regis_meta['__epl'][$this->regis_id]['_events'] = array( );
                 break;
             case '_events':
+                $this->regis_meta['__epl'][$this->regis_id]['_events'][$_POST['event_id']] = $this->event_meta['post_title'];
+
+                break;
+            case '_payment_info':
                 $this->regis_meta['__epl'][$this->regis_id]['_events'][$_POST['event_id']] = $this->event_meta['post_title'];
 
                 break;
@@ -593,9 +598,7 @@ class EPL_regis_admin_model extends EPL_model {
 
     function get_the_dates() {
         global $multi_time;
-        /*
-         * NEED to check the regis start and end dates before presenting.
-         */
+
 
         $data['date'] = array( );
         $data['time'] = array( );
@@ -608,10 +611,14 @@ class EPL_regis_admin_model extends EPL_model {
 
             $value = $this->regis_meta['__epl'][$this->regis_id]['_dates']['_epl_start_date'][$this->event_meta['ID']];
 
+            $start_date = $this->event_meta['_epl_start_date'][$event_date_id];
+            $end_date = $this->event_meta['_epl_start_date'][$event_date_id];
+             $end_date = ($start_date != $end_date ? ' - ' . $end_date : '');
+             
             $epl_fields = array(
                 'input_type' => $input_type,
                 'input_name' => "epl_start_date[{$this->event_meta['ID']}][]",
-                'options' => array( $event_date_id => $this->event_meta['_epl_start_date'][$event_date_id] . ' to ' . $this->event_meta['_epl_start_date'][$event_date_id] ), // . ' to ' . $this->event_meta['epl_regis_start_date'][$event_date_id] . ' to ' . $this->event_meta['epl_regis_end_date'][$event_date_id] ),
+                'options' => array( $event_date_id => $start_date . $end_date ),
                 'default_checked' => 1,
                 'display_inline' => true,
                 'value' => $value
@@ -755,16 +762,15 @@ class EPL_regis_admin_model extends EPL_model {
             $value = $this->get_current_value( '_dates', '_att_quantity', $this->event_meta['ID'], $_k );
             $epl_fields = array(
                 'input_type' => 'select',
-                'input_name' => "att_quantity[{$this->event_meta['ID']}][{$_k}]",
+                'input_name' => "_att_quantity[{$this->event_meta['ID']}][{$_k}]",
                 'options' => $this->get_allowed_quantity( $this->event_meta ),
                 'value' => $value
             );
             $epl_fields += ( array ) $this->overview_trigger;
-
-
+            
             $data['price_qty_dd'] = $this->epl_util->create_element( $epl_fields );
 
-            if ( $this->mode == 'overview' && $value == 0 ) {
+            if ( $this->mode == 'overview' && ($value == 0 || current((array)$value) == 0)) {
 
             }else
                 $r .= $this->epl->load_view( 'front/cart/cart-prices-row', $data, true );

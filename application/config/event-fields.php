@@ -290,6 +290,14 @@ $epl_fields['epl_other_settings_fields'] =
                 'input_name' => '_epl_event_organization',
                 'options' => get_list_of_orgs(),
                 'label' => epl__( 'Organization hosting the event' ), ),
+            '_epl_display_org_info' => array(
+                'input_type' => 'select',
+                'input_name' => '_epl_display_org_info',
+                'label' => epl__( 'Display Organization Info' ),
+                 'description' => 'Display the Organization info on the event list?',
+                'options' => epl_yes_no(),
+                'default_value' => 0,
+                'class' => '' ),
 );
 
 
@@ -318,6 +326,7 @@ $epl_fields['epl_display_option_fields'] =
                 'description' => epl__( '' ),
                 'default_value' => 10,
                 'class' => '' ),
+
             /* '_epl_display_att_list_button' => array(
               'input_type' => 'select',
               'input_name' => '_epl_display_att_list_button',

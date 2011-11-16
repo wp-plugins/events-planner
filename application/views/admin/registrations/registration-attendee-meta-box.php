@@ -5,7 +5,7 @@
         </div>
     </div>
     <?php endif; ?>
-<div class="meta_box_content">
+<div class="">
 
 
 

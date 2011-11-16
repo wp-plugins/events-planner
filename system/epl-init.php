@@ -225,15 +225,14 @@ class EPL_Init {
         register_post_type( 'epl_location', $post_type_args );
 
         $post_type_args = array(
-            //'public' => true,
             'show_ui' => true,
-            'publicly_queryable' => true,
+            'publicly_queryable' => false,
             'exclude_from_search' => true,
             'show_in_nav_menus' => false,
             'show_in_menu' => true,
             'query_var' => 'epl_registration',
             'rewrite' => array(
-                'slug' => 'registration',
+                'slug' => 'epl_registration',
                 'with_front' => false,
             ),
             'supports' => array( 'title' ),

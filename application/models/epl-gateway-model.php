@@ -78,7 +78,10 @@ class EPL_Gateway_Model extends EPL_Model {
         }
         else {
 
-            echo "Sorry an error occured.";
+
+            $error = 'ERROR: ' . $response['L_SHORTMESSAGE0'] . '. ' . $response['L_LONGMESSAGE0'];
+
+            echo EPL_Util::get_instance()->epl_invoke_error(0, $error, false);
         }
     }
 
@@ -143,21 +146,19 @@ class EPL_Gateway_Model extends EPL_Model {
 
         $response = $paypal->request( 'DoExpressCheckoutPayment', $requestParams );
         if ( is_array( $response ) && $response['ACK'] == 'Success' ) {
-            // INSET TO DB
-            // SAVE DETAILS, destroy session
-            //echo "<pre class='prettyprint'>" . print_r($response, true). "</pre>";
 
+            $data['post_ID'] = $post_ID;
+            $data['_epl_regis_status'] = '5';
+            $data['_epl_grand_total'] = $_totals['money_totals']['grand_total'];
+            $data['_epl_payment_amount'] = $response['PAYMENTINFO_0_AMT'];
+            $data['_epl_payment_date'] = current_time( 'mysql' );
+            $data['_epl_payment_method'] = '_pp_exp';
+            $data['_epl_transaction_id'] = $response['PAYMENTINFO_0_TRANSACTIONID'];
 
-            $total_paid = $_totals['money_totals']['grand_total'];
-            $date_paid = current_time( 'mysql' );
+            $data = apply_filters( 'epl_pp_exp_response_data', $data, $response );
 
-            $transactionId = $response['PAYMENTINFO_0_TRANSACTIONID'];
+            $this->erm->update_payment_data( $data );
 
-            update_post_meta( $post_ID, '_epl_regis_status', '5' );
-            update_post_meta( $post_ID, '_epl_payment_amount', $total_paid );
-            update_post_meta( $post_ID, '_epl_payment_date', $date_paid );
-            update_post_meta( $post_ID, '_epl_transaction_id', $transactionId );
-            update_post_meta( $post_ID, '_epl_payment_method', '_pp_exp' );
 
             return true; //echo "DONE";
         }

@@ -417,10 +417,10 @@ function show_loader_image(container){
 
 function show_slide_down(cont){
 
-    show_loader_image('slide_down_box p.display');
+    show_loader_image('slide_down_box div.display');
 
     if(cont !== '')
-        jQuery("#slide_down_box p.display").html(cont);
+        jQuery("#slide_down_box div.display").html(cont);
 
     jQuery('#slide_down_box').animate({
         'top':'0px'

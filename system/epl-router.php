@@ -14,13 +14,14 @@ class EPL_router {
             $GLOBALS['epl_ajax'] = true;
 
 
+        /*
+          $this->uri_components = array( );
 
-        $this->uri_components = array( );
+          $this->uri_components = parse_url( $_SERVER['REQUEST_URI'] );
 
-        $this->uri_components = parse_url( $_SERVER['REQUEST_URI'] );
-
-        if ( array_key_exists( 'query', $this->uri_components ) )
-            parse_str( $this->uri_components['query'], $this->uri_segments );
+          if ( array_key_exists( 'query', $this->uri_components ) )
+          parse_str( $this->uri_components['query'], $this->uri_segments );
+         */
     }
 
 
@@ -36,9 +37,9 @@ class EPL_router {
     function route() {
 
         //if ( self::$routed )
-          //  return;
+        //  return;
         //ajax also ends up in admin
-        if (!defined('EPL_IS_ADMIN'))
+        if ( !defined( 'EPL_IS_ADMIN' ) )
             define( 'EPL_IS_ADMIN', is_admin() );
 
         if ( EPL_IS_ADMIN ) {
@@ -61,7 +62,7 @@ class EPL_router {
                 $resource = $_REQUEST['epl_controller'];
 
             return $this->_route( $resource );
-        } elseif (isset($_REQUEST['epl_action'])){
+        } elseif ( isset( $_REQUEST['epl_action'] ) ) {
             //may use it for ipn
         }
     }
@@ -85,7 +86,7 @@ class EPL_router {
     function _route( $resource = null ) {
 
 
- epl_log( "init", "<pre>" . print_r( $resource, true ) . "</pre>" );
+        epl_log( "init", "<pre>" . print_r( $resource, true ) . "</pre>" );
 
         if ( self::$routed )
             return;

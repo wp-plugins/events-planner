@@ -46,7 +46,7 @@ $epl_fields['epl_registration_options'] =
                 'description' => epl__( 'This will be an alphanumeric string.' ),
                 'options' => epl_make_array( 10, 40 ),
                 'default_value' => 10 ),
-            'epl_regis_decrement_when' => array(
+            /*'epl_regis_decrement_when' => array(
                 'input_type' => 'radio',
                 'input_name' => 'epl_regis_decrement_when',
                 'label' => 'When should the available space quantity be adjusted?',
@@ -55,7 +55,7 @@ $epl_fields['epl_registration_options'] =
                     10 => epl__( 'After the attendee information is entered.' ),
                     20 => epl__( 'After payment is successfully received.' ),
                 ),
-                'default_value' => 10 ),
+                'default_value' => 10 ),*/
 );
 
 ?>

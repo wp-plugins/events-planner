@@ -203,7 +203,6 @@ function epl_compare_dates( $date1, $date2, $logic = '=' ) {
 
 function epl_get_option( $var ) {
 
-
     $opt = get_option( $var );
 
     return $opt;
@@ -241,8 +240,8 @@ function epl_is_ok_to_register( $event_data, $current_key ) {
 
     $avail_spaces = 0;
     if ( is_array( $available_space_arr ) && !empty( $available_space_arr ) )
-        if ( array_key_exists( $current_key, $available_space_arr ) && $available_space_arr[$current_key][2] ) {
-            $avail_spaces = $available_space_arr[$current_key][2];
+        if ( array_key_exists( $current_key, $available_space_arr ) && $available_space_arr[$current_key][1] ) {
+            $avail_spaces = $available_space_arr[$current_key][1];
 
             $ok = is_numeric( $avail_spaces );
         }
@@ -327,7 +326,7 @@ function epl_get_regis_setting( $opt = '' ) {
     $settings = get_option( 'epl_registration_options' );
 
 
-    if ( array_key_exists( $opt, $settings ) ) {
+    if ( array_key_exists( $opt, ( array ) $settings ) ) {
         $checked[$opt] = $settings[$opt];
         return $checked[$opt];
     }
@@ -427,7 +426,7 @@ function epl_get_formatted_curr( $amount ) {
 
 function epl_get_currency_symbol() {
     $v = epl_get_option( 'epl_general_options' );
-    return (isset($v['epl_currency_symbol']))?$v['epl_currency_symbol']:'';
+    return (isset( $v['epl_currency_symbol'] )) ? $v['epl_currency_symbol'] : '';
 }
 
 
@@ -443,15 +442,30 @@ function epl_get_event_property( $prop = '', $key = '' ) {
             return $event_details[$prop][$key];
     } elseif ( isset( $event_details[$prop] ) )
         return $event_details[$prop];
+
+    return null;
 }
 
 
-function epl_get_gateway_info( ) {
+function epl_get_gateway_info() {
+
+}
 
 
+function epl_escape_csv_val( $val ) {
 
+    if ( preg_match( '/,/', $val ) ) {
+        return '"' . $val . '"';
+    }
+
+    return $val;
+}
+
+
+function epl_get_selected_price_info( $values = array(), $prices = array()) {
 
     
-
+    return "<pre>" . print_r($values, true). "</pre>" . "<pre>" . print_r($prices, true). "</pre>";;
 }
+
 ?>

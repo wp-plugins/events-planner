@@ -140,8 +140,7 @@ class EPL_Event_Manager extends EPL_Controller {
         $help_link = get_help_icon( array( 'section' => 'event_capacity', 'id' => null ) );
         add_meta_box( 'epl-capacity-meta-box', epl__( 'Capacity Information' ) . $help_link, array( &$this, 'capacity_meta_box' ), "epl_event", 'side', 'core' );
 
-        $help_link = get_help_icon( array( 'section' => 'event_donate', 'id' => null ) );
-        add_meta_box( 'epl-donation-meta-box', epl__( 'Donations' ) . $help_link, array( &$this, 'donation_meta_box' ), "epl_event", 'side', 'low' );
+        add_meta_box( 'epl-donation-meta-box', epl__( 'Donations' ), array( &$this, 'donation_meta_box' ), "epl_event", 'side', 'low' );
 
        
     }

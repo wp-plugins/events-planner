@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
 
- /*
+    /*
  * MAJOR CLEANUP AND REFACTORING IN ONE OF THE UPCOMING VERSIONS
  **/
 
@@ -97,21 +97,22 @@ jQuery(document).ready(function($) {
         return false;
 
     });
-    $('img.epl_regis_snapshot').live("click", function(){
+
+    $('a.epl_event_snapshot, a.epl_regis_snapshot, a.epl_payment_snapshot').live("click", function(){
 
         var me = $(this);
         var par = me.parent();
         var id = me.prop('id');
+        var epl_action = me.prop('class');
 
 
-
-        var data = "epl_action=epl_regis_snapshot&epl_controller=epl_registration&post_ID=" + id ;
-        
+        var data =  "epl_action=" + epl_action +  "&epl_controller=epl_registration&post_ID=" + this.getAttribute('data-post_ID') + "&event_id=" + this.getAttribute('data-event_id') ;
 
         events_planner_do_ajax( data, function(r){
 
 
             show_slide_down(r.html);
+            create_datepicker('.datepicker');
 
 
         });
@@ -119,6 +120,24 @@ jQuery(document).ready(function($) {
 
         return false;
 
+    });
+
+
+
+    $('form.epl_regis_payment_meta_box_form').live('submit', function(){
+        var me = $(this);
+        post_ID = $('input[name="post_ID"]', me).val();
+
+        var data = "epl_action=update_payment_details&epl_controller=epl_registration&" + me.serialize();
+
+        events_planner_do_ajax( data, function(r){
+
+            hide_slide_down();
+            $('.epl_regis_list_payment_info_wrapper_' + post_ID).hide().html(r.html).fadeIn();
+
+        });
+
+        return false;
     });
 
     $('a.epl_get_help, a.epl_send_email').click(function(){
@@ -255,7 +274,7 @@ jQuery(document).ready(function($) {
         events_planner_do_ajax( data, function(r){
 
             if (act == 'recurrence_preview'){
-                $("#slide_down_box p.display").html(r.html);
+                $("#slide_down_box div.display").html(r.html);
                 show_slide_down();
             } else {
                 var dates_section =  $('#epl_dates_section');

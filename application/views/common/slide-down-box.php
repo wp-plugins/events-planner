@@ -1,9 +1,9 @@
 <div class="slide_down_box" id="slide_down_box">
-    <p class="display">
+    <div class="display">
 
-    </p>
-    <p class="incoming" style="display: none;"></p>
-    <a href="#" id="dismiss_loader" class="epl_button" style=""><span class=""></span><?php epl_e( 'Close' ); ?></a>
+    </div>
+    <div class="incoming" style="display: none;"></div>
+    <a href="#" id="dismiss_loader" class="epl_button_small" style=""><span class=""></span><?php epl_e( 'Close' ); ?></a>
 </div>
 
 <div id="epl_overlay" class="">

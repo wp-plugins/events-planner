@@ -339,6 +339,78 @@ a.epl_field_list{
     margin: 10px;
 }
 
+table.epl_regis_list_payment_info {
+    margin: 0;
+    min-width: 100%;
+
+}
+table.epl_regis_list_payment_info td {
+    font-weight: bold;
+    padding: 1px;
+    border: none;
+    vertical-align: middle;
+        color: #222;
+}
+
+table.epl_regis_list_payment_info td img{
+    cursor: pointer;
+}
+
+table.epl_regis_list_payment_info td .small{
+    font-size: 10px;
+}
+table.epl_regis_list_payment_info td .amount{
+    font-size: 12px;
+    color: #000;
+    padding: 5px;
+}
+
+td.epl_regis_field_label_wrapper {
+    width: 200px;
+    padding: 7px;
+}
+
+.epl_event_dates {
+    font-size: 16px;
+
+}
+
+.epl_times_wrapper {
+    font-size: 16px;
+    padding: 5px;
+}
+table.epl_prices_table{
+    margin: 10px;
+    border: 1px solid #ccc;
+}
+
+table.epl_prices_table th,
+table.epl_prices_table td{
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+}
+table.epl_prices_table tr:last-child td{
+    border-bottom: none;
+}
+table.epl_status_paid{
+    background-color:  #ebffbf;
+}
+table.epl_status_pending{
+    background-color:   #fff0b3;
+}
+table.epl_status_cancelled{
+    background-color: #ff8f8f;
+}
+
+span.num_attendees {
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+span.event_name {
+    margin-left: 10px;
+}
+
 /*
 jQuery UI reset
 */

@@ -992,7 +992,15 @@ class EPL_util {
             $class = 'add_to_cart';
         }
 
-        return "<a id='{$event_details['ID']}' class='$class epl_button ' href='" . $_SERVER['REQUEST_URI'] . "?epl_action=process_cart_action&cart_action=add&event_id=" . $event_details['ID'] . "'>{$button_text}</a>";
+        $url_vars = array(
+            'epl_action' =>'process_cart_action',
+            'cart_action' =>'add',
+            'event_id' =>$event_details['ID']
+        );
+
+        $url = add_query_arg($url_vars,  $_SERVER['REQUEST_URI'] );
+
+        return "<a id='{$event_details['ID']}' class='$class epl_button ' href='" . $url . "'>{$button_text}</a>";
     }
 
 

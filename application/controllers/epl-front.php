@@ -68,7 +68,7 @@ if ( !class_exists( 'EPL_front' ) ) {
 
                 //POST has higher priority
 
-                $epl_action = esc_attr( $_POST['epl_action'] ? $_POST['epl_action'] : $_GET['epl_action'] );
+                $epl_action = esc_attr( isset($_POST['epl_action']) ? $_POST['epl_action'] : $_GET['epl_action'] );
 
                 if ( in_array( $epl_action, $defined_actions ) ) {
                     if ( method_exists( $this, $epl_action ) ) {

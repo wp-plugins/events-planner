@@ -1,10 +1,11 @@
 <?php
+
 /*
   Plugin Name: Events Planner
   Plugin URI: http://wpEventsPlanner.com
   Description: A comprehensive event management plugin that contains support for multiple event types, payments, custom forms, and etc.
 
-  Version: 1.2
+  Version: 1.3
 
   Author: Abel Sekepyan
   Author URI: http://wpEventsPlanner.com
@@ -105,7 +106,7 @@ function epl_activate() {
 
     require_once(dirname( __FILE__ ) . '/application/config/install_defaults.php');
 
-    
+
     update_option( 'events_planner_version', EPL_PLUGIN_VERSION );
     update_option( 'events_planner_active', 1 );
 
@@ -132,9 +133,9 @@ function epl_log( $log= '', $message = '' ) {
         'init',
         'debug',
         'clear'
-        );
+    );
 
-    if (!in_array($log, $process))
+    if ( !in_array( $log, $process ) )
         return;
 
     $log_file = WP_PLUGIN_DIR . "/log.txt";
@@ -147,13 +148,13 @@ function epl_log( $log= '', $message = '' ) {
 
 
     $_bt = '';
-    $trace = debug_backtrace();
-    if ( isset( $trace[1] ) ) {
+    /* $trace = debug_backtrace();
+      if ( isset( $trace[1] ) ) {
 
-        $_bt = " \t\t called by {$trace[1]['class']} :: {$trace[1]['function']}, line {$trace[1]['line']}, file {$trace[1]['file']}";
+      $_bt = " \t\t called by {$trace[1]['class']} :: {$trace[1]['function']}, line {$trace[1]['line']}, file {$trace[1]['file']}";
 
-    }
-
+      }
+     */
     //$message = $new_call . date( "m/d/Y H:i:s" ) . ' > ' . $message . $_bt . "\r\n";
     $message = $new_call . $message . $_bt . "\r\n";
 

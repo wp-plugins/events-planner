@@ -4,7 +4,7 @@
 
     <?php
 
-    echo epl_show_ad( 'Editable registrations and printable attendee list coming soon.' );
+    echo epl_show_ad( 'Editable registrations coming soon to the PRO version.' );
     /*
      * This loop grabs each one of the forms and displays.
      */
@@ -18,7 +18,7 @@
 
 
                     <p class="message"></p>
-                    <div class="content">
+                    <div class="content epl_event_dates">
 
 
 <?php echo $event['event_dates']; ?>
