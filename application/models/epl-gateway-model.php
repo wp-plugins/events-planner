@@ -25,7 +25,7 @@ class EPL_Gateway_Model extends EPL_Model {
         }
         $this->epl->load_file( 'libraries/gateways/paypal/paypal.php' );
 
-        $url = (!empty( $_SERVER['HTTPS'] )) ? "https://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] : "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        $url = (!empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] != 'off') ? "https://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] : "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 
         //echo "<pre class='prettyprint'>" . print_r( $_SESSION, true ) . "</pre>";
         $regis_id = $this->erm->get_regis_id();
