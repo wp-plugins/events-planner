@@ -26,7 +26,6 @@ Events Planner is a next generation [Event Registration](http://www.wpeventsplan
 * Use custom event template tags to include event specific information on your event pages.
 * [Read More](http://www.wpeventsplanner.com/2011/10/whats-new-in-v1-1/)
 
-**Coming next, the PRO version with a lot more features (i.e. more event types, more pricing options, widgets, calendars....)**
 
 = List of features =
 
