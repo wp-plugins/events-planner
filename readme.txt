@@ -6,7 +6,7 @@ Requires at least: 3.1
 Tested up to: 3.2
 Stable tag: 1.3.1
 
-Events Planner: A powerful next generation event management plugin, built with Custom Post Types
+Events Planner: A powerful next generation event management plugin, built with Custom Post Types 
 
 == Description ==
 
