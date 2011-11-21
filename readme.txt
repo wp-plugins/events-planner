@@ -79,7 +79,7 @@ will be able to do it yourself, easily and safely.
 1.  Inside each form, you can sort the order of the fields.
 1.  Inside each event, you can choose which forms to use to collect the registration information from the ticket buyer (and optionally, the other attendees).
 
-= Accept (**coming very soon**) =
+= Accept Registrations =
 
 1.  All the registration information is stored in a custom post type.
 1.  The user will go through a process similar to a shopping cart (i.e. select event > select event options > enter registration info > see overview > pay > done).
@@ -122,6 +122,7 @@ will be able to do it yourself, easily and safely.
 = 1.3.1 =
 
 * Added CAD and EUR to the currency list in the Settings.  Adjusted the gateway files for the change.
+* Added an option to PayPal ExpressCheckout to select the PayPal landing page (login or credit card).
 * Fixed the register button link in the template files.
 
 = 1.3 =
