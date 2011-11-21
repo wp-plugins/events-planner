@@ -143,7 +143,7 @@ class EPL_Gateway_Model extends EPL_Model {
             'PAYMENTACTION' => 'Sale',
             'PAYERID' => $_GET['PayerID'],
             'PAYMENTREQUEST_0_AMT' => $_totals['money_totals']['grand_total'], // Same amount as in the original request
-            'PAYMENTREQUEST_0_CURRENCYCODE' => epl_nz(epl_get_option('epl_currency_code'), 'USD')
+            'PAYMENTREQUEST_0_CURRENCYCODE' => epl_nz(epl_get_general_setting('epl_currency_code'), 'USD')
         );
 
         $response = $paypal->request( 'DoExpressCheckoutPayment', $requestParams );
