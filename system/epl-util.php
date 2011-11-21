@@ -1009,7 +1009,7 @@ class EPL_util {
             foreach ( $pages as $page ) {
                 if ( stripos( $page->post_content, '[events_planner' ) !== false ){
                     update_option( 'epl_shortcode_page_id', $page->ID );
-					page_id = $page->ID;
+					$page_id = $page->ID;
 					
 					}
             }
