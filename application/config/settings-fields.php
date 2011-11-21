@@ -16,7 +16,7 @@ $epl_fields['epl_general_options'] =
                 'input_name' => 'epl_currency_code',
                 'label' => 'Currency Code',
                 'description' => 'This will be used in payment gateways. ',
-                'options' => array( 'CAD' => 'CAD', 'EUR' => 'EUR', 'USD' => 'USD' )
+                'options' => array( 'CAD' => 'CAD', 'EUR' => 'EUR', 'GBP' => 'GBP', 'USD' => 'USD' )
             ),
             'epl_currency_symbol' => array(
                 'input_type' => 'text',
