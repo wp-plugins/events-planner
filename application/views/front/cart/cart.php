@@ -1,19 +1,17 @@
 <div class="epl_cart_wrapper">
 
-    <?php if (isset($message)): ?>
-     <div class="epl_regis_message_warn epl_rounded_corners_10">
-         <?php  echo $message; ?>
-        </div>
-       
-        <?php endif; ?>
+    <?php if ( isset( $message ) ): ?>
+        <div class="epl_regis_message_warn epl_rounded_corners_10">
+        <?php echo $message; ?>
+    </div>
+
+    <?php endif; ?>
 
     <?php foreach ( ( array ) $cart_data['cart_items'] as $k => $event ): ?>
 
+            <div class="event_name section"><?php echo $event['title']; ?></div>
 
-
-        <div class="event_name section"><?php echo $event['title']; ?></div>
-
-    <?php if ( isset( $cart_data['available_spaces'][$k] ) ): ?>
+    <?php if ( isset( $cart_data['available_spaces'][$k] ) ) : ?>
 
 
 
@@ -23,16 +21,16 @@
 
 
 
-            <div class="section">
+                <div class="section">
 
         <?php echo $event['event_dates']; ?>
 
-        </div>
+            </div>
 
     <?php if ( $event['event_time_and_prices'] ): ?>
-                <div class="section">
+                    <div class="section">
         <?php echo $event['event_time_and_prices']; ?>
-            </div>
+                </div>
     <?php endif; ?>
 
 
@@ -41,7 +39,7 @@
     <?php endforeach; ?>
     <?php if ( !isset( $cart_data['free_event'] ) ): ?>
 
-                    <div id="epl_totals_wrapper" class="section">
+                        <div id="epl_totals_wrapper" class="section">
 
         <?php if ( !$cart_data['view_mode'] != 'overview' ): ?>
 
@@ -49,23 +47,21 @@
 
         <?php
 
-                        echo $cart_data['cart_totals'];
+                            echo $cart_data['cart_totals'];
         ?>
-                        <?php if ( $mode != 'overview' ): ?>
-                        <a href="#" id="calculate_total_due" class="epl_button_small epl_fr">Refresh Total</a>
-                        <?php endif; ?>
-                    </div>
-
         <?php if ( $mode != 'overview' ): ?>
-                    <div class="section">
+                                <a href="#" id="calculate_total_due" class="epl_button_small epl_fr">Refresh Total</a>
+        <?php endif; ?>
+                            </div>
+
+    <?php if ( $mode != 'overview' ): ?>
+                                    <div class="section">
 
         <?php
 
-
-                            echo $cart_data['pay_options'];
-
+                                    echo $cart_data['pay_options'];
         ?>
-                   </div>
+                                </div>
         <?php endif; ?>
 <?php endif; ?>
 

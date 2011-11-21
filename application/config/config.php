@@ -7,7 +7,7 @@ define( "EPL_FULL_PATH", WP_PLUGIN_DIR . EPL_PATH );
 define( "EPL_APPLICATION_FOLDER", EPL_FULL_PATH . 'application/' );
 define( "EPL_FULL_URL", WP_PLUGIN_URL . EPL_PATH );
 define( "EPL_MODULE_ACTIVE", TRUE );
-define( "EPL_PLUGIN_VERSION", '1.3' );
+define( "EPL_PLUGIN_VERSION", '1.3.1' );
 define( "EPL_CONTROLLER_FOLDER", EPL_FULL_PATH . 'application/controllers/' );
 define( "EPL_SYSTEM_FOLDER", EPL_FULL_PATH . 'system/' );
 define( "EPL_ASSETS_FOLDER", EPL_FULL_URL . 'assets/' );

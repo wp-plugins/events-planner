@@ -10,9 +10,7 @@ $epl_fields['epl_gateway_type'] =
                 'id' => 'epl_pay_type',
                 'empty_row' => true,
                 'options' => array(
-                 
                     '_pp_exp' => 'PayPal Express Checkout'
-
                 ),
             )
 );
@@ -22,7 +20,7 @@ $epl_fields['_pp_exp_fields'] = array(
     '_epl_pay_help' => array(
         'input_type' => 'section',
         'label' => 'PayPal Express Checkout',
-        'content' => 'Visit ' . epl_anchor('https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECGettingStarted', 'here'). ' for more information.'
+        'content' => 'Visit ' . epl_anchor( 'https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECGettingStarted', 'here' ) . ' for more information.'
     ),
     '_epl_pay_type' => array(
         'input_type' => 'hidden',
@@ -35,7 +33,7 @@ $epl_fields['_pp_exp_fields'] = array(
         'id' => '',
         'label' => 'Label',
         'description' => 'What the customer will see as an option.  PayPal requires you to use one of their '
-        . epl_anchor('https://www.paypal.com/express-checkout-buttons', 'buttons'),
+        . epl_anchor( 'https://www.paypal.com/express-checkout-buttons', 'buttons' ),
         'class' => 'epl_w300' ),
     '_epl_pre_checkout_message' => array(
         'input_type' => 'textarea',
@@ -67,12 +65,21 @@ $epl_fields['_pp_exp_fields'] = array(
         'description' => 'Will be a very long string. Ex. SRl31AbcSd9fIqew......',
         'class' => 'epl_w300',
         'required' => true ),
+    '_epl_pp_landing_page' => array(
+        'input_type' => 'radio',
+        'input_name' => '_epl_pp_landing_page',
+        'id' => '',
+        'label' => epl__( 'PayPal Landing Page' ),
+        'description' => epl__('If "PayPal Account Optional" is set to "on" inside your PayPal account, this option selects which section the users see by default when they reach PayPal.'),
+        'options' => array( 'Login' => epl__( 'PayPal account login' ), 'Billing' => epl__( 'Non-PayPal account, for credit/debit cards' ) ),
+        'default_value' => 'Billing',
+        'default_checked' => 1 ),
     '_epl_sandbox' => array(
         'input_type' => 'select',
         'input_name' => '_epl_sandbox',
         'label' => 'Test Mode?',
         'options' => epl_yes_no(),
-        'description' => 'If yes, please make sure you use Sandbox credentials above.',
+        'description' => epl__('If yes, please make sure you use Sandbox credentials above.'),
         'class' => '' ),
 );
 

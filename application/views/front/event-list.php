@@ -81,7 +81,7 @@ global $event_list;
                 </a><br />
 
                 <?php echo get_the_location_address(); ?><br />
-                <?php echo get_the_location_city(); ?>, <?php echo get_the_location_state(); ?> <?php echo get_the_location_zip(); ?>
+                <?php echo get_the_location_city(); ?>, <?php echo get_the_location_state(); ?> <?php echo get_the_location_zip(); ?><br />
                 <?php echo get_the_location_phone(); ?><br />
             </div>
 

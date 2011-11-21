@@ -2,7 +2,7 @@
 
     <script type="text/javascript">
         jQuery(document).ready(function($){
-            $("#tabs").tabs();
+             $("#epl_tabs").tabs({ fx: {opacity: 'toggle', duration:'fast' } });
 
         });
     </script>
@@ -21,7 +21,7 @@
 
             wp_nonce_field( 'epl_form_nonce', '_epl_nonce' );
             ?>
-            <div id="tabs">
+            <div id="epl_tabs">
                 <ul>
                     <li><a href="#tabs-1">General</a></li>
                     <li><a href="#tabs-2">Registrations</a></li>

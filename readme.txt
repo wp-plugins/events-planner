@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=abels
 Tags: events, event, events planner, event planner, event registration, event calendar, events calendar, event management, paypal, registration, ticket, tickets, ticketing, tickets, widget, locations, maps, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
 Requires at least: 3.1
 Tested up to: 3.2
-Stable tag: 1.3
+Stable tag: 1.3.1
 
 Events Planner: A powerful next generation event management plugin, built with Custom Post Types
 
@@ -25,7 +25,6 @@ Events Planner is a next generation [Event Registration](http://www.wpeventsplan
 * Use theme templates (samples provided) to change the look and content of the event list, individual event, location, organization pages.
 * Use custom event template tags to include event specific information on your event pages.
 * [Read More](http://www.wpeventsplanner.com/2011/10/whats-new-in-v1-1/)
-
 
 = List of features =
 
@@ -116,11 +115,16 @@ will be able to do it yourself, easily and safely.
 
 1. Event Management Page
 2. Form Builder
-2. Registration Page Overview
+3. Registration Page Overview
 
 == Changelog ==
 
-= 1.2 =
+= 1.3.1 =
+
+* Added CAD and EUR to the currency list in the Settings.  Adjusted the gateway files for the change.
+* Fixed the register button link in the template files.
+
+= 1.3 =
 
 * Downloadable CSV of event registration info.
 * AJAX snapshots of registration and payment info.

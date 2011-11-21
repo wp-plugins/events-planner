@@ -92,7 +92,7 @@ class EPL_util {
                         //prepare the value to be passed to the next function
 
                         if ( isset( $field_attr['parent_keys'] ) )
-                            $master_keys = $meta['value'][$field_name];
+                            $master_keys = (isset( $meta['value'][$field_name] )) ? $meta['value'][$field_name] : '';
 
 
                         $field_attr['value'] = (isset( $meta['value'][$field_name] )) ? $meta['value'][$field_name] : '';
@@ -438,7 +438,8 @@ class EPL_util {
         $error_codes = array(
             0 => 'Sorry, something went wrong.  Please try again',
             1 => 'Sorry, something went wrong.  Please try again',
-            20 => 'Your cart is empty'
+            20 => 'Your cart is empty',
+            21 => 'Please select a date.'
         );
 
         $error_text = (!is_null( $custom_text )) ? $custom_text : epl__( $error_codes[$error_code] );
@@ -657,14 +658,18 @@ class EPL_util {
 
         global $regis_details, $event_details;
 
-        return epl_get_currency_symbol().( epl_get_formatted_curr(epl_nz($regis_details['_epl_payment_amount'])) );
+        return epl_get_currency_symbol() . ( epl_get_formatted_curr( epl_nz( $regis_details['_epl_payment_amount'] ) ) );
     }
+
+
     function get_the_regis_payment_date() {
 
         global $regis_details, $event_details;
 
-        return date("m/d/Y", strtotime($regis_details['_epl_payment_date']));
+        return date( "m/d/Y", strtotime( $regis_details['_epl_payment_date'] ) );
     }
+
+
     function get_the_regis_transaction_id() {
 
         global $regis_details, $event_details;
@@ -876,10 +881,12 @@ class EPL_util {
 // check the current post for the existence of a short code
     function has_shortcode( $shortcode = '', $post_id = null ) {
 
+
+
         if ( is_null( $post_id ) )
             return false;
 
-        $post_to_check = get_post( $post_id );
+        $post_to_check = get_pages( $post_id );
 
         // false because we have to search through the post content first
         $found = false;
@@ -984,6 +991,8 @@ class EPL_util {
         if ( !epl_is_ok_to_show_regis_button() )
             return null;
 
+
+
         $button_text = 'Register';
         $class = '';
 
@@ -992,13 +1001,29 @@ class EPL_util {
             $class = 'add_to_cart';
         }
 
+        //The shortcode page id.  Everythng goes through the shortcode
+        $page_id = get_option( 'epl_shortcode_page_id' );
+        if ( !$page_id ) {
+            $pages = get_pages();
+
+            foreach ( $pages as $page ) {
+                if ( stripos( $page->post_content, '[events_planner' ) !== false ){
+                    update_option( 'epl_shortcode_page_id', $page->ID );
+					page_id = $page->ID;
+					
+					}
+            }
+        }
+
         $url_vars = array(
-            'epl_action' =>'process_cart_action',
-            'cart_action' =>'add',
-            'event_id' =>$event_details['ID']
+            'page_id' => $page_id,
+            'epl_action' => 'process_cart_action',
+            'cart_action' => 'add',
+            'event_id' => $event_details['ID'],
+            'epl_event' => false,
         );
 
-        $url = add_query_arg($url_vars,  $_SERVER['REQUEST_URI'] );
+        $url = add_query_arg( $url_vars, $_SERVER['REQUEST_URI'] );
 
         return "<a id='{$event_details['ID']}' class='$class epl_button ' href='" . $url . "'>{$button_text}</a>";
     }

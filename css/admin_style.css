@@ -111,6 +111,7 @@ div.time-box{
     font-style: italic;
     font-size: 12px;
     display: block;
+    padding: 3px 0;
 }
 .epl_form_data_table td label {
 
@@ -415,6 +416,44 @@ span.event_name {
 jQuery UI reset
 */
 
+
 .ui-widget-content a.epl_button{
     color: #fff;
 }
+
+#epl_tabs {
+    font-family: inherit;
+    background:none;
+    border: none;
+    padding: 0;
+}
+
+#epl_tabs .ui-tabs{
+    padding: 0;
+}
+#epl_tabs .ui-widget-header {
+    background: none;
+    border-width: 0 0 1px 0;
+    border-color: #ccc;
+    color: #222222;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+#epl_tabs .ui-corner-all
+{
+    border-radius: 0;
+}
+#epl_tabs .ui-tabs-panel
+{
+    padding: 0.5em 0.5em;
+    border-width: 0 1px 1px 1px;
+    border-color: #ccc;
+    min-height: 300px;
+}
+
+#epl_tabs select, #epl_tabs input, #epl_tabs textarea {
+    font-family: inherit;
+
+}
+

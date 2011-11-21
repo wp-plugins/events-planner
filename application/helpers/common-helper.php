@@ -174,8 +174,8 @@ function get_list_of_orgs( $id = null ) {
 function epl_compare_dates( $date1, $date2, $logic = '=' ) {
     //epl_log( "debug", "<pre>" . print_r($date1 . ' ' . $date2, true ) . "</pre>" );
 
-    $date1 = strtotime( $date1 );
-    $date2 = strtotime( $date2 );
+    $date1 = ( is_numeric( $date1 ) && ( int ) $date1 == $date1 ) ? $date1 : strtotime( $date1 );
+    $date2 = ( is_numeric( $date2 ) && ( int ) $date2 == $date2 ) ? $date2 : strtotime( $date2 );
 
     //epl_log( "debug", "<pre>" . print_r($date1 . ' ' . $date2, true ) . "</pre>" );
 
@@ -310,6 +310,42 @@ function epl_is_free_event() {
         return true;
 
     return false;
+}
+
+
+function epl_get_general_setting( $key = null ) {
+
+    if ( is_null( $key ) )
+        return null;
+
+    $setting = 'epl_general_options';
+
+    return epl_get_setting($setting, $key);
+
+}
+
+
+function epl_get_setting( $opt = '', $key = null ) {
+
+    if ( $opt == '' )
+        return null;
+
+    static $checked = array( );
+
+    if ( array_key_exists( $key, $checked ) )
+        return $checked[$key];
+
+    $settings = get_option( $opt );
+
+    if (is_null($settings))
+        return null;
+
+    if ( array_key_exists( $key, ( array ) $settings ) ) {
+        $checked[$key] = $settings[$key];
+        return $checked[$key];
+    }
+
+    return null;
 }
 
 
@@ -462,10 +498,11 @@ function epl_escape_csv_val( $val ) {
 }
 
 
-function epl_get_selected_price_info( $values = array(), $prices = array()) {
+function epl_get_selected_price_info( $values = array( ), $prices = array( ) ) {
 
-    
-    return "<pre>" . print_r($values, true). "</pre>" . "<pre>" . print_r($prices, true). "</pre>";;
+
+    return "<pre>" . print_r( $values, true ) . "</pre>" . "<pre>" . print_r( $prices, true ) . "</pre>";
+    ;
 }
 
 ?>

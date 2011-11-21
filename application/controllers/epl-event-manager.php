@@ -190,7 +190,8 @@ class EPL_Event_Manager extends EPL_Controller {
                 'input_type' => $epl_fields_to_create['input_type'],
                 'input_name' => $epl_fields_to_create['input_name'],
                 'options' => array( $k => $v ),
-                'value' => $this->data['values']['_epl_event_type']
+                'value' => (isset($this->data['values']['_epl_event_type']))?$this->data['values']['_epl_event_type']:'',
+                'default_checked' => 1
             );
 
             $data['epl_event_type'][$k] = $this->epl_util->create_element( $field, 20 );
@@ -280,7 +281,7 @@ class EPL_Event_Manager extends EPL_Controller {
 
         $rows_to_display = $this->edit_mode ? count( $this->data['values']['_epl_start_time'] ) : 1;
 
-        $data['epl_price_parent_time_id_key'] = $this->data['values']['_epl_price_parent_time_id'];
+        $data['epl_price_parent_time_id_key'] = (isset($this->data['values']['_epl_price_parent_time_id']))?$this->data['values']['_epl_price_parent_time_id']:'';
 
 
 

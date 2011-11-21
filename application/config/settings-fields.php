@@ -4,21 +4,20 @@ global $epl_fields;
 
 $epl_fields['epl_general_options'] =
         array(
-
-            /*'epl_sort_event_list_by' => array(
-                'input_type' => 'select',
-                'input_name' => 'epl_sort_event_list_by',
-                'label' => epl__('Sort Events By'),
-                'description' => 'If yes is selected, will be displayed',
-                'options' => array( 10 => epl__( 'Date Published' ), 20 => epl__( 'Title' ), 30 => epl__( 'Start Date' ), 40 => epl__( 'Registration Date' ) ),
-                'default_value' => 10 ),*/
-                        'epl_currency_code' => array(
+            /* 'epl_sort_event_list_by' => array(
+              'input_type' => 'select',
+              'input_name' => 'epl_sort_event_list_by',
+              'label' => epl__('Sort Events By'),
+              'description' => 'If yes is selected, will be displayed',
+              'options' => array( 10 => epl__( 'Date Published' ), 20 => epl__( 'Title' ), 30 => epl__( 'Start Date' ), 40 => epl__( 'Registration Date' ) ),
+              'default_value' => 10 ), */
+            'epl_currency_code' => array(
                 'input_type' => 'select',
                 'input_name' => 'epl_currency_code',
                 'label' => 'Currency Code',
                 'description' => 'This will be used in payment gateways. ',
-                'options' => array('USD'=>'USD')
-                 ),
+                'options' => array( 'CAD' => 'CAD', 'EUR' => 'EUR', 'USD' => 'USD' )
+            ),
             'epl_currency_symbol' => array(
                 'input_type' => 'text',
                 'input_name' => 'epl_currency_symbol',
@@ -33,12 +32,10 @@ $epl_fields['epl_general_options'] =
                 'label' => 'Currency display format',
                 'description' => 'This determines how your currency is displayed.  Ex. 1,234.56 or 1,200 or 1200.',
                 'class' => '' ),
-
 );
 
 $epl_fields['epl_registration_options'] =
         array(
-
             'epl_regis_id_length' => array(
                 'input_type' => 'select',
                 'input_name' => 'epl_regis_id_length',
@@ -46,16 +43,15 @@ $epl_fields['epl_registration_options'] =
                 'description' => epl__( 'This will be an alphanumeric string.' ),
                 'options' => epl_make_array( 10, 40 ),
                 'default_value' => 10 ),
-            /*'epl_regis_decrement_when' => array(
-                'input_type' => 'radio',
-                'input_name' => 'epl_regis_decrement_when',
-                'label' => 'When should the available space quantity be adjusted?',
-                'description' => 'This option determines when the number of available spaces is adjusted.',
-                'options' => array(
-                    10 => epl__( 'After the attendee information is entered.' ),
-                    20 => epl__( 'After payment is successfully received.' ),
-                ),
-                'default_value' => 10 ),*/
+        /* 'epl_regis_decrement_when' => array(
+          'input_type' => 'radio',
+          'input_name' => 'epl_regis_decrement_when',
+          'label' => 'When should the available space quantity be adjusted?',
+          'description' => 'This option determines when the number of available spaces is adjusted.',
+          'options' => array(
+          10 => epl__( 'After the attendee information is entered.' ),
+          20 => epl__( 'After payment is successfully received.' ),
+          ),
+          'default_value' => 10 ), */
 );
-
 ?>

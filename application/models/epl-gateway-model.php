@@ -45,19 +45,21 @@ class EPL_Gateway_Model extends EPL_Model {
 
         $requestParams = array(
             'RETURNURL' => add_query_arg( array( 'cart_action' => '', 'p_ID' => $post_ID, 'regis_id' => $regis_id, 'epl_action' => '_exp_checkout_payment_success' ), $url ),
-            'CANCELURL' => add_query_arg( array( 'cart_action' => '', 'p_ID' => $post_ID, 'regis_id' => $regis_id, 'epl_action' => '_exp_checkout_payment_cancel' ), $url )
+            'CANCELURL' => add_query_arg( array( 'cart_action' => '', 'p_ID' => $post_ID, 'regis_id' => $regis_id, 'epl_action' => '_exp_checkout_payment_cancel' ), $url ),
+            "SOLUTIONTYPE" => 'Sole',
+            "LANDINGPAGE" => epl_nz($gateway_info['_epl_pp_landing_page'],'Login')
         );
 
         $orderParams = array(
             'PAYMENTREQUEST_0_AMT' => $_totals['money_totals']['grand_total'],
             'PAYMENTREQUEST_0_SHIPPINGAMT' => 0,
-            'PAYMENTREQUEST_0_CURRENCYCODE' => 'USD',
+            'PAYMENTREQUEST_0_CURRENCYCODE' => epl_nz(epl_get_general_setting('epl_currency_code'), 'USD') ,
             'PAYMENTREQUEST_0_ITEMAMT' => $_totals['money_totals']['grand_total']
         );
 
         $item = array(
             'L_PAYMENTREQUEST_0_NAME0' => 'Event Registration',
-            'L_PAYMENTREQUEST_0_DESC0' => $event_details['post_title'] . ', ' . $_totals['_att_quantity']['total'][$event_details['ID']] . ' tickets',
+            'L_PAYMENTREQUEST_0_DESC0' => $event_details['post_title'] . ', ' . $_totals['_att_quantity']['total'][$event_details['ID']] . epl__(' tickets'),
             'L_PAYMENTREQUEST_0_AMT0' => $_totals['money_totals']['grand_total'],
             'L_PAYMENTREQUEST_0_QTY0' => 1 //$_totals['_att_quantity']['total'][$event_details['ID']]
         );
@@ -81,7 +83,7 @@ class EPL_Gateway_Model extends EPL_Model {
 
             $error = 'ERROR: ' . $response['L_SHORTMESSAGE0'] . '. ' . $response['L_LONGMESSAGE0'];
 
-            echo EPL_Util::get_instance()->epl_invoke_error(0, $error, false);
+            echo EPL_Util::get_instance()->epl_invoke_error( 0, $error, false );
         }
     }
 
@@ -141,7 +143,7 @@ class EPL_Gateway_Model extends EPL_Model {
             'PAYMENTACTION' => 'Sale',
             'PAYERID' => $_GET['PayerID'],
             'PAYMENTREQUEST_0_AMT' => $_totals['money_totals']['grand_total'], // Same amount as in the original request
-            'PAYMENTREQUEST_0_CURRENCYCODE' => 'USD' // Same currency as the original request
+            'PAYMENTREQUEST_0_CURRENCYCODE' => epl_nz(epl_get_option('epl_currency_code'), 'USD')
         );
 
         $response = $paypal->request( 'DoExpressCheckoutPayment', $requestParams );
@@ -164,7 +166,7 @@ class EPL_Gateway_Model extends EPL_Model {
         }
         else {
             //display error message
-            echo "Sorry, but it looks like something went wrong.  Please notify the administrator.";
+            $error = 'ERROR: ' . $response['L_SHORTMESSAGE0'] . '. ' . $response['L_LONGMESSAGE0'];
         }
     }
 
