@@ -1,7 +1,7 @@
 <div class="epl_cart_wrapper epl_thank_you_page">
     <div class="section">
         <div class="thank_you_message epl_rounded_corners_5">
-            Thank you.  Your registration is complete.  Please print this page for your records.
+            <?php epl_e('Thank you.  Your registration is complete.'); ?>
         </div>
         <div class="event_name"><?php echo get_the_event_title(); ?></div>
         <div class="address_section">

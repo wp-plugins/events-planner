@@ -31,15 +31,14 @@ class EPL_recurrence_model extends EPL_Model {
             $this->recurrence_end_date = date( "Y-m-d", strtotime( current( ( array ) $_POST['_epl_end_date'] ) ) );
 
 
-        }
-        else {
+        }  else {
 
             $this->rec_start_date = date( "Y-m-d", strtotime( $_POST['_epl_rec_first_start_date'] ) );
             $rec_first_end_date = date( "Y-m-d", strtotime( $_POST['_epl_rec_first_end_date'] ) );
 
             $this->ind_event_length = $this->get_date_difference( $this->rec_start_date, $rec_first_end_date, 'day' );
 
-            $epl_rec_first_end_date = date( "Y-m-d", strtotime( $_POST['_epl_rec_first_start_date'] ) );
+            $epl_rec_first_end_date = date( "Y-m-d", strtotime( $_POST['_epl_rec_first_end_date'] ) );
 
             $this->recurrence_end_date = date( "Y-m-d", strtotime( $_POST['_epl_recurrence_end'] ) );
             $first_day = date( "d", strtotime( $this->rec_start_date ) );
@@ -154,7 +153,7 @@ class EPL_recurrence_model extends EPL_Model {
 
     function get_the_dates( ) {
 
-         for ( $i = 0; $i <= $this->difference; $i = $i + $this->interval ) {
+        for ( $i = 0; $i <= $this->difference; $i = $i + $this->interval ) {
 
             //formula for determining the next date in the seried
             $new_date = '+ ' . $i . " $this->type";
@@ -194,6 +193,7 @@ class EPL_recurrence_model extends EPL_Model {
                      * care of it.
                      * NOTICE the $dates passed by reference
                      */
+
                     $this->get_days_of_a_week( $new_date, $this->rec_start_date, $this->recurrence_end_date, $this->weekdays );
                 }
             }
@@ -227,6 +227,7 @@ class EPL_recurrence_model extends EPL_Model {
          * need to know the constructed dates
          *
          */
+        epl_log( "debug", "<pre>" . print_r($dates, true ) . "</pre>" );
 
         foreach ( $dates as $year => $month ) {
 
@@ -368,17 +369,20 @@ class EPL_recurrence_model extends EPL_Model {
      */
     function get_days_of_a_week( $date, $start_date = 0, $end_date = 0, $weekdays = array( ) ) {
 
-
         $date = strtotime( $date );
         $start_date = strtotime( $start_date );
         $end_date = strtotime( $end_date );
 
-        //usnign this method instead of date("W") since the latter method uses Monday as start of week
+        //usingn this method instead of date("W") since the latter method uses Monday as start of week
         $year = date( "Y", $date );
         $jan1 = gmmktime( 0, 0, 0, 1, 1, $year );
         $mydate = gmmktime( 0, 0, 0, 11, 30, $year );
-        $week_number = ( int ) (($date - $jan1) / (7 * 24 * 60 * 60)) + 1;
+        $week_number = (int) (($date - $jan1) / (7 * 24 * 60 * 60)) + 1;
 
+        // below, in the loop, for $n_d, the week number that is below 10 needs to be represented in 0# format
+        if ($week_number <10)
+            $week_number = "0" . $week_number;
+        
         //$week_number = date( "W", $date ); //Note that this number is derived with Monday as start of the week
 
 
@@ -393,10 +397,11 @@ class EPL_recurrence_model extends EPL_Model {
             $j = date( "j", $n_d ); //day 1-31
             $w = date( "w", $n_d ); //day of the week 0-6
 
-            if ( ($n_d >= $start_date && $n_d <= $end_date) && in_array( $w, $weekdays ) )
+            if ( ($n_d >= $start_date && $n_d <= $end_date) && in_array( $w, $weekdays ) ){
                 $this->dates[$newdate_year][$newdate_month][$j] = date( 'Y-m-d', $n_d );
-            else
+            }else{
                 unset( $this->dates[$newdate_year][$newdate_month][$j] );
+            }
         }
 
 

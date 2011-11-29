@@ -14,7 +14,7 @@ $values[$index]['form_field_list'] = $this->epl->load_view( 'admin/forms/field-l
     $d = json_encode( $values[$index] ); //json encoded data that will be used client side for edit purposes
 ?>
     <tr id="<?php echo $index; ?>">
-        <td class="epl_w20"> <div class="handle"></div></td>
+        <td class="epl_w20"></td>
         <td>
         <?php echo $values[$index]['epl_form_label']?$values[$index]['epl_form_label']:$values[$index]['epl_field_section']; ?>
             <input type="hidden" name ="_order[]" value="<?php echo $index; ?>" />

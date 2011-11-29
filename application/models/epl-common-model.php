@@ -185,7 +185,7 @@ class EPL_Common_Model extends EPL_Model {
             $r = array_key_exists( $key, $r ) ? $r[$key] : $r;
         }
 
-        return $r;
+        return stripslashes_deep( $r );
     }
 
 
@@ -381,7 +381,7 @@ class EPL_Common_Model extends EPL_Model {
         $this_regis_post_id = (isset( $_SESSION['post_ID'] )) ? $_SESSION['post_ID'] : null;
 
         if ( !is_null( $this_regis_post_id ) )
-            $excl_this_regis_post_id = " AND NOT post_id = " & ( int ) $this_regis_post_id;
+            $excl_this_regis_post_id = " AND NOT post_id = " . ( int ) $this_regis_post_id;
 
 
         $q = $wpdb->get_results( "SELECT meta_key, SUM(meta_value) as num_attendees
@@ -398,7 +398,7 @@ class EPL_Common_Model extends EPL_Model {
                 $current_att_count[$v['meta_key']] = $v['num_attendees'];
             }
         }
-        //echo "<pre class='prettyprint'>" . print_r( $current_att_count, true ) . "</pre>";
+        
     }
 
 
@@ -538,6 +538,7 @@ class EPL_Common_Model extends EPL_Model {
 
         $args = array(
             'post_type' => 'epl_event',
+            'posts_per_page' => -1,
             'meta_query' => array(
                 'relation' => 'AND',
                 /* array(
@@ -685,9 +686,12 @@ class EPL_Common_Model extends EPL_Model {
 
                     foreach ( $data['values'] as $_k => $_v ) {
 
-                        if ( isset( $fields[$meta_k]['data_type'] ) )
-                            $this->epl->epl_util->process_data_type( &$_v, $fields[$meta_k]['data_type'], 's' );
+                        if ( isset( $fields[$meta_k]['data_type'] ) ) {
 
+                            //epl_log( "debug", "<pre>" . print_r( $_v, true ) . "</pre>" );
+
+                            $this->epl->epl_util->process_data_type( &$_v, $fields[$meta_k]['data_type'], 's' );
+                        }
                         $this->epl_add_post_meta( $post_ID, '_q_' . $meta_k, $_v, $_k );
                     }
                 }

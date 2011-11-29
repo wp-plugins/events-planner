@@ -2,8 +2,8 @@
 <table class="epl_form_data_table  epl_w300" cellspacing ="0" id="event_times_table">
     <thead>
     <th></th>
-    <th>Start Time</th>
-    <th>End Time</th>
+    <th><?php epl_e('Start Time'); ?></th>
+    <th><?php epl_e('End Time'); ?></th>
    
     <th></th>
 </thead>
@@ -48,7 +48,7 @@
 <table class="epl_form_data_table epl_w400" cellspacing ="0" id="epl_prices_table">
     <thead>
     <th></th>
-    <th>Ticket Name</th>
+    <th><?php epl_e('Price Type'); ?></th>
     <th>Price (<?php echo epl_get_currency_symbol(); ?>)</th>
 
     <th></th>

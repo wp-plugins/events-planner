@@ -356,6 +356,7 @@ function events_planner_do_ajax(data, callback){
     data += "&epl_ajax=1&action=events_planner_form";
     jQuery.ajax({
         data: data,
+        type: "POST",
         dataType: "json",
         beforeSend: function(){
             epl_loader('show');
@@ -442,6 +443,7 @@ function hide_slide_down(){
 
 function create_datepicker(elem){
     jQuery( elem ).datepicker({
+        dateFormat: EPL.date_format,
         showOn: "button",
         buttonImage: EPL.plugin_url + "images/calendar.png",
         buttonImageOnly: true,
@@ -456,13 +458,15 @@ function create_sortable(elem){
 
 }
 function create_timepicker(elem){
-    
+    var _t_f =  (EPL.time_format == "H:i")?false:true;
+    var opt = {
+        showPeriod: _t_f,
+        showLeadingZero: true,
+        showPeriodLabels: _t_f
+    };
+    //showPeriodLabels: false,
  
-    jQuery(elem).timepicker({
-        showPeriod: true,
-        showLeadingZero: false
-
-    });
+    jQuery(elem).timepicker(opt);
 
 }
 

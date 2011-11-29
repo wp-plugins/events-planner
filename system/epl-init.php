@@ -58,10 +58,22 @@ class EPL_Init {
 
 
     function common_js_files() {
+
+        $_f = array('F','Y','j','l','d');
+        $_r = array('MM','yy','d','DD','dd');
+
+        //$date_format_for_dp = (strpos('F', get_option( 'date_format' ) === false))?str_ireplace('Y','yy',get_option( 'date_format' )):'m/d/yy';
+        $date_format_for_dp = str_replace($_f,$_r,get_option( 'date_format' ));
+
+
         wp_enqueue_script( 'jquery' );
         wp_enqueue_script( 'events_planner_js', EPL_FULL_URL . 'js/events-planner.js', array( 'jquery' ) );
         wp_enqueue_script( 'tipsy-js', EPL_FULL_URL . 'js/tipsy.js', array( 'jquery' ) );
-        wp_localize_script( 'events_planner_js', 'EPL', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'plugin_url' => EPL_FULL_URL ) );
+        wp_localize_script( 'events_planner_js', 'EPL', array(
+            'ajaxurl' => admin_url( 'admin-ajax.php' ),
+            'plugin_url' => EPL_FULL_URL,
+            'date_format' => $date_format_for_dp ,
+            'time_format' => get_option( 'time_format' ) ) );
 
 
         return $this;

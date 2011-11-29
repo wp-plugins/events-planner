@@ -199,6 +199,11 @@ function get_the_organization_phone() {
     return _get_the_organization_field( '_epl_org_phone' );
 }
 
+function get_the_organization_email() {
+
+    return _get_the_organization_field( '_epl_org_email' );
+}
+
 
 function get_the_organization_website() {
 

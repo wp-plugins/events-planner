@@ -42,7 +42,7 @@
         </tr>
 
         <tr class ="for_class">
-            <td>Weekdays</td>
+            <td>Recurrence Weekdays</td>
             <td><?php echo $r_f['_epl_recurrence_weekdays']['field']; ?>
                 (<a href="#" class="check_all">All</a> | <a href="#" class="uncheck_all">None</a>)
             </td>

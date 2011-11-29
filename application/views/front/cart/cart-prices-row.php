@@ -10,7 +10,7 @@
     <td>
 <?php
 
-       echo  $price;
+       echo epl_get_currency_symbol() . $price;
 ?>
     </td>
     <td>

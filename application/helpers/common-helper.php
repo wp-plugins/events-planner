@@ -7,13 +7,13 @@
 
 function epl_e( $t ) {
 
-    _e( $t, 'events-planner' );
+    _e( $t, 'events_planner' );
 }
 
 
 function epl__( $t ) {
 
-    return __( $t, 'events-planner' );
+    return __( $t, 'events_planner' );
 }
 
 /*
@@ -210,7 +210,7 @@ function epl_get_option( $var ) {
 
 
 function epl_is_ok_to_register( $event_data, $current_key ) {
-
+    global $event_details;
     /*
      * the event is marked as open for registration 
      * registration start date is <= today -done
@@ -223,28 +223,31 @@ function epl_is_ok_to_register( $event_data, $current_key ) {
     //echo "<pre class='prettyprint'>$current_key" . print_r( $current_att_count, true ) . "</pre>";
     $today = date( 'm/d/Y H:i:s', EPL_TIME );
 
-    $ok = epl_compare_dates( $today, $event_data['_epl_regis_start_date'][$current_key], ">=" );
+    $regis_start_date = $event_details['_epl_regis_start_date'][$current_key];
+    $regis_end_date = $event_details['_epl_regis_end_date'][$current_key];
+
+    if ( stripos( get_option( 'date_format' ), 'd/m/Y' ) !== false ) {
+        $regis_start_date = str_replace( '/', '-', $regis_start_date );
+        $regis_end_date = str_replace( '/', '-', $regis_end_date );
+    }
+
+    $ok = epl_compare_dates( $today, $regis_start_date, ">=" );
 
     if ( !$ok )
-        return epl__( "Available on " ) . $event_data['_epl_regis_start_date'][$current_key];
+        return epl__( "Available for registration on " ) . $event_details['_epl_regis_start_date'][$current_key];
 
-    $ok = epl_compare_dates( $today, $event_data['_epl_regis_end_date'][$current_key], "<=" );
+    $ok = epl_compare_dates( $today, $regis_end_date, "<=" );
 
     if ( !$ok )
         return epl__( ' Registration Closed' );
 
-    $ok = epl_compare_dates( $today, $event_data['_epl_regis_end_date'][$current_key], "<=" );
-
-    if ( !$ok )
-        return epl__( ' Registration Closed' );
 
     $avail_spaces = 0;
     if ( is_array( $available_space_arr ) && !empty( $available_space_arr ) )
         if ( array_key_exists( $current_key, $available_space_arr ) && $available_space_arr[$current_key][1] ) {
             $avail_spaces = $available_space_arr[$current_key][1];
 
-            $ok = is_numeric( $avail_spaces );
-        }
+            $ok = is_numeric( $avail_spaces );        }
 
     if ( !$ok )
         return epl__( 'Sold Out' );
@@ -320,8 +323,7 @@ function epl_get_general_setting( $key = null ) {
 
     $setting = 'epl_general_options';
 
-    return epl_get_setting($setting, $key);
-
+    return epl_get_setting( $setting, $key );
 }
 
 
@@ -337,7 +339,7 @@ function epl_get_setting( $opt = '', $key = null ) {
 
     $settings = get_option( $opt );
 
-    if (is_null($settings))
+    if ( is_null( $settings ) )
         return null;
 
     if ( array_key_exists( $key, ( array ) $settings ) ) {

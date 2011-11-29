@@ -1,4 +1,4 @@
-<div class="epl_mh_300 " style="">
+<div class="epl_mh_300 epl_ov_a" style="">
 <?php echo epl_show_ad ('Control Registration Start and End times in the pro version.'); ?>
     <table class="epl_form_data_table" cellspacing ="0" id="epl_dates_table">
         <thead>

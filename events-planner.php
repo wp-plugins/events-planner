@@ -5,7 +5,7 @@
   Plugin URI: http://wpEventsPlanner.com
   Description: A comprehensive event management plugin that contains support for multiple event types, payments, custom forms, and etc.
 
-  Version: 1.3.1
+  Version: 1.3.2
 
   Author: Abel Sekepyan
   Author URI: http://wpEventsPlanner.com
@@ -91,7 +91,7 @@ function start_events_planner() {
     /*
      * coming soon
      */
-    //load_plugin_textdomain( 'events_planner', false, dirname( plugin_basename( __FILE__ ) ) . '/application/languages/' );
+    //load_plugin_textdomain( 'events_planner', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
 /*

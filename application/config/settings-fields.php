@@ -16,7 +16,7 @@ $epl_fields['epl_general_options'] =
                 'input_name' => 'epl_currency_code',
                 'label' => 'Currency Code',
                 'description' => 'This will be used in payment gateways. ',
-                'options' => array( 'CAD' => 'CAD', 'EUR' => 'EUR', 'GBP' => 'GBP', 'USD' => 'USD' )
+                'options' => array( 'AUD' => 'AUD','CAD' => 'CAD', 'EUR' => 'EUR', 'GBP' => 'GBP', 'USD' => 'USD' )
             ),
             'epl_currency_symbol' => array(
                 'input_type' => 'text',
@@ -43,15 +43,6 @@ $epl_fields['epl_registration_options'] =
                 'description' => epl__( 'This will be an alphanumeric string.' ),
                 'options' => epl_make_array( 10, 40 ),
                 'default_value' => 10 ),
-        /* 'epl_regis_decrement_when' => array(
-          'input_type' => 'radio',
-          'input_name' => 'epl_regis_decrement_when',
-          'label' => 'When should the available space quantity be adjusted?',
-          'description' => 'This option determines when the number of available spaces is adjusted.',
-          'options' => array(
-          10 => epl__( 'After the attendee information is entered.' ),
-          20 => epl__( 'After payment is successfully received.' ),
-          ),
-          'default_value' => 10 ), */
+
 );
 ?>

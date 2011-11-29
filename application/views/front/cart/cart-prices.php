@@ -3,7 +3,7 @@
         <th>
             <?php
 
-            epl_e( 'Ticket Name' );
+            epl_e( 'Type' );
             ?>
         </th>
 
@@ -16,7 +16,7 @@
         <th>
             <?php
 
-            epl_e( '# of Tickets' );
+            epl_e( 'Quantity' );
             ?>
         </th>
 

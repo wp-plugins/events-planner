@@ -18,7 +18,7 @@ foreach ( $values as $index => $q_id ):
         <tr id="<?php echo $index; ?>">
             <td class="epl_w20"> <div class="handle"></div></td>
             <td>
-<?php echo (isset($values[$index]['epl_field']) && $values[$index]['epl_field'] )? $values[$index]['epl_field'] : $values[$index]['label']; ?>
+<?php echo (isset($values[$index]['epl_field']) && $values[$index]['epl_field'] )? $values[$index]['epl_field'] : stripslashes_deep($values[$index]['label']); ?>
         <input type="hidden" name ="_order[]" value="<?php echo $index; ?>" />
 
         <textarea class="data" rows="" cols=""><?php echo $d; ?></textarea>

@@ -21,7 +21,10 @@ jQuery(document).ready(function($){
             var d = r.html; //$('.data', par).val();
             //
            // $('.epl_totals_table').replaceWith(d);
-            $('#epl_totals_wrapper table').replaceWith(d);
+
+                $('#epl_totals_wrapper table').replaceWith(d);
+
+
         //console.log(r.html);
         //alert(d);
 

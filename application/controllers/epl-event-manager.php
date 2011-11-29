@@ -129,7 +129,7 @@ class EPL_Event_Manager extends EPL_Controller {
         add_meta_box( 'epl-other-settings-meta-box', epl__( 'Other Settings' ) . $help_link, array( &$this, 'other_settings_meta_box' ), "epl_event", 'normal', 'core' );
 
         $help_link = get_help_icon( array( 'section' => 'event_forms', 'id' => null ) );
-        add_meta_box( 'epl-forms-meta-box', epl__( 'Registration Fields' ) . $help_link, array( &$this, 'forms_meta_box' ), "epl_event", 'normal', 'core' );
+        add_meta_box( 'epl-forms-meta-box', epl__( 'Registration Forms' ) . $help_link, array( &$this, 'forms_meta_box' ), "epl_event", 'normal', 'core' );
         //side boxes
         $help_link = get_help_icon( array( 'section' => 'event_options', 'id' => null ) );
         add_meta_box( 'epl-options-meta-box', epl__( 'Options' ) . $help_link, array( &$this, 'options_meta_box' ), "epl_event", 'side', 'core' );

@@ -4,7 +4,6 @@ global $epl_fields;
 
 $epl_fields['epl_org_fields'] =
         array(
-
             '_epl_org_address' => array(
                 'input_type' => 'text',
                 'input_name' => '_epl_org_address',
@@ -40,11 +39,14 @@ $epl_fields['epl_org_fields'] =
                 'input_name' => '_epl_org_phone',
                 'label' => 'Phone',
                 'class' => 'epl_w300' ),
+            '_epl_org_email' => array(
+                'input_type' => 'text',
+                'input_name' => '_epl_org_email',
+                'label' => 'Email',
+                'class' => 'epl_w300' ),
             '_epl_org_website' => array(
                 'input_type' => 'text',
                 'input_name' => '_epl_org_website',
                 'label' => 'Website',
                 'class' => 'epl_w300' ),
-
-
 );

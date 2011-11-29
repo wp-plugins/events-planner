@@ -58,8 +58,8 @@ class EPL_Gateway_Model extends EPL_Model {
         );
 
         $item = array(
-            'L_PAYMENTREQUEST_0_NAME0' => 'Event Registration',
-            'L_PAYMENTREQUEST_0_DESC0' => $event_details['post_title'] . ', ' . $_totals['_att_quantity']['total'][$event_details['ID']] . epl__(' tickets'),
+            'L_PAYMENTREQUEST_0_NAME0' => epl__('Registration'),
+            'L_PAYMENTREQUEST_0_DESC0' => $event_details['post_title'] . ', ' . $_totals['_att_quantity']['total'][$event_details['ID']] . ' ' . epl__('attendees'),
             'L_PAYMENTREQUEST_0_AMT0' => $_totals['money_totals']['grand_total'],
             'L_PAYMENTREQUEST_0_QTY0' => 1 //$_totals['_att_quantity']['total'][$event_details['ID']]
         );

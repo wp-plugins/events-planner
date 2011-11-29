@@ -68,7 +68,7 @@ if ( !class_exists( 'EPL_front' ) ) {
 
                 //POST has higher priority
 
-                $epl_action = esc_attr( isset($_POST['epl_action']) ? $_POST['epl_action'] : $_GET['epl_action'] );
+                $epl_action = esc_attr( isset( $_POST['epl_action'] ) ? $_POST['epl_action'] : $_GET['epl_action'] );
 
                 if ( in_array( $epl_action, $defined_actions ) ) {
                     if ( method_exists( $this, $epl_action ) ) {
@@ -143,12 +143,6 @@ if ( !class_exists( 'EPL_front' ) ) {
         }
 
 
-        function event_details() {
-
-            echo "here";
-        }
-
-
         function show_cart() {
 
             $this->rm->set_mode( 'edit' );
@@ -165,7 +159,7 @@ if ( !class_exists( 'EPL_front' ) ) {
 
 
         function regis_form() {
-
+            global $epl_error;
             $this->rm->set_mode( 'edit' );
             $data['mode'] = 'edit';
             $data['content'] = $this->rm->regis_form();
@@ -174,7 +168,9 @@ if ( !class_exists( 'EPL_front' ) ) {
 
             $data['form_action'] = add_query_arg( 'epl_action', 'show_cart_overview', $_SERVER['REQUEST_URI'] );
             $data['next_step'] = 'show_cart_overview';
-            $data['next_step_label'] = 'Overview';
+
+            if ( empty( $epl_error ) )
+                $data['next_step_label'] = 'Overview';
 
             $this->epl->load_view( 'front/cart-container', $data );
         }
@@ -224,8 +220,8 @@ if ( !class_exists( 'EPL_front' ) ) {
 
         function payment_page() {
 
-             $this->rm->set_mode( 'overview' );
-              $data['cart_data'] = $this->rm->show_cart();
+            $this->rm->set_mode( 'overview' );
+            $data['cart_data'] = $this->rm->show_cart();
 
             $egp = $this->epl->load_model( 'epl-gateway-model' );
             $egp->_express_checkout_redirect();
@@ -256,7 +252,7 @@ if ( !class_exists( 'EPL_front' ) ) {
                 //$data['content'] = $this->epl->load_view( 'front/cart/cart', $data );
 
 
-                $data['regis_form'] = $this->rm->regis_form( null, true );
+                $data['regis_form'] = $this->rm->regis_form( null, false );
                 $data['payment_details'] = $this->epl->load_view( 'front/registration/regis-payment-details', '', true );
 
 
@@ -269,31 +265,47 @@ if ( !class_exists( 'EPL_front' ) ) {
                     //$data['form_action'] = add_query_arg( 'epl_action', 'thank_you_page', $_SERVER['REQUEST_URI'] );
                     //$data['next_step'] = 'thank_you_page';
                     //$data['next_step_label'] = 'Confirm and Complete';
+                    $post_ID = $_SESSION['__epl']['post_ID'];
+                    $data['post_ID'] = $post_ID;
+                    $data['_epl_regis_status'] = '5';
+                    $data['_epl_grand_total'] = 0;
+                    $data['_epl_payment_amount'] = 0;
+                    $data['_epl_payment_date'] = current_time( 'mysql' );
+                    $data['_epl_payment_method'] = '';
+                    $data['_epl_transaction_id'] = '';
+
+
+                    $this->rm->update_payment_data( $data );
                 }
 
 
                 $data['mode'] = 'overview';
                 $data['overview'] = $this->epl->load_view( 'front/registration/regis-thank-you-page', $data );
+
+
+                $email_body = $this->epl->load_view( 'front/registration/regis-confirm-email', $data, true );
+
+                $this->send_confirmation_email( $email_body );
             }
 
 
 
-             $_SESSION['__epl'] = array( );
-              session_regenerate_id();
-              
+            $_SESSION['__epl'] = array( );
+            session_regenerate_id();
         }
 
 
         function _exp_checkout_payment_cancel() {
 
             $this->show_cart_overview();
-
         }
+
+
         function _exp_checkout_payment_success() {
 
             $egp = $this->epl->load_model( 'epl-gateway-model' );
 
-            if ( $egp->_exp_checkout_payment_success() ){
+            if ( $egp->_exp_checkout_payment_success() ) {
 
                 $this->rm->set_mode( 'overview' );
                 $data['message'] = "Please review and Finalize your payment.";
@@ -305,24 +317,24 @@ if ( !class_exists( 'EPL_front' ) ) {
                 $data['content'] .= $this->rm->regis_form();
 
 
-                    $data['form_action'] = add_query_arg( 'epl_action', '_exp_checkout_do_payment', $_SERVER['REQUEST_URI'] );
+                $data['form_action'] = add_query_arg( 'epl_action', '_exp_checkout_do_payment', $_SERVER['REQUEST_URI'] );
 
-                    $data['next_step'] = '_exp_checkout_do_payment';
-                    $data['next_step_label'] = 'Confirm Payment and Finish';
+                $data['next_step'] = '_exp_checkout_do_payment';
+                $data['next_step_label'] = 'Confirm Payment and Finish';
 
                 $this->epl->load_view( 'front/cart-container', $data );
-
-            } else {
+            }
+            else {
                 echo "Sorry, something must have gone wrong.  Please notify the site administrtor";
             }
-                //$this->show_cart_overview( '_exp_checkout_do_payment' );
+            //$this->show_cart_overview( '_exp_checkout_do_payment' );
         }
 
 
         function _exp_checkout_do_payment() {
-                //this sets the event details, for now
-                $this->rm->set_mode( 'overview' );
-                $data['cart_data'] = $this->rm->show_cart();
+            //this sets the event details, for now
+            $this->rm->set_mode( 'overview' );
+            $data['cart_data'] = $this->rm->show_cart();
 
             $egp = $this->epl->load_model( 'epl-gateway-model' );
 
@@ -330,7 +342,7 @@ if ( !class_exists( 'EPL_front' ) ) {
             $egp->_exp_checkout_do_payment();
 
             if ( $egp->_exp_checkout_do_payment() ) {
-               
+
                 $this->thank_you_page();
             }
         }
@@ -342,6 +354,34 @@ if ( !class_exists( 'EPL_front' ) ) {
             foreach ( ( array ) $v['epl_start_date'] as $event_id => $event_dates ) {
 
             }
+        }
+
+
+        function send_confirmation_email( $body ) {
+            global $organization_details, $customer_email;
+
+            if (!(isset($customer_email)) || $customer_email == '')
+                return;
+
+            global $current_user;
+            get_currentuserinfo();
+
+            $data = array( );
+            $data['name'] = $current_user->first_name . ' ' . $current_user->last_name;
+            $data['email'] = $current_user->user_email;
+            $data['section'] = $_POST['section'];
+
+
+            $headers = 'From: ' . $customer_email . "\r\n" .
+                    'Reply-To: ' . "<{$current_user->user_email}>" . "\r\n" .
+                    'X-Mailer: PHP/' . phpversion();
+
+
+            $headers .= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+            @wp_mail( $customer_email, epl__( 'Registration Confirmation' ) . ': ' . get_the_event_title(), $body, $headers );
+            @wp_mail( $current_user->user_email,  epl__( 'New Registration' ) . ': ' . get_the_event_title(), $body, $headers );
         }
 
     }

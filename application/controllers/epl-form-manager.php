@@ -19,7 +19,7 @@ class EPL_Form_Manager extends EPL_Controller {
 
         $this->d['epl_fields'] = $this->ecm->_get_fields( 'epl_fields' );
         $this->d['epl_forms'] = $this->ecm->_get_fields( 'epl_forms' );
-        epl_log( "debug", "<pre>" . print_r($this->d['epl_fields'], true ) . "</pre>" );
+        //epl_log( "debug", "<pre>" . print_r($this->d['epl_fields'], true ) . "</pre>" );
 
         if ( isset( $_REQUEST['epl_ajax'] ) && $_REQUEST['epl_ajax'] == 1 ) {
 
@@ -83,6 +83,7 @@ class EPL_Form_Manager extends EPL_Controller {
             'fields_to_display' => array_keys( (array) $this->fields[$for] ),
             'meta' => array( '_view' => 3, 'value' => &$this->d[$for], '_content' => $data['epl_field_choices'] )
         );
+
         //field creation form
         $data['events_planner_field_form'] = $this->epl_util->render_fields( $this->_field_args );
 
@@ -181,7 +182,7 @@ class EPL_Form_Manager extends EPL_Controller {
 
 
         }
-        epl_log("debug", "<pre>" . print_r( $_v[$_id], true ) . "</pre>" );
+        //epl_log("debug", "<pre>" . print_r( $_v[$_id], true ) . "</pre>" );
         return json_encode( $_v[$_id] );
     }
 

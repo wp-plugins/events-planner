@@ -313,7 +313,7 @@ $epl_fields['epl_option_fields'] =
                     1 => epl__( 'Active' ),
                     10 => epl__( 'Cancelled' )
                 ),
-                'description' => epl__( '' ),
+                'description' => '',
                 'class' => '' ),
 );
 $epl_fields['epl_display_option_fields'] =
@@ -323,7 +323,7 @@ $epl_fields['epl_display_option_fields'] =
                 'input_name' => '_epl_display_regis_button',
                 'label' => epl__( 'Show Registration Button' ),
                 'options' => epl_yes_no(),
-                'description' => epl__( '' ),
+                'description' => '',
                 'default_value' => 10,
                 'class' => '' ),
 
@@ -332,7 +332,7 @@ $epl_fields['epl_display_option_fields'] =
               'input_name' => '_epl_display_att_list_button',
               'label' => epl__( 'Show Attendee List Button' ),
               'options' => epl_yes_no(),
-              'description' => epl__( '' ),
+              'description' => '',
               'default_value' => 0,
               'class' => '' ), 
             '_epl_date_display_type' => array(

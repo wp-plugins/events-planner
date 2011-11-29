@@ -208,7 +208,8 @@ class EPL_util {
         //all the values come in as strings.  For cbox, radio and selects,
         //the options loop key is numeric.  I am doing a cast comparison so
         //string 0 != int 0, lots of issues.
-        $value = (is_numeric( $value )) ? ( int ) $value : $value;
+        //NEW issue:  phone number is converted to int if it comes in 5557778888
+        $value = (is_numeric( $value ) && $value < 1000) ? ( int ) $value : $value;
 
 
         $data = array(
@@ -232,6 +233,9 @@ class EPL_util {
             $name = str_replace( "[", "[" . $key, $name );
             $value = $value[$key];
         }
+
+        if ( !is_numeric( $value ) )
+            $value = stripslashes_deep( $value );
 
 
         if ( $readonly != '' ) {
@@ -269,10 +273,11 @@ class EPL_util {
 
 
         if ( $label != '' || $response_view == 2 )
-            $data['label'] = "<label for='$id'>$label$required</label>";
+            $data['label'] = "<label for='$id'>" . stripslashes_deep( $label ) . "{$required}</label>";
 
         if ( $description != '' || $response_view == 2 )
             $data['description'] = "<span class='description'>$description</span>";
+
 
 
         $data['field'] = '';
@@ -510,6 +515,11 @@ class EPL_util {
                 $value = date( "Y-m-d", strtotime( $value ) );
                 break;
             case "unix_time":
+                //converting European date format 29/11/2011 will not work in strtottime.  need to convert it to ISO format
+
+                if ( stripos( get_option( 'date_format' ), 'd/m/Y' ) !== false )
+                    $value = str_replace( '/', '-', $value );
+
                 $value = strtotime( $value );
                 break;
         }
@@ -519,6 +529,10 @@ class EPL_util {
     function process_mode( $value, $data_type, $mode = 's' ) {
 
     }
+
+    /*
+     * Temporarily, is crap.  Too many format changes back and forth
+     */
 
 
     function construct_date_display_table( $args ) {
@@ -531,14 +545,24 @@ class EPL_util {
 
         $this->epl->epl_table->set_template( $tmpl );
         //$this->epl->epl_table->set_heading( epl__( 'Start Date' ), epl__( 'End Date' ), '' );
+
+
         foreach ( $meta['_epl_start_date'] as $key => $date ) {
+            $end_date = $meta['_epl_end_date'][$key];
+            if ( stripos( get_option( 'date_format' ), 'd/m/Y' ) !== false ) {
+                $date = str_replace( '/', '-', $date );
+
+                $end_date = str_replace( '/', '-', $end_date );
+            }
 
             if ( strtotime( $date ) >= strtotime( date( "Y-m-d" ) ) ) {
 
-                $t_row = array( $date, $meta['_epl_end_date'][$key] );
+                $t_row = array( date( get_option( 'date_format' ), strtotime( $date ) ), ' ' . epl__('to') . ' ',date( get_option( 'date_format' ), strtotime( $end_date ) ) );
 
-                if ( $date == $meta['_epl_end_date'][$key] )
-                    $t_row = array( $date );
+                if ( $date == $end_date ){
+                    unset($t_row[1]);
+                    unset($t_row[2]);
+                }
 
 
                 $this->epl->epl_table->add_row( $t_row );
@@ -643,8 +667,9 @@ class EPL_util {
             $r = array( );
             if ( array_key_exists( $price_key, $regis_tickets ) ) {
 
-
-                $this->epl->epl_table->add_row( $event_details['_epl_price_name'][$price_key] . ' - ' . current( $regis_tickets[$price_key] ) );
+                $num_att = current( $regis_tickets[$price_key] );
+                if ( $num_att > 0 )
+                    $this->epl->epl_table->add_row( $event_details['_epl_price_name'][$price_key] . ' - ' . $num_att );
             }
         }
 
@@ -666,7 +691,7 @@ class EPL_util {
 
         global $regis_details, $event_details;
 
-        return date( "m/d/Y", strtotime( $regis_details['_epl_payment_date'] ) );
+        return date( get_option( 'date_format' ), strtotime( $regis_details['_epl_payment_date'] ) );
     }
 
 
@@ -993,25 +1018,22 @@ class EPL_util {
 
 
 
-        $button_text = 'Register';
+        $button_text = epl__( 'Register' );
         $class = '';
 
-        if ( epl_is_addon_active( 'epl_multi_registration' ) ) {
-            $button_text = epl__( 'Add To Cart' );
-            $class = 'add_to_cart';
-        }
 
         //The shortcode page id.  Everythng goes through the shortcode
-        $page_id = get_option( 'epl_shortcode_page_id' );
+        //I have seen people change from page to page.  For now, will check with every call
+        //until I figure out a better method.
+        $page_id = null; // get_option( 'epl_shortcode_page_id' );
         if ( !$page_id ) {
             $pages = get_pages();
 
             foreach ( $pages as $page ) {
-                if ( stripos( $page->post_content, '[events_planner' ) !== false ){
+                if ( stripos( $page->post_content, '[events_planner' ) !== false ) {
                     update_option( 'epl_shortcode_page_id', $page->ID );
-					$page_id = $page->ID;
-					
-					}
+                    $page_id = $page->ID;
+                }
             }
         }
 
@@ -1096,6 +1118,7 @@ class EPL_util {
     }
 
 
+//there is another way, coming
     function remove_array_vals( $array = array( ) ) {
 
         foreach ( $array as $k => $v ) {
@@ -1107,16 +1130,22 @@ class EPL_util {
 
 
     function clean_input( $data ) {
-        return array_map( array( get_class(), 'clean_input_process' ), $data );
+        return array_map( array( get_class(), 'clean_input_process' ), &$data );
     }
 
 
     function clean_input_process( $data ) {
 
+
+
         if ( is_array( $data ) ) {
-            return self::clean_post_process( current( $data ) );
+            $k = key( $data );
+            $data[$k] = self::clean_input_process( current( $data ) );
+            //return self::clean_input_process( current( $data ) );
+            return $data;
         }
-        return trim( htmlentities( $data, ENT_QUOTES, 'UTF-8' ) );
+
+        return trim( htmlentities( strip_tags( $data ), ENT_QUOTES, 'UTF-8' ) );
     }
 
 
