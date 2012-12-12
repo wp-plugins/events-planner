@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=abels
 Tags: buddypress, events, event, events planner, event planner, event registration, event calendar, events calendar, event management, paypal, registration, ticket, tickets, ticketing, tickets, widget, locations, maps, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
 Requires at least: 3.1
 Tested up to: 3.2
-Stable tag: 1.3.4
+Stable tag: 1.3.4.1
 
 Events Planner: A powerful next generation event management plugin, built with Custom Post Types 
 
