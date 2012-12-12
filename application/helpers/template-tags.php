@@ -5,9 +5,9 @@
  */
 
 
-function the_event_list() {
-
-    return EPL_Common_Model::get_instance()->events_list();
+function the_event_list($args = array()) {
+    
+    return EPL_Common_Model::get_instance()->events_list($args);
 }
 
 
@@ -23,6 +23,12 @@ function get_the_event_dates() {
 
 
     return EPL_util::get_instance()->get_the_event_dates();
+}
+
+function get_the_event_dates_raw() {
+
+
+    return EPL_util::get_instance()->get_the_event_dates_raw();
 }
 
 

@@ -21,7 +21,8 @@ jQuery(document).ready(function($) {
         url:  EPL.ajaxurl
     });
 
-    $('#dismiss_loader').click(function(){
+    $('#dismiss_loader').live('click',function(){
+
         hide_slide_down();
         return false;
     });
@@ -432,7 +433,7 @@ function show_slide_down(cont){
 
 function hide_slide_down(){
 
-    var height = Number(jQuery('#slide_down_box').outerHeight() + 10);
+    var height = Number(jQuery('#slide_down_box').outerHeight(true) + 10);
 
     jQuery('#slide_down_box').animate({
         'top':'-' + height + 'px'

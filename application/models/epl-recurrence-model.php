@@ -5,8 +5,8 @@ class EPL_recurrence_model extends EPL_Model {
 
     function __construct() {
         parent::__construct();
-        epl_log('init', get_class() . ' initialized.', 1 );
-        $this->dates = array();
+        epl_log( 'init', get_class() . ' initialized.', 1 );
+        $this->dates = array( );
     }
 
 
@@ -23,31 +23,31 @@ class EPL_recurrence_model extends EPL_Model {
         //if a class, that has many days for the same event
         if ( current( ( array ) $_POST['_epl_event_type'] ) == 10 ) {
 
-            $this->rec_start_date = date( "Y-m-d", strtotime( current( ( array ) $_POST['_epl_start_date'] ) ) );
-            $rec_first_end_date = date( "Y-m-d", strtotime( current( ( array ) $_POST['_epl_start_date'] ) ) );
+            $this->rec_start_date = date( "Y-m-d", strtotime( epl_dmy_convert( current( ( array ) $_POST['_epl_start_date'] ) ) ) );
+            $rec_first_end_date = date( "Y-m-d", strtotime( epl_dmy_convert( current( ( array ) $_POST['_epl_start_date'] ) ) ) );
 
             $this->ind_event_length = $this->get_date_difference( $this->rec_start_date, $rec_first_end_date, 'day' );
 
-            $this->recurrence_end_date = date( "Y-m-d", strtotime( current( ( array ) $_POST['_epl_end_date'] ) ) );
+            $this->recurrence_end_date = date( "Y-m-d", strtotime( epl_dmy_convert( current( ( array ) $_POST['_epl_end_date'] ) ) ) );
+        }
+        else {
 
-
-        }  else {
-
-            $this->rec_start_date = date( "Y-m-d", strtotime( $_POST['_epl_rec_first_start_date'] ) );
-            $rec_first_end_date = date( "Y-m-d", strtotime( $_POST['_epl_rec_first_end_date'] ) );
+            $this->rec_start_date = date( "Y-m-d", strtotime( epl_dmy_convert( $_POST['_epl_rec_first_start_date'] ) ) );
+            $rec_first_end_date = date( "Y-m-d", strtotime( epl_dmy_convert( $_POST['_epl_rec_first_end_date'] ) ) );
 
             $this->ind_event_length = $this->get_date_difference( $this->rec_start_date, $rec_first_end_date, 'day' );
 
-            $epl_rec_first_end_date = date( "Y-m-d", strtotime( $_POST['_epl_rec_first_end_date'] ) );
+            // $epl_rec_first_end_date = date( "Y-m-d", strtotime( epl_dmy_convert($_POST['_epl_rec_first_end_date'] ) ));
 
-            $this->recurrence_end_date = date( "Y-m-d", strtotime( $_POST['_epl_recurrence_end'] ) );
+            $this->recurrence_end_date = date( "Y-m-d", strtotime( epl_dmy_convert( $_POST['_epl_recurrence_end'] ) ) );
             $first_day = date( "d", strtotime( $this->rec_start_date ) );
         }
 
 
-         $this->week_of_first_day = $this->get_week_of_the_month( $this->rec_start_date );
+        $this->week_of_first_day = $this->get_week_of_the_month( $this->rec_start_date );
 
- 
+
+
         //Find the difference between the start and end dates, based on the selected type (i.e. day, week, month
         $this->difference = $this->get_date_difference( $this->rec_start_date, $this->recurrence_end_date, $this->type );
 
@@ -65,10 +65,11 @@ class EPL_recurrence_model extends EPL_Model {
          *  from first day to the last
          */
 
+
         $this->get_the_dates();
 
         //epl_log('debug', "<pre>" . print_r($this->dates, true ) . "</pre>");
-        
+
         if ( $this->r_mode == 'recurrence_preview' )
             $r = $this->epl_util->construct_calendar( $this->dates ); // . $this->construct_table_array( $dates );
         else
@@ -80,10 +81,11 @@ class EPL_recurrence_model extends EPL_Model {
     /*
      * for a specific event
      */
-    
-    function recurrence_dates_from_db($event_data) {
 
-        $this->dates = array();
+
+    function recurrence_dates_from_db( $event_data ) {
+
+        $this->dates = array( );
         if ( current( ( array ) $event_data['_epl_event_type'] ) == 0 )
             return;
 
@@ -102,34 +104,32 @@ class EPL_recurrence_model extends EPL_Model {
         //if a class, that has many days for the same event
         if ( current( ( array ) $event_data['_epl_event_type'] ) == 10 ) {
 
-            $this->rec_start_date = date( "Y-m-d", strtotime( current( ( array ) $event_data['_epl_start_date'] ) ) );
-            $rec_first_end_date = date( "Y-m-d", strtotime( current( ( array ) $event_data['_epl_start_date'] ) ) );
+            $this->rec_start_date = date( "Y-m-d", strtotime( epl_dmy_convert(current( ( array ) $event_data['_epl_start_date'] ) ) ));
+            $rec_first_end_date = date( "Y-m-d", strtotime( epl_dmy_convert(current( ( array ) $event_data['_epl_start_date'] ) ) ));
 
             $this->ind_event_length = $this->get_date_difference( $this->rec_start_date, $rec_first_end_date, 'day' );
 
-            $this->recurrence_end_date = date( "Y-m-d", strtotime( current( ( array ) $event_data['_epl_end_date'] ) ) );
-
-
+            $this->recurrence_end_date = date( "Y-m-d", strtotime( epl_dmy_convert(current( ( array ) $event_data['_epl_end_date'] ) ) ));
         }
         else {
 
-            $this->rec_start_date = date( "Y-m-d", strtotime( $event_data['_epl_rec_first_start_date'] ) );
-            $rec_first_end_date = date( "Y-m-d", strtotime( $event_data['_epl_rec_first_end_date'] ) );
+            $this->rec_start_date = date( "Y-m-d", strtotime( epl_dmy_convert($event_data['_epl_rec_first_start_date'] ) ));
+            $rec_first_end_date = date( "Y-m-d", strtotime( epl_dmy_convert($event_data['_epl_rec_first_end_date'] ) ));
 
             $this->ind_event_length = $this->get_date_difference( $this->rec_start_date, $rec_first_end_date, 'day' );
 
-            $epl_rec_first_end_date = date( "Y-m-d", strtotime( $event_data['_epl_rec_first_start_date'] ) );
+            $epl_rec_first_end_date = date( "Y-m-d", strtotime( epl_dmy_convert($event_data['_epl_rec_first_start_date'] ) ));
 
-            $this->recurrence_end_date = date( "Y-m-d", strtotime( $event_data['_epl_recurrence_end'] ) );
+            $this->recurrence_end_date = date( "Y-m-d", strtotime( epl_dmy_convert($event_data['_epl_recurrence_end'] ) ));
             $first_day = date( "d", strtotime( $this->rec_start_date ) );
         }
 
-       
-         $this->week_of_first_day = $this->get_week_of_the_month( $this->rec_start_date );
+
+        $this->week_of_first_day = $this->get_week_of_the_month( $this->rec_start_date );
 
         //Find the difference between the start and end dates, based on the selected type (i.e. day, week, month
         $this->difference = $this->get_date_difference( $this->rec_start_date, $this->recurrence_end_date, $this->type );
-        
+
         //weekdays are used for daily and weekly types
         $this->weekdays = (isset( $event_data['_epl_recurrence_weekdays'] ) && is_array( $event_data['_epl_recurrence_weekdays'] )) ? $event_data['_epl_recurrence_weekdays'] : array( );
 
@@ -151,7 +151,8 @@ class EPL_recurrence_model extends EPL_Model {
     }
 
 
-    function get_the_dates( ) {
+    function get_the_dates() {
+
 
         for ( $i = 0; $i <= $this->difference; $i = $i + $this->interval ) {
 
@@ -202,15 +203,12 @@ class EPL_recurrence_model extends EPL_Model {
                  * If it is monthly and repeats on a specific day of week (e.g. third Wednesday of each month),
                  * we need to find which weekday the start date belongs to and go from there.
                  */
-
-           
-
             }
         }
 
         //return $this->dates;
-
     }
+
 
     function construct_dates_blueprint( $data ) {
 
@@ -227,12 +225,12 @@ class EPL_recurrence_model extends EPL_Model {
          * need to know the constructed dates
          *
          */
-        epl_log( "debug", "<pre>" . print_r($dates, true ) . "</pre>" );
+        //epl_log( "debug", "<pre>" . print_r( $dates, true ) . "</pre>" );
 
         foreach ( $dates as $year => $month ) {
 
             foreach ( $month as $_month => $_days ) {
-                
+
                 foreach ( $_days as $k => $v ) {
                     $_dd = strtotime( $v );
                     $_d = date( $date_format, $_dd );
@@ -244,7 +242,6 @@ class EPL_recurrence_model extends EPL_Model {
                     if ( $_u_k === FALSE ) {
 
                         $_u_k = $this->epl_util->make_unique_id();
-                        
                     }
 
                     $data['_epl_start_date'][$_u_k] = $_d;
@@ -252,22 +249,20 @@ class EPL_recurrence_model extends EPL_Model {
 
                     if ( isset( $_POST['_epl_rec_regis_start_date'] ) && $_POST['_epl_rec_regis_start_date'] != '' ) {
 
-                        $data['_epl_regis_start_date'][$_u_k] = date( $date_format, strtotime( $_POST['_epl_rec_regis_start_date'] ) );
+                        $data['_epl_regis_start_date'][$_u_k] = date( $date_format, strtotime( epl_dmy_convert($_POST['_epl_rec_regis_start_date'] )) );
                     }
                     elseif ( isset( $_POST['_epl_rec_regis_start_days_before_start_date'] ) && $_POST['_epl_rec_regis_start_days_before_start_date'] != '' ) {
 
                         $data['_epl_regis_start_date'][$_u_k] = date( $date_format, strtotime( "-" . ( int ) $_POST['_epl_rec_regis_start_days_before_start_date'] . " day", $_dd ) );
-                        
                     }
 
                     if ( isset( $_POST['_epl_rec_regis_end_date'] ) && $_POST['_epl_rec_regis_end_date'] != '' ) {
 
-                        $data['_epl_regis_end_date'][$_u_k] = date( $date_format, strtotime( $_POST['_epl_rec_regis_end_date'] ) );
+                        $data['_epl_regis_end_date'][$_u_k] = date( $date_format, strtotime( epl_dmy_convert($_POST['_epl_rec_regis_end_date'] ) ) );
                     }
                     elseif ( isset( $_POST['_epl_rec_regis_end_days_before_start_date'] ) && $_POST['_epl_rec_regis_end_days_before_start_date'] != '' ) {
 
                         $data['_epl_regis_end_date'][$_u_k] = date( $date_format, strtotime( "-" . ( int ) $_POST['_epl_rec_regis_end_days_before_start_date'] . " day", $_dd ) );
-                        
                     }
                 }
             }
@@ -278,7 +273,7 @@ class EPL_recurrence_model extends EPL_Model {
 
 
         $rows_to_display = count( $data['_epl_start_date'] );
-        $fields_to_display = array_keys($this->fields['epl_date_fields']);
+        $fields_to_display = array_keys( $this->fields['epl_date_fields'] );
 
         $_field_args = array(
             'section' => $this->fields['epl_date_fields'],
@@ -288,13 +283,11 @@ class EPL_recurrence_model extends EPL_Model {
 
         $data['date_fields'] = $this->epl_util->render_fields( $_field_args );
         //epl_log( "<pre>" . print_r($data['date_fields'], true ) . "</pre>", 1 );
-        
         //echo "<pre class='prettyprint'>" . print_r($data['date_fields'], true). "</pre>";
 
         $r = $this->epl->load_view( 'admin/events/dates-section', $data, true );
 
         return $r;
-
     }
 
 
@@ -369,20 +362,20 @@ class EPL_recurrence_model extends EPL_Model {
      */
     function get_days_of_a_week( $date, $start_date = 0, $end_date = 0, $weekdays = array( ) ) {
 
-        $date = strtotime( $date );
-        $start_date = strtotime( $start_date );
-        $end_date = strtotime( $end_date );
+        $date = strtotime( epl_dmy_convert( $date ) );
+        $start_date = strtotime( epl_dmy_convert( $start_date ) );
+        $end_date = strtotime( epl_dmy_convert( $end_date ) );
 
         //usingn this method instead of date("W") since the latter method uses Monday as start of week
         $year = date( "Y", $date );
         $jan1 = gmmktime( 0, 0, 0, 1, 1, $year );
         $mydate = gmmktime( 0, 0, 0, 11, 30, $year );
-        $week_number = (int) (($date - $jan1) / (7 * 24 * 60 * 60)) + 1;
+        $week_number = ( int ) (($date - $jan1) / (7 * 24 * 60 * 60)) + 1;
 
         // below, in the loop, for $n_d, the week number that is below 10 needs to be represented in 0# format
-        if ($week_number <10)
+        if ( $week_number < 10 )
             $week_number = "0" . $week_number;
-        
+
         //$week_number = date( "W", $date ); //Note that this number is derived with Monday as start of the week
 
 
@@ -397,14 +390,13 @@ class EPL_recurrence_model extends EPL_Model {
             $j = date( "j", $n_d ); //day 1-31
             $w = date( "w", $n_d ); //day of the week 0-6
 
-            if ( ($n_d >= $start_date && $n_d <= $end_date) && in_array( $w, $weekdays ) ){
+            if ( ($n_d >= $start_date && $n_d <= $end_date) && in_array( $w, $weekdays ) ) {
                 $this->dates[$newdate_year][$newdate_month][$j] = date( 'Y-m-d', $n_d );
-            }else{
+            }
+            else {
                 unset( $this->dates[$newdate_year][$newdate_month][$j] );
             }
         }
-
-
     }
 
 }

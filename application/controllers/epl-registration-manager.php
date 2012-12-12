@@ -200,14 +200,14 @@ class EPL_Registration_Manager extends EPL_Controller {
         $header_row[] = 'Total';
         $header_row[] = 'Amount Paid';
 
-
+        
         $regis_ids = $this->ecm->get_event_regis_post_ids( false );
 
         foreach ( $regis_ids as $regis_id => $att_count ) {
             $regis_data = $this->ecm->get_post_meta_all( $regis_id );
 
-            $regis_date = implode( ',', array_intersect_key( $event_details['_epl_start_date'], array_flip((array) $regis_data['_epl_dates']['_epl_start_date'][$event_id] ) ) );
-            $regis_time = implode( ',', array_intersect_key( $event_details['_epl_start_time'], array_flip((array) $regis_data['_epl_dates']['_epl_start_time'][$event_id] ) ) );
+            $regis_date = implode( ' & ', array_intersect_key( $event_details['_epl_start_date'], array_flip((array) $regis_data['_epl_dates']['_epl_start_date'][$event_id] ) ) );
+            $regis_time = implode( ' & ', array_intersect_key( $event_details['_epl_start_time'], array_flip((array) $regis_data['_epl_dates']['_epl_start_time'][$event_id] ) ) );
 
             $ticket_labels = array( );
             $ticket_labels[0] = $att_count;
@@ -244,7 +244,7 @@ class EPL_Registration_Manager extends EPL_Controller {
                     $payment_method = '';
                 }
                 $row[] = $regis_data['__epl']['_regis_id'];
-                $row[] = $regis_date;
+                $row[] = epl_escape_csv_val($regis_date);
                 $row[] = $regis_time;
 
                 $row[] = epl_escape_csv_val( $ticket_labels[$i] ); //$regis_price;
@@ -266,10 +266,16 @@ class EPL_Registration_Manager extends EPL_Controller {
 
                     if ( $field_atts['input_type'] == 'select' || $field_atts['input_type'] == 'radio' ) {
 
-                        $value = (isset( $field_atts['epl_field_choice_text'][$value] )) ? $field_atts['epl_field_choice_text'][$value] : '';
+                        if ($field_atts['epl_field_choice_value'] == '')
+                           $value = (isset( $field_atts['epl_field_choice_text'][$value] )) ? $field_atts['epl_field_choice_text'][$value] : '';
+
                     }
                     elseif ( $field_atts['input_type'] == 'checkbox' ) {
                         $value = (implode( ',', array_intersect_key( $field_atts['epl_field_choice_text'], array_flip( ( array ) $value ) ) ));
+                    }
+                    else {
+
+                        $value = html_entity_decode( htmlspecialchars_decode( $attendee_info[$field_id][$event_id][$i] ) );
                     }
 
                     $row[] = epl_escape_csv_val( $value ); // . ',';

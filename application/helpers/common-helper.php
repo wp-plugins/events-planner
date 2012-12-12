@@ -456,6 +456,9 @@ function epl_get_formatted_curr( $amount ) {
         case 4:
             $amount = number_format( $amount, 2 );
             break;
+        case 5:
+            $amount = number_format( $amount, 0, ',', ' ' );
+            break;
     }
 
     return $amount;
@@ -507,4 +510,27 @@ function epl_get_selected_price_info( $values = array( ), $prices = array( ) ) {
     ;
 }
 
+/*
+ * strtotime cannot porcess dates in d/m/Y format.  Need to convert it to ISO d-m-Y or Euro d.m.Y before feeding into strtotime
+ */
+
+function epl_dmy_convert( $date) {
+    $date_format = get_option('date_format');
+
+    if ($date_format == 'd/m/Y' || $date_format == 'd/m/y' ){
+        return str_replace('/','-',$date);
+    }
+
+    return $date;
+
+}
+
+function epl_get_element( $item, $array, $default = FALSE ) {
+
+    if ( $item == '' || !isset( $array[$item] ) || $array[$item] == "" ) {
+        return $default;
+    }
+
+    return $array[$item];
+}
 ?>

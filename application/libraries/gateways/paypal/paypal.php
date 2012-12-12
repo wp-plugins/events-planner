@@ -47,9 +47,9 @@ class Paypal {
         $gateway_info = $this->erm->get_gateway_info();
 
         $this->_credentials = array(
-            'USER' => $gateway_info['_epl_pp_exp_user'],
-            'PWD' => $gateway_info['_epl_pp_exp_pwd'],
-            'SIGNATURE' => $gateway_info['_epl_pp_exp_sig'],
+            'USER' => trim($gateway_info['_epl_pp_exp_user']),
+            'PWD' => trim($gateway_info['_epl_pp_exp_pwd']),
+            'SIGNATURE' => trim($gateway_info['_epl_pp_exp_sig']),
         );
 
         if ($gateway_info['_epl_sandbox'] == 0)
@@ -61,7 +61,8 @@ class Paypal {
             'METHOD' => $method,
             'VERSION' => $this->_version
                 ) + $this->_credentials;
-
+ //echo "<pre class='prettyprint'>" . print_r($this->_endPoint , true). "</pre>";
+ //echo "<pre class='prettyprint'>" . print_r($requestParams , true). "</pre>";
         //Building our NVP string
         $request = http_build_query( $requestParams + $params );
 

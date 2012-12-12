@@ -6,7 +6,7 @@
         <div class="icon32" id="icon-options-general"></div>
         <h2><?php epl_e( 'Events Planner Form Manager' ); ?></h2>
 
-        <div class="tabs" style="overflow:hidden;">
+        <div id="epl_tabs" style="overflow:auto;">
             <ul>
                 <li><a href="#tabs-1"><?php epl_e( 'Registration Fields' ); ?></a></li>
                 <li><a href="#tabs-2" id="epl_form_form_load"><?php epl_e( 'Registration Forms' ); ?></a></li>
@@ -44,7 +44,12 @@
         </table>
     </div>
 </div>
+    <script type="text/javascript">
+        jQuery(document).ready(function($){
+             $("#epl_tabs").tabs({ fx: {opacity: 'toggle', duration:'fast' } });
 
+        });
+    </script>
 
 <div class="clear"></div>
 

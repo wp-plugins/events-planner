@@ -1,10 +1,10 @@
 ﻿=== Events Planner ===
 Contributors: abelony
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=abels122%40gmail%2ecom&lc=US&item_name=Events%20Planner%20for%20Wordpress&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
-Tags: events, event, events planner, event planner, event registration, event calendar, events calendar, event management, paypal, registration, ticket, tickets, ticketing, tickets, widget, locations, maps, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
+Tags: buddypress, events, event, events planner, event planner, event registration, event calendar, events calendar, event management, paypal, registration, ticket, tickets, ticketing, tickets, widget, locations, maps, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
 Requires at least: 3.1
 Tested up to: 3.2
-Stable tag: 1.3.2
+Stable tag: 1.3.4
 
 Events Planner: A powerful next generation event management plugin, built with Custom Post Types 
 
@@ -122,6 +122,15 @@ will be able to do it yourself, easily and safely.
 3. Registration Page Overview
 
 == Changelog ==
+
+= 1.3.4 =
+
+* Fixed 2 instances of wpdb::prepare() due to changes in WP 3.5.  Was throwing a PHP warning.
+* Fixed a jQuery outerHeight issue.  Have to use outerHeight(true) now.
+
+= 1.3.3 =
+
+* Fixed CSV export for dropdown fields
 
 = 1.3.2 =
 

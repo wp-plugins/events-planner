@@ -755,7 +755,7 @@ class EPL_util {
     }
 
 
-    function get_time_display( $args ) {
+    function get_time_display( ) {
         //extract( $args );
         global $event_details;
         if ( $this->is_empty_array( $event_details['_epl_price_name'] ) )
@@ -844,8 +844,8 @@ class EPL_util {
 
             echo "<h1>" . get_the_title() . "</h1>";
 
-            echo $this->epl_util->get_time_display( &$post_mata );
-            echo $this->epl_util->get_prices_display( &$post_mata );
+            echo $this->epl_util->get_time_display(  );
+            echo $this->epl_util->get_prices_display(  );
 
             $epl_options['epl_show_event_description'] != 0 ? the_content() : '';
 
@@ -977,6 +977,18 @@ class EPL_util {
         $d = $this->rm->recurrence_dates_from_db( $event_details );
 
         return $this->construct_calendar( $d );
+    }
+
+    function get_the_event_dates_raw() {
+
+        global $event_details;
+
+           // $d = $this->rm->construct_table_array();
+
+            //foreach($event_details['_epl_start_date'] as $key => $value)
+                
+
+        return $d;
     }
 
 

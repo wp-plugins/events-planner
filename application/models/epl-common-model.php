@@ -366,9 +366,9 @@ class EPL_Common_Model extends EPL_Model {
         $current_att_count = array( );
 
         $_totals = $this->get_event_regis_snapshot( $event_details['ID'] );
-
+        //echo "<pre class='prettyprint'>" . print_r($_totals, true). "</pre>";
         $completed_filter = '';
-        if ( isset( $_totals['status_complete'] ) && is_array( $_totals['status_complete'] ) ) {
+        if ( isset( $_totals['status_complete'] ) && is_array( $_totals['status_complete'] ) && !empty( $_totals['status_complete'] ) ) {
 
             $completed_ids = implode( ',', array_keys( $_totals['status_complete'] ) );
 
@@ -378,10 +378,10 @@ class EPL_Common_Model extends EPL_Model {
         //we don't want to count that as a record
 
         $excl_this_regis_post_id = '';
-        $this_regis_post_id = (isset( $_SESSION['post_ID'] )) ? $_SESSION['post_ID'] : null;
+        $this_regis_post_id = (isset( $_SESSION['__epl']['post_ID'] )) ?( int ) $_SESSION['__epl']['post_ID'] : null;
 
-        if ( !is_null( $this_regis_post_id ) )
-            $excl_this_regis_post_id = " AND NOT post_id = " . ( int ) $this_regis_post_id;
+        if ( !is_null( $this_regis_post_id ) && is_int($this_regis_post_id) )
+            $excl_this_regis_post_id = " AND NOT post_id = " . $this_regis_post_id;
 
 
         $q = $wpdb->get_results( "SELECT meta_key, SUM(meta_value) as num_attendees
@@ -481,15 +481,15 @@ class EPL_Common_Model extends EPL_Model {
         $_count = array( );
         if ( !empty( $event_regis_post_ids ) ) {
             $_where_regis_post_ids = " AND post_id IN ( " . $this->get_event_regis_post_ids() . ")";
-        }
+        }else return $_count;
 
-        $q = $wpdb->get_results( $wpdb->prepare( "SELECT post_id, meta_key, meta_value
+        $q = $wpdb->get_results( "SELECT post_id, meta_key, meta_value
                 FROM $wpdb->postmeta as pm
                 INNER JOIN $wpdb->posts p ON p.ID = pm.post_id
                 WHERE p.post_status = 'publish'
                 AND meta_key = '_epl_regis_status'
                 AND meta_value = 5
-                $_where_regis_post_ids" ), ARRAY_A );
+                $_where_regis_post_ids" , ARRAY_A );
 
         if ( $wpdb->num_rows > 0 ) {
 
@@ -511,15 +511,15 @@ class EPL_Common_Model extends EPL_Model {
         $_count = array( );
         if ( !empty( $event_regis_post_ids ) ) {
             $_where_regis_post_ids = " AND post_id IN ( " . $this->get_event_regis_post_ids() . ")";
-        }
+        }else return $_count;
 
-        $q = $wpdb->get_results( $wpdb->prepare( "SELECT post_id, meta_key, meta_value
+        $q = $wpdb->get_results(  "SELECT post_id, meta_key, meta_value
                 FROM $wpdb->postmeta as pm
                 INNER JOIN $wpdb->posts p ON p.ID = pm.post_id
                 WHERE p.post_status = 'publish'
                 AND meta_key = '_epl_payment_amount'
                 AND meta_value >0
-                $_where_regis_post_ids" ), ARRAY_A );
+                $_where_regis_post_ids" , ARRAY_A );
 
         if ( $wpdb->num_rows > 0 ) {
 
@@ -534,12 +534,9 @@ class EPL_Common_Model extends EPL_Model {
     }
 
 
-    function events_list( $param =array( ) ) {
+    function events_list( $args = array() ) {
 
-        $args = array(
-            'post_type' => 'epl_event',
-            'posts_per_page' => -1,
-            'meta_query' => array(
+        $meta_query = array(
                 'relation' => 'AND',
                 /* array(
                   'key' => '_q_epl_regis_start_date',
@@ -559,7 +556,16 @@ class EPL_Common_Model extends EPL_Model {
                     'type' => 'NUMERIC',
                     'compare' => '='
                 )
-            )
+            );
+
+        if (  epl_get_element( 'show_past', $args ))
+            $meta_query = array();
+
+        
+        $args = array(
+            'post_type' => 'epl_event',
+            'posts_per_page' => -1,
+            'meta_query' => $meta_query
         );
         // The Query
 

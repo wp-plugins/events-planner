@@ -63,7 +63,7 @@ div#parent p.header {
 
 
     left: 42%;
-    top: 5px;
+    top: 30px;
     display: none;
     padding: 10px;
     position: fixed;
@@ -104,7 +104,7 @@ pre {
     right:20%;
     background-color:#F1F1F1;
     color:#7F7F7F;
-    padding:10px;
+    padding:35px 10px 10px 10px;
     border:0px solid #ccc;
     -webkit-border-bottom-right-radius: 5px;
     -webkit-border-bottom-left-radius: 5px;

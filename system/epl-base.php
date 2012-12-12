@@ -228,7 +228,7 @@ class EPL_Base {
         if ( is_null( $file_name ) )
             return null;
 
-        $template_path = TEMPLATEPATH;
+        $template_path = get_stylesheet_directory();
         $file = $template_path . '/' . $file_name;
 
         if ( !file_exists( $file ) ) {

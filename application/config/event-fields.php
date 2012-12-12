@@ -203,12 +203,13 @@ $epl_fields['epl_recurrence_fields'] =
                 'input_type' => 'select',
                 'input_name' => '_epl_recurrence_interval',
                 'options' => epl_make_array( 1, 30 ) ),
+            
             '_epl_recurrence_end' => array(
                 'input_type' => 'text',
                 'input_name' => '_epl_recurrence_end',
                 'label' => '',
                 'description' => '',
-                'class' => 'datepicker',
+                'class' => 'datepicker epl_w100',
                 'data_type' => 'date' ),
             '_epl_recurrence_weekdays' => array(
                 'input_type' => 'checkbox',

@@ -9,10 +9,8 @@ $epl_fields['epl_regis_payment_fields'] =
                 'input_name' => '_epl_payment_method',
                 'label' => epl__( 'Payment Method' ),
                 'options' => array(
-                    '_cash' => epl__('Cash'),
-                    '_check' => 'Check',
                     '_pp_exp' => 'PayPal Expr. Checkout',
-                    '_other' => 'Other',
+
                 ),
                 'empty_row' => true
             ),

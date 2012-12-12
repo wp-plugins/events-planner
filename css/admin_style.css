@@ -450,6 +450,7 @@ jQuery UI reset
     border-width: 0 1px 1px 1px;
     border-color: #ccc;
     min-height: 300px;
+    overflow: hidden;
 }
 
 #epl_tabs select, #epl_tabs input, #epl_tabs textarea {

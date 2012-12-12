@@ -104,7 +104,7 @@ if ( !class_exists( 'EPL_front' ) ) {
             global $post;
 
             global $event_list;
-            $this->ecm->events_list();
+            $this->ecm->events_list( array( 'show_past' => 1 ) );
 
             $data['event_list'] = $event_list;
 
@@ -360,28 +360,23 @@ if ( !class_exists( 'EPL_front' ) ) {
         function send_confirmation_email( $body ) {
             global $organization_details, $customer_email;
 
-            if (!(isset($customer_email)) || $customer_email == '')
-                return;
-
-            global $current_user;
-            get_currentuserinfo();
-
             $data = array( );
-            $data['name'] = $current_user->first_name . ' ' . $current_user->last_name;
-            $data['email'] = $current_user->user_email;
-            $data['section'] = $_POST['section'];
+
+            $_email = get_bloginfo( 'admin_email' );
 
 
-            $headers = 'From: ' . $customer_email . "\r\n" .
-                    'Reply-To: ' . "<{$current_user->user_email}>" . "\r\n" .
+            $headers = 'From: ' . get_bloginfo( 'name' ) . " <{$_email}>" . "\r\n" .
+                    'Reply-To: ' . "<{$_email}>" . "\r\n" .
                     'X-Mailer: PHP/' . phpversion();
 
 
             $headers .= "MIME-Version: 1.0\r\n";
             $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
-            @wp_mail( $customer_email, epl__( 'Registration Confirmation' ) . ': ' . get_the_event_title(), $body, $headers );
-            @wp_mail( $current_user->user_email,  epl__( 'New Registration' ) . ': ' . get_the_event_title(), $body, $headers );
+            if ( (isset( $customer_email )) && $customer_email != '' )
+                @wp_mail( $customer_email, epl__( 'Registration Confirmation' ) . ': ' . get_the_event_title(), $body, $headers );
+
+            @wp_mail( $_email, epl__( 'New Registration' ) . ': ' . get_the_event_title(), $body, $headers );
         }
 
     }

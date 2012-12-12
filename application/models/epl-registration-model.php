@@ -466,8 +466,8 @@ class EPL_registration_model extends EPL_model {
             //$open_for_regis = epl_compare_dates( $event_details['_epl_regis_start_date'][$event_date_id], date( "m/d/Y" ), "<=" );
 
             $value = (isset( $_SESSION['__epl'][$this->regis_id]['_dates']['_epl_start_date'][$event_details['ID']] )) ? $_SESSION['__epl'][$this->regis_id]['_dates']['_epl_start_date'][$event_details['ID']] : '';
-            $start_date = $event_details['_epl_start_date'][$event_date_id];
-            $end_date = $event_details['_epl_start_date'][$event_date_id];
+                        $start_date = date(get_option('date_format'), strtotime(epl_dmy_convert($event_details['_epl_start_date'][$event_date_id])));
+            $end_date = date(get_option('date_format'), strtotime(epl_dmy_convert($event_details['_epl_start_date'][$event_date_id])));
 
             $end_date = ($start_date != $end_date ? ' - ' . $end_date : '');
             $epl_fields = array(
@@ -1047,7 +1047,7 @@ class EPL_registration_model extends EPL_model {
                 );
 
 
-                if ( $customer_email == '' && stripos( $field_atts['label'], 'email' ) !== false )
+                if ( $customer_email == '' && stripos( $field_atts['input_slug'], 'email' ) !== false )
                     $customer_email = $args['value'];
 
                 //if overview, we don't want to display the field, just the value
