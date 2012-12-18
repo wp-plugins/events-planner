@@ -81,9 +81,12 @@ class EPL_Init {
 
 
     function admin_js_files() {
-        wp_register_script( 'jui', (EPL_FULL_URL . "js/jquery-ui-1.8.12.custom.min.js" ), false, '1.8.12' );
-        wp_enqueue_script( 'jui' );
+        // wp_register_script( 'jui', (EPL_FULL_URL . "js/jquery-ui-1.8.12.custom.min.js" ), false, '1.8.12' );
+        // wp_enqueue_script( 'jui' );
+        wp_enqueue_script( 'jquery-ui-accordion' );
+        wp_enqueue_script( 'jquery-ui-tabs' );
         wp_enqueue_script( 'jquery-ui-sortable' );
+        wp_enqueue_script( 'jquery-ui-datepicker' );
         wp_enqueue_script( 'epl-forms-js', EPL_FULL_URL . 'js/events-planner-forms.js', array( 'jquery' ) );
         wp_enqueue_script( 'epl-event-manager-js', EPL_FULL_URL . 'js/epl-event-manager.js', array( 'jquery' ) );
         wp_enqueue_script( 'jquery-ui-timepicker', EPL_FULL_URL . 'js/jquery.ui.timepicker.js', array( 'jquery' ) );
