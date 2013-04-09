@@ -125,7 +125,7 @@ will be able to do it yourself, easily and safely.
 
 == Changelog ==
 
-= 1.3.4.3 =
+= 1.3.4.4 =
 
 * Fixed PayPal express checkout "Duplicate transaction ..." error.
 * Made it so the payment method radio is automatically selected when a user ends up in the cart.
