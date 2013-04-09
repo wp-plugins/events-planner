@@ -25,14 +25,14 @@ class EPL_Gateway_Model extends EPL_Model {
         }
         $this->epl->load_file( 'libraries/gateways/paypal/paypal.php' );
 
-        $url = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] : "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        $url = (!empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] : "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 
         //echo "<pre class='prettyprint'>" . print_r( $_SESSION, true ) . "</pre>";
         $regis_id = $this->erm->get_regis_id();
         $gateway_info = $this->erm->get_gateway_info();
 
 
-
+        $tickets = $_SESSION['__epl'][$regis_id]['_dates']['_att_quantity'];
 
         $post_ID = $_SESSION['__epl']['post_ID'];
 
@@ -47,13 +47,13 @@ class EPL_Gateway_Model extends EPL_Model {
             'RETURNURL' => add_query_arg( array( 'cart_action' => '', 'p_ID' => $post_ID, 'regis_id' => $regis_id, 'epl_action' => '_exp_checkout_payment_success' ), $url ),
             'CANCELURL' => add_query_arg( array( 'cart_action' => '', 'p_ID' => $post_ID, 'regis_id' => $regis_id, 'epl_action' => '_exp_checkout_payment_cancel' ), $url ),
             "SOLUTIONTYPE" => 'Sole',
-            "LANDINGPAGE" => epl_nz($gateway_info['_epl_pp_landing_page'],'Login')
+            "LANDINGPAGE" => epl_nz( $gateway_info['_epl_pp_landing_page'], 'Login' )
         );
 
         $orderParams = array(
             'PAYMENTREQUEST_0_AMT' => $_totals['money_totals']['grand_total'],
             'PAYMENTREQUEST_0_SHIPPINGAMT' => 0,
-            'PAYMENTREQUEST_0_CURRENCYCODE' => epl_nz(epl_get_general_setting('epl_currency_code'), 'USD') ,
+            'PAYMENTREQUEST_0_CURRENCYCODE' => epl_nz( epl_get_general_setting( 'epl_currency_code' ), 'USD' ),
             'PAYMENTREQUEST_0_ITEMAMT' => $_totals['money_totals']['grand_total']
         );
 
@@ -64,7 +64,30 @@ class EPL_Gateway_Model extends EPL_Model {
             'L_PAYMENTREQUEST_0_QTY0' => 1 //$_totals['_att_quantity']['total'][$event_details['ID']]
         );
 
-        //echo "<pre class='prettyprint'>" . print_r($requestParams + $orderParams +  $item , true). "</pre>";
+/*
+         $counter = 0;
+        $item = array( );
+        foreach ( $tickets as $event_id => $ind_tickets ) {
+
+            foreach ( $ind_tickets as $ticket_id => $ticket_qty ) {
+
+                $ticket_name = epl_get_element( $ticket_id, $event_details['_epl_price_name'] );
+                $ticket_price = epl_get_element( $ticket_id, $event_details['_epl_price'] );
+                $qty = (is_array( $ticket_qty )) ? array_sum( $ticket_qty ) : $ticket_qty;
+
+                if ( $qty > 0 ) {
+                    $item['L_PAYMENTREQUEST_0_NAME' . $counter] = substr( $event_details['post_title'], 0, 126 );
+                    $item['L_PAYMENTREQUEST_0_DESC' . $counter] = $ticket_name;
+                    //$item['L_PAYMENTREQUEST_0_NUMBER' . $counter] = $ticket_id;
+                    $item['L_PAYMENTREQUEST_0_AMT' . $counter] = $ticket_price;
+                    $item['L_PAYMENTREQUEST_0_QTY' . $counter] = $qty;
+
+                    $counter++;
+                }
+            }
+        }
+*/
+        //echo "<pre class='prettyprint'>" . print_r( $requestParams + $orderParams + $item, true ) . "</pre>";
 
         $paypal = new Paypal();
 
@@ -143,7 +166,7 @@ class EPL_Gateway_Model extends EPL_Model {
             'PAYMENTACTION' => 'Sale',
             'PAYERID' => $_GET['PayerID'],
             'PAYMENTREQUEST_0_AMT' => $_totals['money_totals']['grand_total'], // Same amount as in the original request
-            'PAYMENTREQUEST_0_CURRENCYCODE' => epl_nz(epl_get_general_setting('epl_currency_code'), 'USD')
+            'PAYMENTREQUEST_0_CURRENCYCODE' => epl_nz( epl_get_general_setting( 'epl_currency_code' ), 'USD' )
         );
 
         $response = $paypal->request( 'DoExpressCheckoutPayment', $requestParams );
@@ -166,7 +189,7 @@ class EPL_Gateway_Model extends EPL_Model {
         }
         else {
             //display error message
-            $error = 'ERROR: ' . $response['L_SHORTMESSAGE0'] . '. ' . $response['L_LONGMESSAGE0'];
+            return 'ERROR: ' . $response['L_SHORTMESSAGE0'] . '. ' . $response['L_LONGMESSAGE0'];
         }
     }
 
