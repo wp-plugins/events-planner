@@ -68,7 +68,7 @@ if ( !class_exists( 'EPL_front' ) ) {
 
                 //POST has higher priority
 
-                $epl_action = esc_attr( isset( $_POST['epl_action'] ) ? $_POST['epl_action'] : $_GET['epl_action'] );
+                $epl_action = esc_attr( isset( $_POST['epl_action'] ) ? $_POST['epl_action'] : $_GET['epl_action']  );
 
                 if ( in_array( $epl_action, $defined_actions ) ) {
                     if ( method_exists( $this, $epl_action ) ) {
@@ -197,7 +197,7 @@ if ( !class_exists( 'EPL_front' ) ) {
                 if ( is_null( $data['next_step'] ) )
                     $data['next_step'] = 'payment_page';
 
-                if ( epl_is_free_event ( ) ) {
+                if ( epl_is_free_event() ) {
 
                     $data['form_action'] = add_query_arg( 'epl_action', 'thank_you_page', $_SERVER['REQUEST_URI'] );
 
@@ -260,7 +260,7 @@ if ( !class_exists( 'EPL_front' ) ) {
                 if ( is_null( $data['next_step'] ) )
                     $data['next_step'] = 'payment_page';
 
-                if ( epl_is_free_event ( ) ) {
+                if ( epl_is_free_event() ) {
 
                     //$data['form_action'] = add_query_arg( 'epl_action', 'thank_you_page', $_SERVER['REQUEST_URI'] );
                     //$data['next_step'] = 'thank_you_page';
@@ -339,11 +339,14 @@ if ( !class_exists( 'EPL_front' ) ) {
             $egp = $this->epl->load_model( 'epl-gateway-model' );
 
 
-            $egp->_exp_checkout_do_payment();
+            $r = $egp->_exp_checkout_do_payment();
 
-            if ( $egp->_exp_checkout_do_payment() ) {
+            if ( $r === true ) {
 
                 $this->thank_you_page();
+            }
+            else {
+                echo $r;
             }
         }
 
@@ -352,7 +355,7 @@ if ( !class_exists( 'EPL_front' ) ) {
             $v = $_SESSION['events_planner']['POST_EVENT_VARS'];
 
             foreach ( ( array ) $v['epl_start_date'] as $event_id => $event_dates ) {
-
+                
             }
         }
 
