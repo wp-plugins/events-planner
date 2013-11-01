@@ -8,7 +8,7 @@ Stable tag: 1.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Events Planner: A powerful next generation event registration plugin, built with Custom Post Types.
+Events Planner: A powerful and flexible next generation event registration and management plugin, with a form manager, support for locations, organizations, categories, and PayPal.
 
 == Description ==
 
