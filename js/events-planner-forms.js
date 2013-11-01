@@ -4,7 +4,7 @@ jQuery(document).ready(function($){
     $(".tabs").tabs({
         selected:0
     });
-         $('div#form_field_list table tbody').sortable();
+    $('div#form_field_list table tbody').sortable();
     function field_choices_toggle(el_form){
         //var el_form = el.parents('form');
 
@@ -33,7 +33,8 @@ jQuery(document).ready(function($){
 
     $('.epl_field_choices').hide();
 
-    $('#epl_field_slug, #epl_form_slug, .input_name, .make_slug').live('blur', function(){
+
+    $(document).on('blur', '#epl_field_slug, #epl_form_slug, .input_name, .make_slug', function(){
         var me = $(this);
 
         var new_val = me.val().replace(/\s/g,"_").replace(/\W/g,"").toLowerCase();
@@ -42,7 +43,8 @@ jQuery(document).ready(function($){
     });
 
     //this can be fired from many places
-    $('select.epl_field_type').live("change",function(){
+
+    $(document).on('change', 'select.epl_field_type', function(){
         field_choices_toggle($(this).parents('form'));
        
 
@@ -69,7 +71,8 @@ jQuery(document).ready(function($){
         }
     });*/
 
-    $('.reset_button').live('click', function(){
+
+    $(document).on('click', '.reset_button', function(){
         _EPL.hide_overlay();
         var par = $(this).parents('form').prop('id');
         var default_form = $('body').data(par + '_defaults');
@@ -81,8 +84,8 @@ jQuery(document).ready(function($){
     /*
      * edit or delete icons are clicked
      **/
-    $('.epl_action').live('click', function(){
 
+    $(document).on('click', '.epl_action', function(){
         var me = $(this);
         var my_form = me.parents('form');
         var my_form_id = my_form.prop('id');
@@ -198,7 +201,8 @@ jQuery(document).ready(function($){
     });
 
 
-    $('a.cancel_edit').live('click', function(){
+
+    $(document).on('click', 'a.cancel_edit', function(){
         var my_form = $(this).parents('form');
         alert(my_form.prop('id'));
         $('.reset_button', my_form).trigger('click');
@@ -254,8 +258,7 @@ jQuery(document).ready(function($){
 
 
 
-    $('.add_table_row').live('click', function(){
-
+    $(document).on('click', '.add_table_row', function(){
         _EPL.add_table_row({
             table: $(this).closest('table')
         });
@@ -264,8 +267,8 @@ jQuery(document).ready(function($){
 
     });
 
-    $('a.delete_table_row').live('click', function(){
 
+    $(document).on('click', 'a.delete_table_row', function(){
         _EPL.delete_table_row({
             me: $(this)
         });
@@ -292,7 +295,8 @@ jQuery(document).ready(function($){
 
     }
 
-    $('table.list_of_fields_for_forms tbody td div.epl_action').live('click', function(){
+
+    $(document).on('click', 'table.list_of_fields_for_forms tbody td div.epl_action', function(){
         var me = $(this);
         var par = me.closest('tr');
         var _cl = par.clone();
@@ -303,8 +307,8 @@ jQuery(document).ready(function($){
     });
 
 
-    $('a.epl_field_list').live('click', function(){
-    
+
+    $(document).on('click', 'a.epl_field_list', function(){
         var my_id = $(this).prop('id');
 
         field_list(my_id); //repopulate the list of available forms

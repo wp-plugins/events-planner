@@ -89,7 +89,7 @@ class EPL_Gateway_Model extends EPL_Model {
 */
         //echo "<pre class='prettyprint'>" . print_r( $requestParams + $orderParams + $item, true ) . "</pre>";
 
-        $paypal = new Paypal();
+        $paypal = new EPL_Paypal();
 
         $response = $paypal->request( 'SetExpressCheckout', $requestParams + $orderParams + $item );
 
@@ -123,7 +123,7 @@ class EPL_Gateway_Model extends EPL_Model {
         if ( isset( $_GET['token'] ) && !empty( $_GET['token'] ) ) { // Token parameter exists
             // Get checkout details, including buyer information.
             // We can save it for future reference or cross-check with the data we have
-            $paypal = new Paypal();
+            $paypal = new EPL_Paypal();
             $checkoutDetails = $paypal->request( 'GetExpressCheckoutDetails', array( 'TOKEN' => $_GET['token'] ) );
             //echo "<pre class='prettyprint'>" . print_r( $checkoutDetails, true ) . "</pre>";
             // Complete the checkout transaction
@@ -160,7 +160,7 @@ class EPL_Gateway_Model extends EPL_Model {
 
 
         $this->epl->load_file( 'libraries/gateways/paypal/paypal.php' );
-        $paypal = new Paypal();
+        $paypal = new EPL_Paypal();
         $requestParams = array(
             'TOKEN' => $_GET['token'],
             'PAYMENTACTION' => 'Sale',

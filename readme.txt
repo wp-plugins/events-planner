@@ -1,18 +1,18 @@
 ﻿=== Events Planner ===
 Contributors: abelony
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=abels122%40gmail%2ecom&lc=US&item_name=Events%20Planner%20for%20Wordpress&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
-Tags: buddypress, events, event, events planner, event planner, event registration, event calendar, events calendar, event management, paypal, registration, ticket, tickets, ticketing, tickets, widget, locations, maps, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
+Tags: events, event, event registration, event calendar, events calendar, event management, paypal, events planner, event planner, ticket, tickets, ticketing, tickets, widget, locations, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
 Requires at least: 3.3
-Tested up to: 3.5.1
-Stable tag: 1.3.4.4
+Tested up to: 3.7
+Stable tag: 1.3.5
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Events Planner: A powerful next generation event management plugin, built with Custom Post Types.  Check out the PRO for A LOT of powerful and flexible options.
+Events Planner: A powerful next generation event registration plugin, built with Custom Post Types.
 
 == Description ==
 
 Events Planner is a next generation [Event Registration](http://www.wpeventsplanner.com/) Plugin, built with standard WordPress tools (Custom Post Types, Custom Fields, Options), making it extremely powerful and flexible.
-The Lite version is very capable on its own but check out the PRO for some incredibly powerful tools and capabilities.  With the PRO v1.4 around the corner, you will have the ability
-to accept multiple registrations, offer more flexible discounts and tons of buying options.
 
 = New in version 1.3.2 =
 * Confirmation emails to the registrant and the admin, date and time formatting ....
@@ -125,6 +125,10 @@ will be able to do it yourself, easily and safely.
 
 == Changelog ==
 
+= 1.3.4.5 =
+
+* Fixed pass-by-reference issues for PHP 5.4+
+
 = 1.3.4.4 =
 
 * Fixed PayPal express checkout "Duplicate transaction ..." error.
@@ -190,4 +194,4 @@ will be able to do it yourself, easily and safely.
 
 == Frequently Asked Questions ==
 
-Please visit our [Contact Page](http://www.wpeventsplanner.com/contact-us/) and ask us anything about the plugin.
+Please visit our [Support Center](http://help.wpeventsplanner.com/) and ask us anything about the plugin.

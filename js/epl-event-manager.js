@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
         return false;
 
     });
-    $('a#admin_calc_total').live("click", function(){
+    $(document).on('click', 'a#admin_calc_total', function(){
 
         var event_id=$('#event_list_id').val();
         var admin_totals_section=$('#admin_totals_section');
@@ -68,7 +68,7 @@ jQuery(document).ready(function($) {
 
 
 
-    $('a#admin_get_regis_form').live("click", function(){
+    $(document).on('click', 'a#admin_get_regis_form', function(){
 
         var event_id=$('#event_list_id').val();
         var admin_regis_section=$('#admin_regis_section');
@@ -98,7 +98,8 @@ jQuery(document).ready(function($) {
 
     });
 
-    $('a.epl_event_snapshot, a.epl_regis_snapshot, a.epl_payment_snapshot').live("click", function(){
+
+   $(document).on('click', 'a.epl_event_snapshot, a.epl_regis_snapshot, a.epl_payment_snapshot', function(){
 
         var me = $(this);
         var par = me.parent();
@@ -124,7 +125,8 @@ jQuery(document).ready(function($) {
 
 
 
-    $('form.epl_regis_payment_meta_box_form').live('submit', function(){
+
+        $(document).on('submit', 'form.epl_regis_payment_meta_box_form', function(){
         var me = $(this);
         post_ID = $('input[name="post_ID"]', me).val();
 
@@ -170,7 +172,8 @@ jQuery(document).ready(function($) {
         return false;
     });
 
-    $('#epl_feedback_form').live('submit', function(){
+
+        $(document).on('submit', '#epl_feedback_form', function(){
         var me = $(this);
 
         if (!epl_validate(me))
@@ -291,8 +294,8 @@ jQuery(document).ready(function($) {
 
 
 
-    $('a.add_time_block').live('click', function(){
 
+        $(document).on('click', 'a.add_time_block', function(){
 
         //the last time box
         var box = $('div.time-box:last');

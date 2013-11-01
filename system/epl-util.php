@@ -1142,7 +1142,7 @@ class EPL_util {
 
 
     function clean_input( $data ) {
-        return array_map( array( get_class(), 'clean_input_process' ), &$data );
+        return array_map( array( get_class(), 'clean_input_process' ), $data );
     }
 
 
