@@ -310,7 +310,7 @@ class EPL_util {
                     foreach ( $options as $k => $v ) {
 
                         $checked = '';
-                        if ( $default_checked == 1 && $value === '' ) {
+                        if ( $default_checked == 1 && (string)$value === '' ) {
 
                             $checked = 'checked = "checked"';
                         }
@@ -342,7 +342,7 @@ class EPL_util {
                     foreach ( $options as $k => $v ) {
 
                         $checked = '';
-                        if ( $default_checked == 1 && $value === '' ) {
+                        if ( $default_checked == 1 && (string)$value === '' ) {
 
                             $checked = 'checked = "checked"';
                         }
@@ -1009,7 +1009,7 @@ class EPL_util {
         foreach ( $event_details['_epl_price_name'] as $price_key => $price_data ) {
 
             $price_name = $event_details['_epl_price_name'][$price_key];
-            $price = (epl_is_free_event()) ? '' : epl_get_formatted_curr( $event_details['_epl_price'][$price_key] );
+            $price = (epl_is_free_event()) ? '' : epl_get_currency_symbol().epl_get_formatted_curr( $event_details['_epl_price'][$price_key] );
             $this->epl->epl_table->add_row( $price_name, $price
             );
 
@@ -1142,7 +1142,7 @@ class EPL_util {
 
 
     function clean_input( $data ) {
-        return array_map( array( get_class(), 'clean_input_process' ), &$data );
+        return array_map( array( get_class(), 'clean_input_process' ), $data );
     }
 
 

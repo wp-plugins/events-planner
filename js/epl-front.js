@@ -20,9 +20,9 @@ jQuery(document).ready(function($){
         events_planner_do_ajax( data, function(r){
             var d = r.html; //$('.data', par).val();
             //
-           // $('.epl_totals_table').replaceWith(d);
+            // $('.epl_totals_table').replaceWith(d);
 
-                $('#epl_totals_wrapper table').replaceWith(d);
+            $('#epl_totals_wrapper table').replaceWith(d);
 
 
         //console.log(r.html);
@@ -84,8 +84,8 @@ jQuery(document).ready(function($){
 
     });
    
-    $('div.widget_has_data').live('click',function(){
 
+    $(document).on('click', 'div.widget_has_data', function(){
         $('.epl_calendar_widget_data').html(Math.random());
         
 
@@ -93,8 +93,8 @@ jQuery(document).ready(function($){
 
     });
 
-    $('a.epl_next_prev_link').live('click',function(){
-       
+
+    $(document).on('click', 'a.epl_next_prev_link', function(){
         var me = $(this);
         var url = me.prop("href");
         var par = me.parents('table');
@@ -117,8 +117,8 @@ jQuery(document).ready(function($){
         
     });
 
-    $('.epl_action').live('click', function(){
 
+    $(document).on('click', '.epl_action', function(){
         var me = $(this);
         var my_form = me.parents('form');
         var my_form_id = my_form.prop('id');
@@ -169,8 +169,8 @@ jQuery(document).ready(function($){
         }
     });
 
-    $('form#events_planner_shopping_cart1').live('submit', function(){
 
+    $(document).on('click', 'form#events_planner_shopping_cart1', function(){
         var me = $(this);
 
         me.validate();

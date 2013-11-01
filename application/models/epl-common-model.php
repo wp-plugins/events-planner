@@ -696,7 +696,7 @@ class EPL_Common_Model extends EPL_Model {
 
                             //epl_log( "debug", "<pre>" . print_r( $_v, true ) . "</pre>" );
 
-                            $this->epl->epl_util->process_data_type( &$_v, $fields[$meta_k]['data_type'], 's' );
+                            $this->epl->epl_util->process_data_type( $_v, $fields[$meta_k]['data_type'], 's' );
                         }
                         $this->epl_add_post_meta( $post_ID, '_q_' . $meta_k, $_v, $_k );
                     }

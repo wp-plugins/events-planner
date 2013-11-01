@@ -1,16 +1,18 @@
 ﻿=== Events Planner ===
 Contributors: abelony
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=abels122%40gmail%2ecom&lc=US&item_name=Events%20Planner%20for%20Wordpress&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
-Tags: buddypress, events, event, events planner, event planner, event registration, event calendar, events calendar, event management, paypal, registration, ticket, tickets, ticketing, tickets, widget, locations, maps, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
-Requires at least: 3.1
-Tested up to: 3.2
-Stable tag: 1.3.4
+Tags: events, event, event registration, event calendar, events calendar, event management, paypal, events planner, event planner, ticket, tickets, ticketing, tickets, widget, locations, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
+Requires at least: 3.3
+Tested up to: 3.7
+Stable tag: 1.3.5
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Events Planner: A powerful next generation event management plugin, built with Custom Post Types 
+Events Planner: A powerful and flexible next generation event registration and management plugin, with a form manager, support for locations, organizations, categories, and PayPal.
 
 == Description ==
 
-Events Planner is a next generation [Event Registration](http://www.wpeventsplanner.com/) Plugin, built with standard Wordpress tools (Custom Post Types, Custom Fields, Options), making it extremely powerful and flexible.
+Events Planner is a next generation [Event Registration](http://www.wpeventsplanner.com/) Plugin, built with standard WordPress tools (Custom Post Types, Custom Fields, Options), making it extremely powerful and flexible.
 
 = New in version 1.3.2 =
 * Confirmation emails to the registrant and the admin, date and time formatting ....
@@ -123,6 +125,19 @@ will be able to do it yourself, easily and safely.
 
 == Changelog ==
 
+= 1.3.4.5 =
+
+* Fixed pass-by-reference issues for PHP 5.4+
+
+= 1.3.4.4 =
+
+* Fixed PayPal express checkout "Duplicate transaction ..." error.
+* Made it so the payment method radio is automatically selected when a user ends up in the cart.
+
+= 1.3.4.2 =
+
+* Switched to using WP jQuery UI lib. files as the old one that was in the plugin was throwing a jQuery error (prevented widget dragging).  Plugin use now requires WP 3.3+
+
 = 1.3.4 =
 
 * Fixed 2 instances of wpdb::prepare() due to changes in WP 3.5.  Was throwing a PHP warning.
@@ -179,4 +194,4 @@ will be able to do it yourself, easily and safely.
 
 == Frequently Asked Questions ==
 
-Please visit our [Contact Page](http://www.wpeventsplanner.com/contact-us/) and ask us anything about the plugin.
+Please visit our [Support Center](http://help.wpeventsplanner.com/) and ask us anything about the plugin.
