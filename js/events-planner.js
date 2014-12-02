@@ -21,8 +21,8 @@ jQuery(document).ready(function($) {
         url:  EPL.ajaxurl
     });
 
-    $('#dismiss_loader').live('click',function(){
 
+    $(document).on('click', '#dismiss_loader', function(){
         hide_slide_down();
         return false;
     });
@@ -30,8 +30,8 @@ jQuery(document).ready(function($) {
     //$('#slide_down_box').draggable();
 
 
-    $('.epl_delete_element, .delete_element').live('click', function(){
 
+    $(document).on('click', '.epl_delete_element, .delete_element', function(){
         /*_EPL.delete_element({
             me: $(this)
         });*/

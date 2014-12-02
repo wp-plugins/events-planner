@@ -14,10 +14,6 @@
 }
 .event_wrapper{
 
-    -webkit-border-radius: 5px;
-    -khtml-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     padding: 10px;
@@ -146,9 +142,6 @@
 
     padding:10px 10px;
     width: 96%; border: 1px solid #cbcbcb;
-    border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius:10px;
     background:#fff;
     margin:0 auto;
     margin-bottom: 10px;
@@ -266,6 +259,7 @@ end cart section
 
     font-size:14px;
     font-weight:bold;
+    margin: 2px;
     padding: 5px
 }
 .epl_regis_field_wrapper h2 {
@@ -314,8 +308,8 @@ end cart section
 /* when the values are displayed for overview*/
 .epl_regis_message_warn {
     padding: 10px;
-    background-color:  #f9febd;
-    font-weight: bold;
+    background-color:  tomato;
+    color: white;
     margin: 10px auto;
     width: 96%;
 }

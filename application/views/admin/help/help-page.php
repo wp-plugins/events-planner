@@ -22,7 +22,7 @@
                     </li>
 
                     <li>
-                        Visit <?php echo epl_anchor( 'http://www.wpeventsplanner.com', 'Our Support Website' ); ?>
+                        Visit <?php echo epl_anchor( 'http://help.wpeventsplanner.com', 'Our Support Website' ); ?>
                     </li>
                     <li>
                         Email help@wpeventsplanner.com directly.  Please be as specific as possible when you are reporting bugs or have feature requests.
@@ -37,7 +37,7 @@
         <div class="epl_box">
             <div class="epl_box_content">
                 <h4>After Initial Installation</h4>
-                <h4><a href="http://www.wpeventsplanner.com/help/initial-setup/" title="Events Planner Theme Template Setup" target="_blank">
+                <h4><a href="http://help.wpeventsplanner.com/customer/portal/articles/299588-initial-setup" title="Events Planner Theme Template Setup" target="_blank">
                         Please click here</a> to visit our Initial Setup page for easy instruction.</h4>
 
                 </ol>
@@ -49,9 +49,8 @@
                 <h4>Theme Templates (optional)</h4>
                 <p>Since Events Planner uses Custom Post Types, the displaying is handled by your theme on the front end of the website.
                     If you would like to change the look and feel of your event specific pages, you can use theme templates instead of the default system views. </p>
-       <h4><a href="http://www.wpeventsplanner.com/help/theme-template-setup/" title="Events Planner Theme Template Setup" target="_blank">Please click here</a> to visit our Theme Setup Page and download sample templates.</h4>
+                <h4><a href="http://help.wpeventsplanner.com/customer/portal/articles/379107-theme-template-setup" title="Events Planner Theme Template Setup" target="_blank">Please click here</a> to visit our Theme Setup Page and download sample templates.</h4>
 
-            <p>If you are not comfortable enough to modify templates, in version 1.2, you will get shortcodes for use inside each event (ex. [events_planner_dates], [events_planner_times]...).</p>
             </div>
         </div>
 

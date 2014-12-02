@@ -11,14 +11,14 @@ class EPL_util {
 
         self::$instance = $this;
 
-        add_action( 'init', array( &$this, 'load_components' ) );
+        add_action( 'init', array( $this, 'load_components' ) );
     }
 
 
     public static function get_instance() {
         if ( !self::$instance ) {
 
-            self::$instance = new EPL_tt;
+            self::$instance = new EPL_util;
         }
 
         return self::$instance;
@@ -310,7 +310,7 @@ class EPL_util {
                     foreach ( $options as $k => $v ) {
 
                         $checked = '';
-                        if ( $default_checked == 1 && $value === '' ) {
+                        if ( $default_checked == 1 && (string)$value === '' ) {
 
                             $checked = 'checked = "checked"';
                         }
@@ -342,7 +342,7 @@ class EPL_util {
                     foreach ( $options as $k => $v ) {
 
                         $checked = '';
-                        if ( $default_checked == 1 && $value === '' ) {
+                        if ( $default_checked == 1 && (string)$value === '' ) {
 
                             $checked = 'checked = "checked"';
                         }
@@ -629,6 +629,9 @@ class EPL_util {
         global $regis_details, $event_details;
 
         $time_format = get_option( 'time_format' );
+        
+        if( $event_details['_epl_start_time']  == "")
+            return null;
 
         $regis_times = $regis_details['_epl_dates']['_epl_start_time'][$event_details['ID']];
 
@@ -758,7 +761,7 @@ class EPL_util {
     function get_time_display( ) {
         //extract( $args );
         global $event_details;
-        if ( $this->is_empty_array( $event_details['_epl_price_name'] ) )
+        if ( $this->is_empty_array( $event_details['_epl_start_time'] ) )
             return;
 
         $time_format = get_option( 'time_format' );
@@ -1009,7 +1012,7 @@ class EPL_util {
         foreach ( $event_details['_epl_price_name'] as $price_key => $price_data ) {
 
             $price_name = $event_details['_epl_price_name'][$price_key];
-            $price = (epl_is_free_event()) ? '' : epl_get_formatted_curr( $event_details['_epl_price'][$price_key] );
+            $price = (epl_is_free_event()) ? '' : epl_get_currency_symbol().epl_get_formatted_curr( $event_details['_epl_price'][$price_key] );
             $this->epl->epl_table->add_row( $price_name, $price
             );
 
@@ -1142,7 +1145,7 @@ class EPL_util {
 
 
     function clean_input( $data ) {
-        return array_map( array( get_class(), 'clean_input_process' ), &$data );
+        return array_map( array( get_class(), 'clean_input_process' ), $data );
     }
 
 

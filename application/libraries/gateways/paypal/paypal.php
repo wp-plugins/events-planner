@@ -2,7 +2,7 @@
 
 /* http://coding.smashingmagazine.com/2011/09/05/getting-started-with-the-paypal-api/ */
 
-class Paypal {
+class EPL_Paypal {
 
     /**
      * Last error message(s)

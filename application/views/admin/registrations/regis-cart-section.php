@@ -4,13 +4,13 @@
 
     <?php
 
-    echo epl_show_ad( 'Editable registrations coming soon to the PRO version.' );
+    echo epl_show_ad( 'Editable registrations, manual emails are available in PRO version.' );
     /*
      * This loop grabs each one of the forms and displays.
      */
     if ( is_array( $cart_data['cart_items'] ) ):
         foreach ( $cart_data['cart_items'] as $event ):
-    ?>
+            ?>
             <div class="epl_cart_section">
 
                 <div class="event_name"><h1><?php echo $event['title']; ?></h1></div>
@@ -21,7 +21,7 @@
                     <div class="content epl_event_dates">
 
 
-<?php echo $event['event_dates']; ?>
+                        <?php echo $event['event_dates']; ?>
                     </div>
 
                 </div>
@@ -29,21 +29,21 @@
 
 
                     <div class="content">
-<?php echo $event['event_time_and_prices']; ?>
+                        <?php echo $event['event_time_and_prices']; ?>
+                    </div>
+
+
+                </div>
+
+
             </div>
 
 
-        </div>
 
+            <?php
 
-    </div>
-
-
-
-<?php
-
-            endforeach;
-        endif;
-?>
+        endforeach;
+    endif;
+    ?>
 
 </div>

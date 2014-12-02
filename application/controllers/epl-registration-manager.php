@@ -5,6 +5,7 @@
  */
 
 class EPL_Registration_Manager extends EPL_Controller {
+
     const post_type = 'epl_registration';
 
 
@@ -32,13 +33,13 @@ class EPL_Registration_Manager extends EPL_Controller {
         }
         else {
 
-            add_action( 'default_title', array( &$this, 'pre' ) );
-            add_action( 'add_meta_boxes', array( &$this, 'epl_add_meta_boxes' ) );
-            add_action( 'save_post', array( &$this, 'save_postdata' ) );
+            add_action( 'default_title', array( $this, 'pre' ) );
+            add_action( 'add_meta_boxes', array( $this, 'epl_add_meta_boxes' ) );
+            add_action( 'save_post', array( $this, 'save_postdata' ) );
             //post list manage screen columns - extra columns
-            add_filter( 'manage_edit-' . self::post_type . '_columns', array( &$this, 'add_new_columns' ) );
+            add_filter( 'manage_edit-' . self::post_type . '_columns', array( $this, 'add_new_columns' ) );
             //post list manage screen - column data
-            add_action( 'manage_' . self::post_type . '_posts_custom_column', array( &$this, 'column_data' ), 10, 2 );
+            add_action( 'manage_' . self::post_type . '_posts_custom_column', array( $this, 'column_data' ), 10, 2 );
         }
     }
 
@@ -91,7 +92,7 @@ class EPL_Registration_Manager extends EPL_Controller {
         if ( isset( $_REQUEST['epl_action'] ) ) {
 
             //POST has higher priority
-            $epl_action = esc_attr( isset( $_POST['epl_action'] ) ? $_POST['epl_action'] : $_GET['epl_action'] );
+            $epl_action = esc_attr( isset( $_POST['epl_action'] ) ? $_POST['epl_action'] : $_GET['epl_action']  );
             if ( in_array( $epl_action, $defined_actions ) ) {
                 if ( method_exists( $this, $epl_action ) ) {
 
@@ -148,11 +149,14 @@ class EPL_Registration_Manager extends EPL_Controller {
         global $event_details;
         $event_title = $event_details['post_title'];
         $filename = str_replace( " ", "-", $event_title ) . "_" . date( "m-d-Y" );
-        header( "Content-type: application/x-msdownload", true, 200 );
+
+        header( 'Content-Encoding: UTF-8' );
+
+        header( 'Content-Type: application/csv;charset=UTF-8' );
         header( "Content-Disposition: attachment; filename={$filename}.csv" );
         header( "Pragma: no-cache" );
         header( "Expires: 0" );
-
+        echo "\xEF\xBB\xBF"; //BOM to make other utf-8 chars work
         //$this->ecm->setup_event_details( $event_id );
         $this->get_values();
 
@@ -200,18 +204,18 @@ class EPL_Registration_Manager extends EPL_Controller {
         $header_row[] = 'Total';
         $header_row[] = 'Amount Paid';
 
-        
+
         $regis_ids = $this->ecm->get_event_regis_post_ids( false );
 
         foreach ( $regis_ids as $regis_id => $att_count ) {
             $regis_data = $this->ecm->get_post_meta_all( $regis_id );
 
-            $regis_date = implode( ' & ', array_intersect_key( $event_details['_epl_start_date'], array_flip((array) $regis_data['_epl_dates']['_epl_start_date'][$event_id] ) ) );
-            $regis_time = implode( ' & ', array_intersect_key( $event_details['_epl_start_time'], array_flip((array) $regis_data['_epl_dates']['_epl_start_time'][$event_id] ) ) );
+            $regis_date = implode( ' & ', array_intersect_key( $event_details['_epl_start_date'], array_flip( ( array ) $regis_data['_epl_dates']['_epl_start_date'][$event_id] ) ) );
+            $regis_time = implode( ' & ', array_intersect_key( $event_details['_epl_start_time'], array_flip( ( array ) $regis_data['_epl_dates']['_epl_start_time'][$event_id] ) ) );
 
             $ticket_labels = array( );
             $ticket_labels[0] = $att_count;
-            $purchased_tickets = (array) $regis_data['_epl_dates']['_att_quantity'][$event_id];
+            $purchased_tickets = ( array ) $regis_data['_epl_dates']['_att_quantity'][$event_id];
             $start = 1;
             foreach ( $purchased_tickets as $price_id => $qty ) {
                 $_qty = current( $qty );
@@ -244,7 +248,7 @@ class EPL_Registration_Manager extends EPL_Controller {
                     $payment_method = '';
                 }
                 $row[] = $regis_data['__epl']['_regis_id'];
-                $row[] = epl_escape_csv_val($regis_date);
+                $row[] = epl_escape_csv_val( $regis_date );
                 $row[] = $regis_time;
 
                 $row[] = epl_escape_csv_val( $ticket_labels[$i] ); //$regis_price;
@@ -266,9 +270,8 @@ class EPL_Registration_Manager extends EPL_Controller {
 
                     if ( $field_atts['input_type'] == 'select' || $field_atts['input_type'] == 'radio' ) {
 
-                        if ($field_atts['epl_field_choice_value'] == '')
-                           $value = (isset( $field_atts['epl_field_choice_text'][$value] )) ? $field_atts['epl_field_choice_text'][$value] : '';
-
+                        if ( $field_atts['epl_field_choice_value'][$value] == '' )
+                            $value = (isset( $field_atts['epl_field_choice_text'][$value] )) ? $field_atts['epl_field_choice_text'][$value] : '';
                     }
                     elseif ( $field_atts['input_type'] == 'checkbox' ) {
                         $value = (implode( ',', array_intersect_key( $field_atts['epl_field_choice_text'], array_flip( ( array ) $value ) ) ));
@@ -286,7 +289,6 @@ class EPL_Registration_Manager extends EPL_Controller {
 
                 $csv_row .= implode( ",", $row ) . "\r\n";
                 $row = array( );
-
             }
         }
 
@@ -338,9 +340,9 @@ class EPL_Registration_Manager extends EPL_Controller {
         $data['cart_data'] = $this->epl->load_view( 'admin/registrations/regis-cart-section', $data, true );
 
         $data['cart_totals'] =
-                        $this->rm
-                        ->__in( $this->event_meta + $this->regis_meta )
-                        ->calculate_totals();
+                $this->rm
+                ->__in( $this->event_meta + $this->regis_meta )
+                ->calculate_totals();
 
         //totals
         $data['cart_totals'] = $this->epl->load_view( 'admin/registrations/regis-totals-section', $data, true );
@@ -350,7 +352,7 @@ class EPL_Registration_Manager extends EPL_Controller {
 
 
         if ( !$this->edit_mode ) {
-            $data['message'] = epl__( "This feature will be available in the PRO version very soon." );
+            $data['message'] = epl__( "This feature is available in the Pro version." );
         }
 
         $r = $this->epl->load_view( 'admin/registrations/registration-attendee-meta-box', $data, true );
@@ -387,10 +389,10 @@ class EPL_Registration_Manager extends EPL_Controller {
 
 
         $data['cart_totals'] =
-                        $this->rm
-                        ->__in( $this->event_meta + $this->regis_meta )
-                        ->__update_from_post( 'dates' )
-                        ->calculate_totals();
+                $this->rm
+                ->__in( $this->event_meta + $this->regis_meta )
+                ->__update_from_post( 'dates' )
+                ->calculate_totals();
 
 
 
@@ -448,9 +450,9 @@ class EPL_Registration_Manager extends EPL_Controller {
 
     function epl_add_meta_boxes() {
         $this->get_values();
-        add_meta_box( 'epl-regis-meta-box', epl__( 'Registration Information' ), array( &$this, 'regis_meta_box' ), self::post_type, 'normal', 'core' );
-        add_meta_box( 'epl-payment-meta-box', epl__( 'Payment Information' ), array( &$this, 'payment_meta_box' ), self::post_type, 'side', 'low' );
-        // add_meta_box( 'epl-regis-action-meta-box', epl__( 'Available Actions' ), array( &$this, 'action_meta_box' ), self::post_type, 'side', 'low' );
+        add_meta_box( 'epl-regis-meta-box', epl__( 'Registration Information' ), array( $this, 'regis_meta_box' ), self::post_type, 'normal', 'core' );
+        add_meta_box( 'epl-payment-meta-box', epl__( 'Payment Information' ), array( $this, 'payment_meta_box' ), self::post_type, 'side', 'low' );
+        // add_meta_box( 'epl-regis-action-meta-box', epl__( 'Available Actions' ), array( $this, 'action_meta_box' ), self::post_type, 'side', 'low' );
     }
 
 
@@ -602,12 +604,12 @@ class EPL_Registration_Manager extends EPL_Controller {
                 echo $num_attendees;
                 break;
             case 'payment_status':
-                /*if ( epl_is_free_event ( ) ) {
-                    $payment_info = epl__( 'FREE' );
-                }
-                else {
-                */
-                    $payment_info = $this->payment_info_box( $post_ID );
+                /* if ( epl_is_free_event ( ) ) {
+                  $payment_info = epl__( 'FREE' );
+                  }
+                  else {
+                 */
+                $payment_info = $this->payment_info_box( $post_ID );
                 //}
                 echo $payment_info;
                 break;

@@ -233,7 +233,7 @@ $epl_fields['epl_recurrence_fields'] =
                     0 => epl__( 'Day of Month' ),
                 ),
                 'default_value' => 0,
-                'description' => epl__( 'Coming soon, ability to select per week of the month (i.e. first, second, last week).' ),
+                //'description' => epl__( 'Coming soon, ability to select per week of the month (i.e. first, second, last week).' ),
             ),
 );
 $epl_fields['epl_special_fields'] =
@@ -274,6 +274,7 @@ $epl_fields['epl_other_settings_fields'] =
                 'input_type' => 'select',
                 'input_name' => '_epl_event_location',
                 'options' => get_list_of_available_locations(),
+                'empty_row' => true,
                 'label' => epl__( 'Event Location' ), ),
             '_epl_event_sublocation' => array(
                 'input_type' => 'text',
@@ -290,6 +291,7 @@ $epl_fields['epl_other_settings_fields'] =
                 'input_type' => 'select',
                 'input_name' => '_epl_event_organization',
                 'options' => get_list_of_orgs(),
+                'empty_row' => true,
                 'label' => epl__( 'Organization hosting the event' ), ),
             '_epl_display_org_info' => array(
                 'input_type' => 'select',

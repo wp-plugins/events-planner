@@ -1,7 +1,7 @@
 <div class="epl_cart_wrapper">
 
     <?php if ( isset( $message ) ): ?>
-        <div class="epl_regis_message_warn epl_rounded_corners_10">
+        <div class="epl_regis_message_warn">
         <?php echo $message; ?>
     </div>
 

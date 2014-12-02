@@ -17,7 +17,7 @@ class EPL_controller{
 
         function _assign_libraries($use_reference = TRUE)
 	{
-		$epl =& EPL_Base::get_instance();
+		$epl = EPL_Base::get_instance();
 
 		foreach (array_keys(get_object_vars($epl)) as $key)
 		{
@@ -29,7 +29,7 @@ class EPL_controller{
 				if ($use_reference == TRUE)
 				{
 					$this->$key = NULL; // Needed to prevent reference errors with some configurations
-					$this->$key =& $epl->$key;
+					$this->$key = $epl->$key;
 				}
 				else
 				{

@@ -28,13 +28,13 @@ class EPL_Location_Manager extends EPL_Controller {
 
         $this->edit_mode = (isset( $_POST['post_action'] ) && $_REQUEST['post_action'] == 'edit' || (isset( $_GET['action'] ) && $_GET['action'] == 'edit'));
         
-        add_action( 'add_meta_boxes', array( &$this, 'epl_add_meta_boxes' ) );
-        add_action( 'save_post', array( &$this, 'save_postdata' ) );
+        add_action( 'add_meta_boxes', array( $this, 'epl_add_meta_boxes' ) );
+        add_action( 'save_post', array( $this, 'save_postdata' ) );
 
         //post list manage screen columns - extra columns
-        add_filter( 'manage_edit-' . self::post_type . '_columns', array( &$this, 'add_new_columns' ) );
+        add_filter( 'manage_edit-' . self::post_type . '_columns', array( $this, 'add_new_columns' ) );
         //post list manage screen - column data
-        add_action( 'manage_' . self::post_type . '_posts_custom_column', array( &$this, 'column_data' ), 10, 2 );
+        add_action( 'manage_' . self::post_type . '_posts_custom_column', array( $this, 'column_data' ), 10, 2 );
 
         if ( isset( $_REQUEST['epl_ajax'] ) && $_REQUEST['epl_ajax'] == 1 )
             $this->run();
@@ -50,7 +50,7 @@ class EPL_Location_Manager extends EPL_Controller {
 
     function epl_add_meta_boxes() {
 
-        add_meta_box( 'epl-locations-meta-box', epl__( 'Location Information' ), array( &$this, 'event_locations_meta_box' ), self::post_type, 'normal', 'core' );
+        add_meta_box( 'epl-locations-meta-box', epl__( 'Location Information' ), array( $this, 'event_locations_meta_box' ), self::post_type, 'normal', 'core' );
     }
 
 
