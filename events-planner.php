@@ -10,7 +10,7 @@
   Author: Abel Sekepyan
   Author URI: http://wpEventsPlanner.com
 
-  Copyright (c) 2013 Abel Sekepyan  All Rights Reserved.
+  Copyright (c) 2014 Abel Sekepyan  All Rights Reserved.
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
