@@ -59,8 +59,8 @@ function start_events_planner() {
         }
     }
 
-    error_reporting(E_ALL ^ E_NOTICE);
-    ini_set( 'display_errors', 1 );
+    //error_reporting(E_ALL ^ E_NOTICE);
+    //ini_set( 'display_errors', 1 );
 
     require_once EPL_SYSTEM_FOLDER . 'epl-base.php'; //load super object
     require_once EPL_SYSTEM_FOLDER . 'epl-init.php'; //load ini class
