@@ -121,7 +121,7 @@ function get_the_location_phone() {
 
 function get_the_location_website() {
 
-    return _get_the_location_field( '_epl_location_website' );
+    return _get_the_location_field( '_epl_location_url' );
 }
 
 

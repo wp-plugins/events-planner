@@ -19,10 +19,10 @@ class EPL_Init {
 
         $this->epl = EPL_Base::get_instance();
 
-        add_action( 'init', array( &$this, 'create_post_types' ) );
-        add_action( 'admin_menu', array( &$this, 'admin_specific' ) );
-        add_action( 'wp_print_styles', array( &$this, 'front_specific_styles' ), 1, 1 );
-        add_action( 'wp_enqueue_scripts', array( &$this, 'front_specific_js' ) );
+        add_action( 'init', array( $this, 'create_post_types' ) );
+        add_action( 'admin_menu', array( $this, 'admin_specific' ) );
+        add_action( 'wp_print_styles', array( $this, 'front_specific_styles' ), 1, 1 );
+        add_action( 'wp_enqueue_scripts', array( $this, 'front_specific_js' ) );
     }
 
 

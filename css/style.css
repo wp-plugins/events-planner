@@ -55,13 +55,6 @@ div#parent p.header {
 #epl_loader {
     background-color: #fff;
     border: 1px solid #ccc;
-
-    -webkit-border-radius: 3px;
-    -khtml-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-
-
     left: 42%;
     top: 30px;
     display: none;
@@ -143,10 +136,6 @@ table.epl_error th, table.epl_error td{
 
 .epl_event_section {
 
-    -webkit-border-radius: 5px;
-    -khtml-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     /*
@@ -295,37 +284,48 @@ div.epl_overlay div{
 }
 
 
-.epl_button, .epl_button_small  {
+a.epl_button, input.epl_button,.epl_button_small  {
+    background-image:none !important;
+    backround-repeat:no-repeat;
+    border-radius: 0 !important;
     display: inline-block;
-    background-color: #0088CC;
-    border: 1px solid #0066AA;
-    border-radius: 5px;
-    color: #FFFFFF !important;
+    margin: 0;
+    padding: 4px 14px !important;
+    border: 1px solid transparent;
+    color: #ffffff !important;
+    vertical-align: middle;
+    text-align: center;
+    font-weight: normal !important;
+    font-size: 13px !important;
+    line-height: 1.5384615384615385 !important;
     cursor: pointer;
-    font-size: 18px;
-    font-weight: normal;
-    margin-top: 5px;
-    padding: 1px 5px;
-    width: auto;
-    text-decoration: none;
-
+    outline: none;
+    background-color: #3bafda !important;
+    border-color: #3bafda !important;
+    -webkit-transition: all 0.15s ease-in-out;
+    -moz-transition: all 0.15s ease-in-out;
+    -o-transition: all 0.15s ease-in-out;
+    transition: all 0.15s ease-in-out;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    text-decoration:none;
 }
 
 .epl_button_small {
-
-
-    border-radius: 3px;
-    font-size: 0.8em;
-    font-weight: normal;
-    padding: 1px 5px;
-    width: auto;
-
+    padding: 2px 15px !important;
+    font-size: 0.8em !important;
+    margin-top:10px !important;
+}
+.epl_button:hover, .epl_button_small:hover, input[type=submit].epl_button_small:hover {
+    background-color: #66c1e2 !important;
+    border-color: #66c1e2 !important;
+}
+.epl_button:active, .epl_button_small:active, input[type=submit].epl_button_small:active {
+    position:relative;
+    top:1px;
 }
 
-.epl_button:hover, .epl_button_small:hover {
-    background: #0066AA;
-    text-decoration: none;
-}
 
 /*
 Short classes
@@ -513,9 +513,6 @@ pre {
     /*background:  #f5ffdd url('../images/epl-url-small.png') no-repeat bottom right;*/
     background-color: #f5ffdd;
     border: 1px solid #c5ec69;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
     box-shadow: 3px 3px 5px 1px #ccc;
     -moz-box-shadow: 3px 3px 5px 1px  #ccc;
     -webkit-box-shadow: 3px 3px 5px 1px  #ccc;

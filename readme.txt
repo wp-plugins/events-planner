@@ -1,10 +1,10 @@
-﻿=== Events Planner ===
+=== Events Planner ===
 Contributors: abelony
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=abels122%40gmail%2ecom&lc=US&item_name=Events%20Planner%20for%20Wordpress&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: events, event, event registration, event calendar, events calendar, event management, paypal, events planner, event planner, ticket, tickets, ticketing, tickets, widget, locations, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
 Requires at least: 3.3
-Tested up to: 3.7
-Stable tag: 1.3.5
+Tested up to: 4.0
+Stable tag: 1.3.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,7 +34,7 @@ Events Planner is a next generation [Event Registration](http://www.wpeventsplan
 
 = List of features =
 
-* All the data is stored in Wordpress tables (post, post meta, options...)  **No custom tables are used.**  As such, the plugin is powerful enough to let you add and
+* All the data is stored in WordPress tables (post, post meta, options...)  **No custom tables are used.**  As such, the plugin is powerful enough to let you add and
 retrieve any type of information that you would like to associate with the events.  With the tools in the Pro version, you don't have to wait for us to make changes to the data structure.  You
 will be able to do it yourself, easily and safely.
 * You can use custom templates and custom Events Planner template tags for displaying event details.  In the Pro version, you will have the option to select a different template for each event, and create your own.
@@ -90,18 +90,18 @@ will be able to do it yourself, easily and safely.
 1.  All the registration information is stored in a custom post type.
 1.  The user will go through a process similar to a shopping cart (i.e. select event > select event options > enter registration info > see overview > pay > done).
 1.  Along with the registration data, you will see the payment information inside the post.
-1.  You can create new registrations and modify them from inside the Wordpress admin -Pro.
+1.  You can create new registrations and modify them from inside the WordPress admin -Pro.
 
 = Some features being worked on right now =
 
-[Please let us know about your needs](http://www.wpeventsplanner.com/contact-us/)
+[Please let us know about your needs](http://help.wpeventsplanner.com/)
 
 *   Notification manager for creating unlimited notification types and use shortcodes to include information in the email body.
 *   Comprehensive Discount manager
 *   Various AJAX calendar widgets
 *   and some that are a secret for now :)
 
-[Again, please let us know about your needs](http://www.wpeventsplanner.com/contact-us/)
+[Again, please let us know about your needs](http://help.wpeventsplanner.com/)
 
 == Installation ==
 
@@ -124,6 +124,14 @@ will be able to do it yourself, easily and safely.
 3. Registration Page Overview
 
 == Changelog ==
+
+= 1.3.6 =
+
+* Fixed get_the_location_website() template tag.
+* Fixed the location display in the event list.
+* Fixed, more strict errors.
+* Removed the border radius from the cart containers.
+* Fixed Help section links.
 
 = 1.3.4.5 =
 

@@ -26,7 +26,7 @@ class EPL_Form_Manager extends EPL_Controller {
             $this->run();
         }
         else
-            add_action( 'admin_notices', array( &$this, 'forms_manager_page' ) );
+            add_action( 'admin_notices', array( $this, 'forms_manager_page' ) );
     }
 
 
@@ -81,7 +81,7 @@ class EPL_Form_Manager extends EPL_Controller {
         $this->_field_args = array(
             'section' => $this->fields[$for],
             'fields_to_display' => array_keys( (array) $this->fields[$for] ),
-            'meta' => array( '_view' => 3, 'value' => &$this->d[$for], '_content' => $data['epl_field_choices'] )
+            'meta' => array( '_view' => 3, 'value' => $this->d[$for], '_content' => $data['epl_field_choices'] )
         );
 
         //field creation form

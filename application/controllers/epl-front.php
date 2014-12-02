@@ -26,7 +26,7 @@ if ( !class_exists( 'EPL_front' ) ) {
             if ( isset( $_REQUEST['epl_action'] ) ) {
                 $this->run();
             }
-            //add_filter( 'the_title', array( &$this, '__return_empty_string' ) );
+            //add_filter( 'the_title', array( $this, '__return_empty_string' ) );
         }
 
 
@@ -85,7 +85,7 @@ if ( !class_exists( 'EPL_front' ) ) {
                  * get the event list
                  * in the loop, a global var $event_list is set for the the template tags
                  */
-                add_action( 'the_post', array( &$this, 'set_event_list' ) );
+                add_action( 'the_post', array( $this, 'set_event_list' ) );
 
                 return $this->the_event_list();
             }

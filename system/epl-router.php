@@ -99,7 +99,7 @@ class EPL_router {
         if ( !array_key_exists( $resource, $valid_controllers ) )
             return false;
 
-        $epl = & EPL_Base::get_instance();
+        $epl = EPL_Base::get_instance();
         $controller_location = $valid_controllers[$resource]['location'];
 
         $controller = $epl->load_controller( $controller_location );

@@ -167,9 +167,6 @@ div.time-box{
 .epl_fieldset, .epl_fieldset legend{
     border:1px solid #ccc;
 
-    -moz-border-radius:3px;
-    -webkit-border-radius:3px;
-    border-radius:3px;
 }
 
 .epl_fieldset {
@@ -256,10 +253,7 @@ a.epl_field_list{
 
 
 .epl_box {
-    -webkit-border-radius: 5px;
-    -khtml-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+
     background-color: #F1F1F1;
     margin-bottom: 10px;
     border: 1px solid #CBC4C4;
@@ -270,10 +264,7 @@ a.epl_field_list{
 }
 
 .epl_box .epl_box_content {
-    -webkit-border-radius: 5px;
-    -khtml-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+
     line-height: 15px;
     padding: 5px;
     text-shadow: 1px 1px 1px #FFFFFF;

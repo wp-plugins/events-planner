@@ -11,14 +11,14 @@ class EPL_util {
 
         self::$instance = $this;
 
-        add_action( 'init', array( &$this, 'load_components' ) );
+        add_action( 'init', array( $this, 'load_components' ) );
     }
 
 
     public static function get_instance() {
         if ( !self::$instance ) {
 
-            self::$instance = new EPL_tt;
+            self::$instance = new EPL_util;
         }
 
         return self::$instance;
@@ -629,6 +629,9 @@ class EPL_util {
         global $regis_details, $event_details;
 
         $time_format = get_option( 'time_format' );
+        
+        if( $event_details['_epl_start_time']  == "")
+            return null;
 
         $regis_times = $regis_details['_epl_dates']['_epl_start_time'][$event_details['ID']];
 
@@ -758,7 +761,7 @@ class EPL_util {
     function get_time_display( ) {
         //extract( $args );
         global $event_details;
-        if ( $this->is_empty_array( $event_details['_epl_price_name'] ) )
+        if ( $this->is_empty_array( $event_details['_epl_start_time'] ) )
             return;
 
         $time_format = get_option( 'time_format' );

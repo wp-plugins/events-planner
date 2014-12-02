@@ -38,14 +38,14 @@ class EPL_Org_Manager extends EPL_Controller {
             $this->run();
         }
         else {
-            add_action( 'default_title', array( &$this, 'pre' ) );
-            add_action( 'add_meta_boxes', array( &$this, 'epl_add_meta_boxes' ) );
-            add_action( 'save_post', array( &$this, 'save_postdata' ) );
+            add_action( 'default_title', array( $this, 'pre' ) );
+            add_action( 'add_meta_boxes', array( $this, 'epl_add_meta_boxes' ) );
+            add_action( 'save_post', array( $this, 'save_postdata' ) );
 
             //post list manage screen columns - extra columns
-            add_filter( 'manage_edit-' . self::post_type . '_columns', array( &$this, 'add_new_columns' ) );
+            add_filter( 'manage_edit-' . self::post_type . '_columns', array( $this, 'add_new_columns' ) );
             //post list manage screen - column data
-            add_action( 'manage_' . self::post_type . '_posts_custom_column', array( &$this, 'column_data' ), 10, 2 );
+            add_action( 'manage_' . self::post_type . '_posts_custom_column', array( $this, 'column_data' ), 10, 2 );
         }
     }
 
@@ -65,7 +65,7 @@ class EPL_Org_Manager extends EPL_Controller {
 
     function epl_add_meta_boxes() {
         $help_link = get_help_icon( array( 'section' => 'org_details' ) );
-        add_meta_box( 'epl-settings-meta-box', epl__( 'Organization Info' ) . $help_link, array( &$this, 'org_meta_box' ), self::post_type, 'normal', 'core' );
+        add_meta_box( 'epl-settings-meta-box', epl__( 'Organization Info' ) . $help_link, array( $this, 'org_meta_box' ), self::post_type, 'normal', 'core' );
     }
 
 

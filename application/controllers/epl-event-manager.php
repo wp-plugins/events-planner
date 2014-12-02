@@ -40,14 +40,14 @@ class EPL_Event_Manager extends EPL_Controller {
             $this->run();
         }
         else {
-            add_action( 'default_title', array( &$this, 'pre' ) );
-            add_action( 'add_meta_boxes', array( &$this, 'epl_add_meta_boxes' ) );
-            add_action( 'save_post', array( &$this, 'save_postdata' ) );
+            add_action( 'default_title', array( $this, 'pre' ) );
+            add_action( 'add_meta_boxes', array( $this, 'epl_add_meta_boxes' ) );
+            add_action( 'save_post', array( $this, 'save_postdata' ) );
 
             //post list manage screen columns - extra columns
-            add_filter( 'manage_edit-epl_event_columns', array( &$this, 'add_new_epl_columns' ) );
+            add_filter( 'manage_edit-epl_event_columns', array( $this, 'add_new_epl_columns' ) );
             //post list manage screen - column data
-            add_action( 'manage_epl_event_posts_custom_column', array( &$this, 'epl_column_data' ), 10, 2 );
+            add_action( 'manage_epl_event_posts_custom_column', array( $this, 'epl_column_data' ), 10, 2 );
         }
     }
 
@@ -117,30 +117,30 @@ class EPL_Event_Manager extends EPL_Controller {
         }
 
         $help_link = get_help_icon( array( 'section' => 'event_dates', 'id' => null ) );
-        add_meta_box( 'epl-dates-meta-box', epl__( 'Dates' ) . $help_link, array( &$this, 'event_dates_meta_box' ), "epl_event", 'normal', 'core' );
+        add_meta_box( 'epl-dates-meta-box', epl__( 'Dates' ) . $help_link, array( $this, 'event_dates_meta_box' ), "epl_event", 'normal', 'core' );
 
         $help_link = get_help_icon( array( 'section' => 'event_recurrence', 'id' => null ) );
-        add_meta_box( 'epl-recurrence-meta-box', epl__( 'Recurrence Helper' ) . $help_link, array( &$this, 'event_recurrence_meta_box' ), "epl_event", 'normal', 'core' );
+        add_meta_box( 'epl-recurrence-meta-box', epl__( 'Recurrence Helper' ) . $help_link, array( $this, 'event_recurrence_meta_box' ), "epl_event", 'normal', 'core' );
 
         $help_link = get_help_icon( array( 'section' => 'event_times', 'id' => null ) );
-        add_meta_box( 'epl-times-meta-box', epl__( 'Times and Prices' ) . $help_link, array( &$this, 'event_times_meta_box' ), "epl_event", 'normal', 'core' );
+        add_meta_box( 'epl-times-meta-box', epl__( 'Times and Prices' ) . $help_link, array( $this, 'event_times_meta_box' ), "epl_event", 'normal', 'core' );
 
         $help_link = get_help_icon( array( 'section' => 'event_settings', 'id' => null ) );
-        add_meta_box( 'epl-other-settings-meta-box', epl__( 'Other Settings' ) . $help_link, array( &$this, 'other_settings_meta_box' ), "epl_event", 'normal', 'core' );
+        add_meta_box( 'epl-other-settings-meta-box', epl__( 'Other Settings' ) . $help_link, array( $this, 'other_settings_meta_box' ), "epl_event", 'normal', 'core' );
 
         $help_link = get_help_icon( array( 'section' => 'event_forms', 'id' => null ) );
-        add_meta_box( 'epl-forms-meta-box', epl__( 'Registration Forms' ) . $help_link, array( &$this, 'forms_meta_box' ), "epl_event", 'normal', 'core' );
+        add_meta_box( 'epl-forms-meta-box', epl__( 'Registration Forms' ) . $help_link, array( $this, 'forms_meta_box' ), "epl_event", 'normal', 'core' );
         //side boxes
         $help_link = get_help_icon( array( 'section' => 'event_options', 'id' => null ) );
-        add_meta_box( 'epl-options-meta-box', epl__( 'Options' ) . $help_link, array( &$this, 'options_meta_box' ), "epl_event", 'side', 'core' );
+        add_meta_box( 'epl-options-meta-box', epl__( 'Options' ) . $help_link, array( $this, 'options_meta_box' ), "epl_event", 'side', 'core' );
 
         $help_link = get_help_icon( array( 'section' => 'event_display_options', 'id' => null ) );
-        add_meta_box( 'epl-display-options-meta-box', epl__( 'Display Options' ) . $help_link, array( &$this, 'display_options_meta_box' ), "epl_event", 'side', 'core' );
+        add_meta_box( 'epl-display-options-meta-box', epl__( 'Display Options' ) . $help_link, array( $this, 'display_options_meta_box' ), "epl_event", 'side', 'core' );
 
         $help_link = get_help_icon( array( 'section' => 'event_capacity', 'id' => null ) );
-        add_meta_box( 'epl-capacity-meta-box', epl__( 'Capacity Information' ) . $help_link, array( &$this, 'capacity_meta_box' ), "epl_event", 'side', 'core' );
+        add_meta_box( 'epl-capacity-meta-box', epl__( 'Capacity Information' ) . $help_link, array( $this, 'capacity_meta_box' ), "epl_event", 'side', 'core' );
 
-        add_meta_box( 'epl-donation-meta-box', epl__( 'Donations' ), array( &$this, 'donation_meta_box' ), "epl_event", 'side', 'low' );
+        add_meta_box( 'epl-donation-meta-box', epl__( 'Donations' ), array( $this, 'donation_meta_box' ), "epl_event", 'side', 'low' );
 
        
     }

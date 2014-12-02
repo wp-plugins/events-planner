@@ -54,7 +54,7 @@ class EPL_Base {
             foreach ( $libraries as $library ) {
 
                 $lib = strtolower( str_replace( "-", "_", $library ) );
-                $this->$lib = & $this->load_library( $library );
+                $this->$lib = $this->load_library( $library );
             }
         }
 

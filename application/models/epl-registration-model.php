@@ -619,10 +619,12 @@ class EPL_registration_model extends EPL_model {
         global $event_details, $capacity, $current_att_count;
 
         //if it is time specific pricing, value hidden
-        $input_type = ( $event_details['_epl_pricing_type'] == 10 ) ? 'text' : 'select';
+        $input_type = ( epl_get_element('_epl_pricing_type', $event_details, 0) == 10 ) ? 'text' : 'select';
 
         $times = $event_details['_epl_start_time'];
 
+        if(EPL_util::get_instance()->is_empty_array($event_details['_epl_start_time']))
+            return null;
         //adding the end time to the displayed value.  Notice the reference
         foreach ( $times as $k => &$v ) {
 

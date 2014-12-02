@@ -33,13 +33,13 @@ class EPL_Registration_Manager extends EPL_Controller {
         }
         else {
 
-            add_action( 'default_title', array( &$this, 'pre' ) );
-            add_action( 'add_meta_boxes', array( &$this, 'epl_add_meta_boxes' ) );
-            add_action( 'save_post', array( &$this, 'save_postdata' ) );
+            add_action( 'default_title', array( $this, 'pre' ) );
+            add_action( 'add_meta_boxes', array( $this, 'epl_add_meta_boxes' ) );
+            add_action( 'save_post', array( $this, 'save_postdata' ) );
             //post list manage screen columns - extra columns
-            add_filter( 'manage_edit-' . self::post_type . '_columns', array( &$this, 'add_new_columns' ) );
+            add_filter( 'manage_edit-' . self::post_type . '_columns', array( $this, 'add_new_columns' ) );
             //post list manage screen - column data
-            add_action( 'manage_' . self::post_type . '_posts_custom_column', array( &$this, 'column_data' ), 10, 2 );
+            add_action( 'manage_' . self::post_type . '_posts_custom_column', array( $this, 'column_data' ), 10, 2 );
         }
     }
 
@@ -270,7 +270,7 @@ class EPL_Registration_Manager extends EPL_Controller {
 
                     if ( $field_atts['input_type'] == 'select' || $field_atts['input_type'] == 'radio' ) {
 
-                        if ( $field_atts['epl_field_choice_value'] == '' )
+                        if ( $field_atts['epl_field_choice_value'][$value] == '' )
                             $value = (isset( $field_atts['epl_field_choice_text'][$value] )) ? $field_atts['epl_field_choice_text'][$value] : '';
                     }
                     elseif ( $field_atts['input_type'] == 'checkbox' ) {
@@ -352,7 +352,7 @@ class EPL_Registration_Manager extends EPL_Controller {
 
 
         if ( !$this->edit_mode ) {
-            $data['message'] = epl__( "This feature will be available in the PRO version very soon." );
+            $data['message'] = epl__( "This feature is available in the Pro version." );
         }
 
         $r = $this->epl->load_view( 'admin/registrations/registration-attendee-meta-box', $data, true );
@@ -450,9 +450,9 @@ class EPL_Registration_Manager extends EPL_Controller {
 
     function epl_add_meta_boxes() {
         $this->get_values();
-        add_meta_box( 'epl-regis-meta-box', epl__( 'Registration Information' ), array( &$this, 'regis_meta_box' ), self::post_type, 'normal', 'core' );
-        add_meta_box( 'epl-payment-meta-box', epl__( 'Payment Information' ), array( &$this, 'payment_meta_box' ), self::post_type, 'side', 'low' );
-        // add_meta_box( 'epl-regis-action-meta-box', epl__( 'Available Actions' ), array( &$this, 'action_meta_box' ), self::post_type, 'side', 'low' );
+        add_meta_box( 'epl-regis-meta-box', epl__( 'Registration Information' ), array( $this, 'regis_meta_box' ), self::post_type, 'normal', 'core' );
+        add_meta_box( 'epl-payment-meta-box', epl__( 'Payment Information' ), array( $this, 'payment_meta_box' ), self::post_type, 'side', 'low' );
+        // add_meta_box( 'epl-regis-action-meta-box', epl__( 'Available Actions' ), array( $this, 'action_meta_box' ), self::post_type, 'side', 'low' );
     }
 
 

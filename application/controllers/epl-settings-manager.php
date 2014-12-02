@@ -13,8 +13,8 @@ class EPL_Settings_Manager extends EPL_Controller {
         global $epl_fields;
 
         $this->fields = $epl_fields;
-        add_action( 'admin_notices', array( &$this, 'settings_page' ) );
-        add_action( 'admin_init', array( &$this, 'set_options' ) );
+        add_action( 'admin_notices', array( $this, 'settings_page' ) );
+        add_action( 'admin_init', array( $this, 'set_options' ) );
     }
 
     function settings_page() {

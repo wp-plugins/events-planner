@@ -7,7 +7,7 @@ class EPL_Help_Manager extends EPL_Controller {
 
         parent::__construct();
 
-        add_action( 'admin_notices', array( &$this, 'settings_page' ) );
+        add_action( 'admin_notices', array( $this, 'settings_page' ) );
         
     }
 
