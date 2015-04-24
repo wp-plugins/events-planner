@@ -151,7 +151,7 @@ if ( !class_exists( 'EPL_front' ) ) {
             $data['content'] = $this->epl->load_view( 'front/cart/cart', $data, true );
             $data['next_step'] = 'regis_form';
 
-            $data['form_action'] = add_query_arg( 'epl_action', 'regis_form', $_SERVER['REQUEST_URI'] );
+            $data['form_action'] = esc_url(add_query_arg( 'epl_action', 'regis_form', $_SERVER['REQUEST_URI'] ) );
             $data['next_step_label'] = 'Next: Attendee Information';
 
             return $this->epl->load_view( 'front/cart-container', $data, true );
@@ -164,9 +164,9 @@ if ( !class_exists( 'EPL_front' ) ) {
             $data['mode'] = 'edit';
             $data['content'] = $this->rm->regis_form();
 
-            $data['prev_step_url'] = add_query_arg( 'epl_action', 'show_cart', $_SERVER['REQUEST_URI'] );
+            $data['prev_step_url'] = esc_url(add_query_arg( 'epl_action', 'show_cart', $_SERVER['REQUEST_URI'] ) );
 
-            $data['form_action'] = add_query_arg( 'epl_action', 'show_cart_overview', $_SERVER['REQUEST_URI'] );
+            $data['form_action'] = esc_url(add_query_arg( 'epl_action', 'show_cart_overview', $_SERVER['REQUEST_URI'] ) );
             $data['next_step'] = 'show_cart_overview';
 
             if ( empty( $epl_error ) )
@@ -193,19 +193,19 @@ if ( !class_exists( 'EPL_front' ) ) {
 
                 $data['content'] .= $this->rm->regis_form();
                 $data['next_step'] = $next_step;
-                $data['prev_step_url'] = add_query_arg( 'epl_action', 'regis_form', $_SERVER['REQUEST_URI'] );
+                $data['prev_step_url'] = esc_url(add_query_arg( 'epl_action', 'regis_form', $_SERVER['REQUEST_URI'] ) );
                 if ( is_null( $data['next_step'] ) )
                     $data['next_step'] = 'payment_page';
 
                 if ( epl_is_free_event() ) {
 
-                    $data['form_action'] = add_query_arg( 'epl_action', 'thank_you_page', $_SERVER['REQUEST_URI'] );
+                    $data['form_action'] = esc_url(add_query_arg( 'epl_action', 'thank_you_page', $_SERVER['REQUEST_URI'] ) );
 
                     $data['next_step'] = 'thank_you_page';
                     $data['next_step_label'] = 'Confirm and Complete';
                 }
                 else {
-                    $data['form_action'] = add_query_arg( 'epl_action', 'payment_page', $_SERVER['REQUEST_URI'] );
+                    $data['form_action'] = esc_url(add_query_arg( 'epl_action', 'payment_page', $_SERVER['REQUEST_URI'] ) );
 
                     $data['next_step'] = 'payment_page';
                     $data['next_step_label'] = 'Confirm and Continue to PayPal';
@@ -256,13 +256,13 @@ if ( !class_exists( 'EPL_front' ) ) {
                 $data['payment_details'] = $this->epl->load_view( 'front/registration/regis-payment-details', '', true );
 
 
-                //$data['prev_step_url'] = add_query_arg( 'epl_action', 'regis_form', $_SERVER['REQUEST_URI'] );
+                //$data['prev_step_url'] = esc_url(add_query_arg( 'epl_action', 'regis_form', $_SERVER['REQUEST_URI'] ) );
                 if ( is_null( $data['next_step'] ) )
                     $data['next_step'] = 'payment_page';
 
                 if ( epl_is_free_event() ) {
 
-                    //$data['form_action'] = add_query_arg( 'epl_action', 'thank_you_page', $_SERVER['REQUEST_URI'] );
+                    //$data['form_action'] = esc_url(add_query_arg( 'epl_action', 'thank_you_page', $_SERVER['REQUEST_URI'] ) );
                     //$data['next_step'] = 'thank_you_page';
                     //$data['next_step_label'] = 'Confirm and Complete';
                     $post_ID = $_SESSION['__epl']['post_ID'];
@@ -317,7 +317,7 @@ if ( !class_exists( 'EPL_front' ) ) {
                 $data['content'] .= $this->rm->regis_form();
 
 
-                $data['form_action'] = add_query_arg( 'epl_action', '_exp_checkout_do_payment', $_SERVER['REQUEST_URI'] );
+                $data['form_action'] = esc_url(add_query_arg( 'epl_action', '_exp_checkout_do_payment', $_SERVER['REQUEST_URI'] ) );
 
                 $data['next_step'] = '_exp_checkout_do_payment';
                 $data['next_step_label'] = 'Confirm Payment and Finish';
@@ -374,7 +374,7 @@ if ( !class_exists( 'EPL_front' ) ) {
 
 
             $headers .= "MIME-Version: 1.0\r\n";
-            $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
             if ( (isset( $customer_email )) && $customer_email != '' )
                 @wp_mail( $customer_email, epl__( 'Registration Confirmation' ) . ': ' . get_the_event_title(), $body, $headers );

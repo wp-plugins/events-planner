@@ -535,7 +535,7 @@ class EPL_Registration_Manager extends EPL_Controller {
         $data['amount_paid'] = epl_get_currency_symbol() . $amount_paid;
         $data['grand_total'] = epl_get_currency_symbol() . $grand_total;
 
-        $href = add_query_arg( array( 'epl_action' => 'epl_payment_snapshot', 'post_ID' => $post_ID ), $_SERVER['REQUEST_URI'] );
+        $href = esc_url(add_query_arg( array( 'epl_action' => 'epl_payment_snapshot', 'post_ID' => $post_ID ), $_SERVER['REQUEST_URI'] ) );
 
         $data['snapshot_link'] = '<a data-post_id = "' . $post_ID . '" class="epl_payment_snapshot" href="#"><img src="' . EPL_FULL_URL . 'images/application_view_list.png" /> </a>';
 
@@ -569,7 +569,7 @@ class EPL_Registration_Manager extends EPL_Controller {
             $this->ecm->setup_event_details( $event_id );
             //$event_name = get_post( $event_id )->post_title;
             $event_name = $event_details['post_title'];
-            $href = add_query_arg( array( 'epl_action' => 'epl_attendee_list', 'epl_download_trigger' => 1, 'post_ID' => $post_ID, 'event_id' => $event_id ), $_SERVER['REQUEST_URI'] );
+            $href = esc_url(add_query_arg( array( 'epl_action' => 'epl_attendee_list', 'epl_download_trigger' => 1, 'post_ID' => $post_ID, 'event_id' => $event_id ), $_SERVER['REQUEST_URI'] ) );
             //$event_name = '<a href="' . $href . '"><img src="' . EPL_FULL_URL . 'images/doc_excel_csv.png" /></a> <a data-post_id = "' . $post_ID . '" data-event_id="' . $event_id . '" class="epl_event_snapshot" href="#"><img id = "' . $event_id . '"  src="' . EPL_FULL_URL . 'images/application_view_list.png" /> </a><span class="">' . $event_name . '</span>';
             $event_name = '<a href="' . $href . '"><img src="' . EPL_FULL_URL . 'images/doc_excel_csv.png" /></a><span class="event_name">' . $event_name . '</span>';
         }
@@ -594,7 +594,7 @@ class EPL_Registration_Manager extends EPL_Controller {
 
 
                 if ( $num_attendees > 0 ) {
-                    $href = add_query_arg( array( 'epl_action' => 'epl_regis_snapshot', 'post_ID' => $post_ID, 'event_id' => $event_id ), $_SERVER['REQUEST_URI'] );
+                    $href = esc_url(add_query_arg( array( 'epl_action' => 'epl_regis_snapshot', 'post_ID' => $post_ID, 'event_id' => $event_id ), $_SERVER['REQUEST_URI'] ) );
 
                     $num_attendees = '<a data-post_id = "' . $post_ID . '" data-event_id="' . $event_id . '" class="epl_regis_snapshot" href="#"><img src="' . EPL_FULL_URL . 'images/application_view_list.png" /> </a><span class="num_attendees">' . $num_attendees . '</span>';
                 }

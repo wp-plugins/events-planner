@@ -44,8 +44,8 @@ class EPL_Gateway_Model extends EPL_Model {
 
 
         $requestParams = array(
-            'RETURNURL' => add_query_arg( array( 'cart_action' => '', 'p_ID' => $post_ID, 'regis_id' => $regis_id, 'epl_action' => '_exp_checkout_payment_success' ), $url ),
-            'CANCELURL' => add_query_arg( array( 'cart_action' => '', 'p_ID' => $post_ID, 'regis_id' => $regis_id, 'epl_action' => '_exp_checkout_payment_cancel' ), $url ),
+            'RETURNURL' => esc_url_raw(add_query_arg( array( 'cart_action' => '', 'p_ID' => $post_ID, 'regis_id' => $regis_id, 'epl_action' => '_exp_checkout_payment_success' ), $url )),
+            'CANCELURL' => esc_url_raw(add_query_arg( array( 'cart_action' => '', 'p_ID' => $post_ID, 'regis_id' => $regis_id, 'epl_action' => '_exp_checkout_payment_cancel' ), $url )),
             "SOLUTIONTYPE" => 'Sole',
             "LANDINGPAGE" => epl_nz( $gateway_info['_epl_pp_landing_page'], 'Login' )
         );

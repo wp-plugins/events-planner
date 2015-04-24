@@ -944,7 +944,7 @@ class EPL_util {
         if ( is_null( $post->ID ) )
             return null;
 
-        return sprintf( '<a href="%s" title="%s">%s</a>', $_SERVER['REQUEST_URI'] . '?event_id=' . $post->ID . '&epl_action=event_details', get_the_title(), get_the_title() );
+        return sprintf( '<a href="%s" title="%s">%s</a>', $_SERVER['REQUEST_URI']  . '?event_id=' . $post->ID . '&epl_action=event_details', get_the_title(), get_the_title() );
     }
 
 
@@ -1060,7 +1060,7 @@ class EPL_util {
             'epl_event' => false,
         );
 
-        $url = add_query_arg( $url_vars, $_SERVER['REQUEST_URI'] );
+        $url = esc_url(add_query_arg( $url_vars, $_SERVER['REQUEST_URI'] ) );
 
         return "<a id='{$event_details['ID']}' class='$class epl_button ' href='" . $url . "'>{$button_text}</a>";
     }

@@ -225,7 +225,7 @@ class EPL_Calendar {
 
             $adjusted_date = $this->adjust_date( $month - 1, $year );
             //$out .= str_replace( '{previous_url}', $this->next_prev_url . $adjusted_date['year'] . '/' . $adjusted_date['month'], $this->temp['heading_previous_cell'] );
-            $out .= str_replace( '{previous_url}', add_query_arg( array( 'c_year' => $adjusted_date['year'], 'c_month' => $adjusted_date['month'] ), $this->next_prev_url ), $this->temp['heading_previous_cell'] );
+            $out .= str_replace( '{previous_url}', esc_url(add_query_arg( array( 'c_year' => $adjusted_date['year'], 'c_month' => $adjusted_date['month'] ), $this->next_prev_url )), $this->temp['heading_previous_cell'] );
             $out .= "\n";
         }
 
@@ -242,7 +242,7 @@ class EPL_Calendar {
         if ( $this->show_next_prev == TRUE ) {
             $adjusted_date = $this->adjust_date( $month + 1, $year );
             //$out .= str_replace( '{next_url}', $this->next_prev_url . $adjusted_date['year'] . '/' . $adjusted_date['month'], $this->temp['heading_next_cell'] );
-            $out .= str_replace( '{next_url}', add_query_arg( array( 'c_year' => $adjusted_date['year'], 'c_month' => $adjusted_date['month'] ), $this->next_prev_url ), $this->temp['heading_next_cell'] );
+            $out .= str_replace( '{next_url}', esc_url(add_query_arg( array( 'c_year' => $adjusted_date['year'], 'c_month' => $adjusted_date['month'] ), $this->next_prev_url )), $this->temp['heading_next_cell'] );
         }
 
         $out .= "\n";

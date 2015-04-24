@@ -2,9 +2,9 @@
 Contributors: abelony
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=abels122%40gmail%2ecom&lc=US&item_name=Events%20Planner%20for%20Wordpress&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: events, event, event registration, event calendar, events calendar, event management, paypal, events planner, event planner, ticket, tickets, ticketing, tickets, widget, locations, booking, attendance, attendee, calendar, payment, payments, sports, training, dance
-Requires at least: 3.3
-Tested up to: 4.1
-Stable tag: 1.3.6
+Requires at least: 3.5
+Tested up to: 4.2
+Stable tag: 1.3.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ A powerful and flexible event registration and management plugin, with a form ma
 
 == Description ==
 
-Events Planner is a next generation [Event Registration](http://www.wpeventsplanner.com/) Plugin, built with standard WordPress tools (Custom Post Types, Custom Fields, Options), making it extremely powerful and flexible.
+Events Planner is a next generation [Event Registration Plugin](http://www.wpeventsplanner.com/), built with standard WordPress tools (Custom Post Types, Custom Fields, Options), making it extremely powerful and flexible.
 
 = New in version 1.3.2 =
 * Confirmation emails to the registrant and the admin, date and time formatting ....
@@ -62,14 +62,13 @@ will be able to do it yourself, easily and safely.
 1.  Allow the user to select **the same price for all the days**
 1.  Choose if the prices apply to **the whole event or each day**
 1.  Allow the user to select **different price for each day that they choose** -Pro
-1.  Have time specific pricing -Pro
 1.  Control available spaces per day (event, time or price in pro).
 
 = Accept Payments =
 
 1.  Create unlimited payment profiles.  This means that you can have **multiple settings for each gateway**.
 1.  Inside each event, you can select which account the payment goes to and **pick and choose which payment methods the user can use.**
-1.  Current payment choices: PayPal ExpressCheckout (in the Lite version). Check, PayPal Pro (Direct Payments), Authorize.net AIM and SIM in the Pro version.  More on the way.
+1.  Current payment choices: PayPal ExpressCheckout (in the Lite version). Check, PayPal Pro (Direct Payments), PayPal Payfow Pro, Authorize.net AIM and SIM, FirstData e3, Stripe, USAePay, Moneris Canada and USA, RedSys in the Pro version.  More on the way.
 
 = Manage Locations =
 
@@ -96,10 +95,9 @@ will be able to do it yourself, easily and safely.
 
 [Please let us know about your needs](http://help.wpeventsplanner.com/)
 
-*   Notification manager for creating unlimited notification types and use shortcodes to include information in the email body.
+*   Notification manager for creating unlimited notification types and use notification tags to include information in the email body.
 *   Comprehensive Discount manager
 *   Various AJAX calendar widgets
-*   and some that are a secret for now :)
 
 [Again, please let us know about your needs](http://help.wpeventsplanner.com/)
 
@@ -124,6 +122,11 @@ will be able to do it yourself, easily and safely.
 3. Registration Page Overview
 
 == Changelog ==
+
+= 1.3.7 =
+
+* Changed the email header to UTF-8.
+* Escaping add_query_arg output.
 
 = 1.3.6 =
 

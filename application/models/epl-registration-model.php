@@ -40,7 +40,7 @@ class EPL_registration_model extends EPL_model {
                 $_SESSION['__epl']['_cart_time'] = time();
                 $_SESSION['__epl'][$this->regis_id] = array( );
 
-                $redir = add_query_arg( 'epl_action', 'process_cart_action', $_SERVER['REQUEST_URI'] );
+                $redir = esc_url(add_query_arg( 'epl_action', 'process_cart_action', $_SERVER['REQUEST_URI'] ) );
                 wp_redirect( $redir );
             }
         }
